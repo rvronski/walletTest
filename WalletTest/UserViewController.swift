@@ -193,7 +193,7 @@ class UserViewController: UIViewController {
     }
     
     @objc private func createCard() {
-        self.cardImageView.image = UIImage(named: "CardImageNewChip")
+        self.cardImageView.image = UIImage(named: "CardImageNewMW")
         self.cardBackImageView.image = UIImage(named: "BackCardImageNew")
         self.cardNameLabel.backgroundColor = .clear
         self.cardNameLabel.text = "Roman Vronsky"
