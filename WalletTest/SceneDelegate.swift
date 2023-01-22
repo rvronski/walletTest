@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let paymentsViewController = UINavigationController(rootViewController: PaymentsViewController())
         let walletViewController = UINavigationController(rootViewController: WalletViewController())
         let tabBarController = UITabBarController()
+        tabBarController.tabBar.tintColor = .systemRed
         tabBarController.viewControllers = [userViewController, paymentsViewController, walletViewController]
         userViewController.title = "Главная"
         paymentsViewController.title = "Платежи"
@@ -62,7 +63,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+       
     }
 
 
