@@ -61,7 +61,7 @@ class UserViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.addTarget(self, action: #selector(createCard), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(createCard), for: .touchUpInside)
         return button
     }()
     
@@ -98,6 +98,7 @@ class UserViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
 //               downloadUser()
+        createWallet(description: "Hello", balance: "0")
         self.gestureView()
         self.gestureBackView()
     }
@@ -184,48 +185,48 @@ class UserViewController: UIViewController {
         isBackView.toggle()
     }
     
-    private func alertAction(title: String, message: String?, completionHandler: @escaping (String,String) -> Void) {
-        
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addTextField()
-        alertController.addTextField()
-//        alertController.textFields[0]
-        
-        let ok = UIAlertAction(title: "ОК", style: .default) {[unowned alertController] _ in
-            guard  let name = alertController.textFields?[0] else {return}
-            let lastName = alertController.textFields?[1]
-            completionHandler(name,lastName)
-        }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-        alertController.addAction(ok)
-        alertController.addAction(cancel)
-//        alertController.view.addSubview(nameTextView)
-//        alertController.view.addSubview(nameLastTextView)
-        
-        present(alertController, animated: true, completion: nil)
-    }
-    
-    @objc private func createCard() {
-        self.alertAction(title: "Выпустить новую карту?", message: nil) { name, lastName in
-            downloadCard { cards in
-                CoreDataManager().addUser(name: name, lastName: lastName, cards: cards) {
-                    DispatchQueue.main.async {
-                        
-                    }
-                }
-            }
-        }
-        
-        self.cardImageView.image = UIImage(named: "CardImageNewMW")
-        self.cardBackImageView.image = UIImage(named: "BackCardImageNew")
-        self.cardNameLabel.backgroundColor = .clear
-        self.cardNameLabel.text = "Roman Vronsky"
-        self.cardCVCLabel.text = "CVC"
-        self.cardNumberLabel.text = "1234 5678 9012 3456"
-        self.cardInvalidDateLabel.text = "12/25"
-        self.cardView.bringSubviewToFront(cardNameLabel)
-        self.addUserButton.isHidden = true
-        self.addUserButton.isEnabled = true
-    }
+//    private func alertAction(title: String, message: String?, completionHandler: @escaping (String,String) -> Void) {
+//
+//        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//        alertController.addTextField()
+//        alertController.addTextField()
+////        alertController.textFields[0]
+//
+//        let ok = UIAlertAction(title: "ОК", style: .default) {[unowned alertController] _ in
+//            guard  let name = alertController.textFields?[0] else {return}
+//            let lastName = alertController.textFields?[1]
+//            completionHandler(name,lastName)
+//        }
+//        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+//        alertController.addAction(ok)
+//        alertController.addAction(cancel)
+////        alertController.view.addSubview(nameTextView)
+////        alertController.view.addSubview(nameLastTextView)
+//
+//        present(alertController, animated: true, completion: nil)
+//    }
+//
+//    @objc private func createCard() {
+//        self.alertAction(title: "Выпустить новую карту?", message: nil) { name, lastName in
+//            downloadCard { cards in
+//                CoreDataManager().addUser(name: name, lastName: lastName, cards: cards) {
+//                    DispatchQueue.main.async {
+//
+//                    }
+//                }
+//            }
+//        }
+//
+//        self.cardImageView.image = UIImage(named: "CardImageNewMW")
+//        self.cardBackImageView.image = UIImage(named: "BackCardImageNew")
+//        self.cardNameLabel.backgroundColor = .clear
+//        self.cardNameLabel.text = "Roman Vronsky"
+//        self.cardCVCLabel.text = "CVC"
+//        self.cardNumberLabel.text = "1234 5678 9012 3456"
+//        self.cardInvalidDateLabel.text = "12/25"
+//        self.cardView.bringSubviewToFront(cardNameLabel)
+//        self.addUserButton.isHidden = true
+//        self.addUserButton.isEnabled = true
+//    }
 }
 
