@@ -34,4 +34,29 @@ class CoreDataManager {
             }
         }
     }
+    
+    var user = [User]()
+    
+    func addUser(name: String, lastName: String, cards: CardCodable, completion: @escaping () -> Void ) {
+//        guard let card else { return }
+        
+        persistentContainer.performBackgroundTask { backgroundContext in
+            let user = User(context: backgroundContext)
+            let card = Card(context: backgroundContext)
+            user.name = name
+            user.lastName = lastName
+            card.cardNumber = cards.card_formatted
+            card.cardValidDate = cards.expiration_date
+            card.cvc = cards.cvc
+            card.userID = UUID()
+            
+            do {
+                try backgroundContext.save()
+            } catch {
+                print(error)
+            }
+            completion()
+        }
+    }
+    
 }

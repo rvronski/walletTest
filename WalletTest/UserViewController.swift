@@ -12,14 +12,14 @@ class UserViewController: UIViewController {
     private var isBackView = false
     
     private lazy var conteinerView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         return view
     }()
-
+    
     private lazy var cardImageView: UIImageView = {
-       let view = UIImageView()
+        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
@@ -28,7 +28,7 @@ class UserViewController: UIViewController {
     }()
     
     private lazy var cardView: UIImageView = {
-       let view = UIImageView()
+        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 0.5
@@ -38,7 +38,7 @@ class UserViewController: UIViewController {
     }()
     
     private lazy var cardBackImageView: UIImageView = {
-       let view = UIImageView()
+        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
@@ -47,7 +47,7 @@ class UserViewController: UIViewController {
     }()
     
     private lazy var cardBackView: UIImageView = {
-       let view = UIImageView()
+        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 0.5
@@ -58,7 +58,7 @@ class UserViewController: UIViewController {
     
     
     private lazy var addUserButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.addTarget(self, action: #selector(createCard), for: .touchUpInside)
@@ -97,11 +97,11 @@ class UserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-//       downloadUser()
+//               downloadUser()
         self.gestureView()
         self.gestureBackView()
     }
-
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.conteinerView)
@@ -118,7 +118,7 @@ class UserViewController: UIViewController {
         self.cardView.bringSubviewToFront(cardNameLabel)
         
         NSLayoutConstraint.activate([
-        
+            
             self.conteinerView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.conteinerView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16),
             self.conteinerView.heightAnchor.constraint(equalToConstant: 185),
@@ -150,24 +150,16 @@ class UserViewController: UIViewController {
             
             self.cardNameLabel.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor, constant: -10),
             self.cardNameLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -20),
-          
+            
             self.cardNumberLabel.centerYAnchor.constraint(equalTo: self.cardView.centerYAnchor),
-//            self.cardNumberLabel.centerXAnchor.constraint(equalTo: self.cardView.centerXAnchor),
-//            self.cardNumberLabel.leadingAnchor.constraint(equalTo: self.cardView.leadingAnchor, constant: 25),
             self.cardNumberLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -25),
-        
+            
             self.cardInvalidDateLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -20),
             self.cardInvalidDateLabel.topAnchor.constraint(equalTo: self.cardNumberLabel.bottomAnchor, constant: 16),
             
             self.cardCVCLabel.trailingAnchor.constraint(equalTo: self.cardBackView.trailingAnchor, constant: -16),
             self.cardCVCLabel.topAnchor.constraint(equalTo: self.cardBackView.topAnchor, constant: 50),
             
-            
-            
-            
-            
-            
-        
         ])
     }
     
@@ -184,7 +176,7 @@ class UserViewController: UIViewController {
     }
     
     @objc private func flip() {
-       
+        
         let toView = isBackView ? self.cardView :  self.cardBackView
         let fromView = isBackView ? self.cardBackView : self.cardView
         
@@ -192,7 +184,38 @@ class UserViewController: UIViewController {
         isBackView.toggle()
     }
     
+    private func alertAction(title: String, message: String?, completionHandler: @escaping (String,String) -> Void) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addTextField()
+        alertController.addTextField()
+//        alertController.textFields[0]
+        
+        let ok = UIAlertAction(title: "ОК", style: .default) {[unowned alertController] _ in
+            guard  let name = alertController.textFields?[0] else {return}
+            let lastName = alertController.textFields?[1]
+            completionHandler(name,lastName)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(ok)
+        alertController.addAction(cancel)
+//        alertController.view.addSubview(nameTextView)
+//        alertController.view.addSubview(nameLastTextView)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @objc private func createCard() {
+        self.alertAction(title: "Выпустить новую карту?", message: nil) { name, lastName in
+            downloadCard { cards in
+                CoreDataManager().addUser(name: name, lastName: lastName, cards: cards) {
+                    DispatchQueue.main.async {
+                        
+                    }
+                }
+            }
+        }
+        
         self.cardImageView.image = UIImage(named: "CardImageNewMW")
         self.cardBackImageView.image = UIImage(named: "BackCardImageNew")
         self.cardNameLabel.backgroundColor = .clear
