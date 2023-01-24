@@ -6,15 +6,23 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController {
+    
+    private let fetchResultController: NSFetchedResultsController = {
+        let fetchRequest = Wallet.fetchRequest()
+        fetchRequest.sortDescriptors = []
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        return frc
+    }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 16
         layout.minimumInteritemSpacing = 16
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         return layout
     }()
     
@@ -29,22 +37,54 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.setupView()
+        fetchResultController.delegate = self
+        try? self.fetchResultController.performFetch()
         
     }
     
-
+    private func setupView() {
+        self.view.backgroundColor = .white
+        self.view.addSubview(self.chekCollectionView)
+        
+        NSLayoutConstraint.activate([
+        
+            self.chekCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.chekCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            
+        
+        ])
+    }
    
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        return fetchResultController.sections?[section].numberOfObjects ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChekCell", for: indexPath) as! CheckCollectionViewCell
+        
+        cell.setup(wallet: self.fetchResultController.object(at: indexPath))
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemWidth = (collectionView.frame.width - 32)
+//        let itemHeight = (collectionView.frame.height)
+        return CGSize(width: itemWidth, height: 150)
+        
     }
     
     
+}
+extension MainViewController: NSFetchedResultsControllerDelegate {
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        self.chekCollectionView.reloadData()
+    }
 }

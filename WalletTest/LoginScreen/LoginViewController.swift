@@ -166,7 +166,7 @@ class LoginViewController: UIViewController {
     @objc private func didTapButton() {
         
         
-        self.navigationController?.pushViewController(UserViewController(), animated: true)
+        self.navigationController?.pushViewController(MainViewController(), animated: true)
     }
             
     @objc private func didPushSignUpButton() {
