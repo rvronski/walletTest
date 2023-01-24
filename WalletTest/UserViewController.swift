@@ -8,9 +8,9 @@
 import UIKit
 
 class UserViewController: UIViewController {
-    
+    private let coreManager = CoreDataManager.shared
     private var isBackView = false
-    
+    private var wallet = [Wallet]()
     private lazy var conteinerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,6 +24,7 @@ class UserViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
         view.isUserInteractionEnabled = true
+        view.image = UIImage(named: "CardImageNewMW")
         return view
     }()
     
@@ -43,6 +44,7 @@ class UserViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
         view.isUserInteractionEnabled = true
+        view.image = UIImage(named: "BackCardImageNew")
         return view
     }()
     
@@ -65,25 +67,27 @@ class UserViewController: UIViewController {
         return button
     }()
     
-    private lazy var cardNumberLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        label.font = UIFont(name: "System", size: 25)
-        return label
-    }()
-    
     private lazy var cardNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        label.backgroundColor = .clear
+        label.text = wallet[0].userName ?? ""
         return label
     }()
     
-    private lazy var cardInvalidDateLabel: UILabel = {
+    private let balanceView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemRed.withAlphaComponent(0.1)
+        view.layer.cornerRadius = 15
+        return view
+    }()
+    
+    private lazy var balanceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.text = "Баланс \(String(describing: wallet[0].balance ?? ""))"
         return label
     }()
     
@@ -96,26 +100,30 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.wallet = coreManager.wallet
+        print("🍋 \(String(describing: wallet[0].id))")
         self.setupView()
-//               downloadUser()
-        createWallet(description: "Hello", balance: "0")
         self.gestureView()
         self.gestureBackView()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.conteinerView)
+        self.view.addSubview(self.balanceView)
+        self.balanceView.addSubview(self.balanceLabel)
         self.conteinerView.addSubview(self.cardBackView)
         self.cardBackView.addSubview(self.cardBackImageView)
         self.cardBackView.addSubview(self.cardCVCLabel)
         self.conteinerView.addSubview(self.cardView)
         self.cardView.addSubview(self.cardImageView)
-        self.cardView.addSubview(self.addUserButton)
+//        self.cardView.addSubview(self.addUserButton)
         self.cardView.addSubview(self.cardNameLabel)
-        self.cardView.addSubview(self.cardNumberLabel)
-        self.cardView.addSubview(self.cardInvalidDateLabel)
-        self.cardNameLabel.backgroundColor = .black
         self.cardView.bringSubviewToFront(cardNameLabel)
         
         NSLayoutConstraint.activate([
@@ -146,20 +154,20 @@ class UserViewController: UIViewController {
             self.cardImageView.leadingAnchor.constraint(equalTo: self.cardView.leadingAnchor),
             self.cardImageView.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor),
             
-            self.addUserButton.centerXAnchor.constraint(equalTo: self.cardView.centerXAnchor),
-            self.addUserButton.centerYAnchor.constraint(equalTo: self.cardView.centerYAnchor),
-            
             self.cardNameLabel.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor, constant: -10),
             self.cardNameLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -20),
             
-            self.cardNumberLabel.centerYAnchor.constraint(equalTo: self.cardView.centerYAnchor),
-            self.cardNumberLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -25),
-            
-            self.cardInvalidDateLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -20),
-            self.cardInvalidDateLabel.topAnchor.constraint(equalTo: self.cardNumberLabel.bottomAnchor, constant: 16),
-            
             self.cardCVCLabel.trailingAnchor.constraint(equalTo: self.cardBackView.trailingAnchor, constant: -16),
             self.cardCVCLabel.topAnchor.constraint(equalTo: self.cardBackView.topAnchor, constant: 50),
+            
+            self.balanceView.topAnchor.constraint(equalTo: self.conteinerView.bottomAnchor, constant: 20),
+            self.balanceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            self.balanceView.heightAnchor.constraint(equalToConstant: 100),
+            self.balanceView.widthAnchor.constraint(equalToConstant: 120),
+            
+            self.balanceLabel.centerYAnchor.constraint(equalTo: self.balanceView.centerYAnchor),
+            self.balanceLabel.centerXAnchor.constraint(equalTo: self.balanceView.centerXAnchor),
+            
             
         ])
     }

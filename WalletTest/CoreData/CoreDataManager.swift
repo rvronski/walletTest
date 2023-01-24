@@ -10,6 +10,14 @@ import CoreData
 
 class CoreDataManager {
     
+    static let shared = CoreDataManager()
+    
+    init() {
+        self.reloadWallets()
+    }
+    
+    var wallet = [Wallet]()
+    
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WalletTest")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -18,6 +26,7 @@ class CoreDataManager {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        container.viewContext.automaticallyMergesChangesFromParent = true
         return container
     }()
     
@@ -35,23 +44,25 @@ class CoreDataManager {
         }
     }
     
-    var user = [User]()
+    func reloadWallets() {
+        let request = Wallet.fetchRequest()
+        self.wallet = (try? persistentContainer.viewContext.fetch(request)) ?? []
+       
+    }
     
-    func addUser(name: String, lastName: String, cards: CardCodable, completion: @escaping () -> Void ) {
-//        guard let card else { return }
-        
+    func createWallet(email: String, userName: String, password: String, nameWallet: String, newWallet: NewWallet, completion: @escaping () -> Void ) {
         persistentContainer.performBackgroundTask { backgroundContext in
-            let user = User(context: backgroundContext)
-            let card = Card(context: backgroundContext)
-            user.name = name
-            user.lastName = lastName
-            card.cardNumber = cards.card_formatted
-            card.cardValidDate = cards.expiration_date
-            card.cvc = cards.cvc
-            card.userID = UUID()
+            let wallet = Wallet(context: backgroundContext)
+            wallet.userName = userName
+            wallet.email = email
+            wallet.id = newWallet.account.id
+            wallet.password = password
+            wallet.balance = newWallet.account.balance
+            wallet.nameWallet = nameWallet
             
             do {
                 try backgroundContext.save()
+                self.reloadWallets()
             } catch {
                 print(error)
             }
