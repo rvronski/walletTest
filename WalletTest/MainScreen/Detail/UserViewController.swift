@@ -11,6 +11,16 @@ class UserViewController: UIViewController {
     private let coreManager = CoreDataManager.shared
     private var isBackView = false
     private var wallet = [Wallet]()
+    let counter: Int
+    
+    init(counter: Int) {
+        self.counter = counter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private lazy var conteinerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -72,24 +82,29 @@ class UserViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.backgroundColor = .clear
-        label.text = wallet[0].userName ?? ""
+        label.text = wallet[counter].userName ?? ""
         return label
     }()
     
-    private let balanceView: UIView = {
-       let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemRed.withAlphaComponent(0.1)
-        view.layer.cornerRadius = 15
-        return view
+    private lazy var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        return layout
     }()
     
-    private lazy var balanceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Баланс \(String(describing: wallet[0].balance ?? ""))"
-        return label
+    private lazy var detailCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: "DetailCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
     }()
+    
+   
     
     private lazy var cardCVCLabel: UILabel = {
         let label = UILabel()
@@ -101,22 +116,20 @@ class UserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.wallet = coreManager.wallet
-        print("🍋 \(String(describing: wallet[0].id))")
         self.setupView()
         self.gestureView()
         self.gestureBackView()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setupView() {
         self.view.backgroundColor = .white
+        self.view.addSubview(self.detailCollectionView)
         self.view.addSubview(self.conteinerView)
-        self.view.addSubview(self.balanceView)
-        self.balanceView.addSubview(self.balanceLabel)
         self.conteinerView.addSubview(self.cardBackView)
         self.cardBackView.addSubview(self.cardBackImageView)
         self.cardBackView.addSubview(self.cardCVCLabel)
@@ -160,13 +173,11 @@ class UserViewController: UIViewController {
             self.cardCVCLabel.trailingAnchor.constraint(equalTo: self.cardBackView.trailingAnchor, constant: -16),
             self.cardCVCLabel.topAnchor.constraint(equalTo: self.cardBackView.topAnchor, constant: 50),
             
-            self.balanceView.topAnchor.constraint(equalTo: self.conteinerView.bottomAnchor, constant: 20),
-            self.balanceView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            self.balanceView.heightAnchor.constraint(equalToConstant: 100),
-            self.balanceView.widthAnchor.constraint(equalToConstant: 120),
+            self.detailCollectionView.topAnchor.constraint(equalTo: self.conteinerView.bottomAnchor),
+            self.detailCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.detailCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.detailCollectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             
-            self.balanceLabel.centerYAnchor.constraint(equalTo: self.balanceView.centerYAnchor),
-            self.balanceLabel.centerXAnchor.constraint(equalTo: self.balanceView.centerXAnchor),
             
             
         ])
@@ -237,4 +248,30 @@ class UserViewController: UIViewController {
 //        self.addUserButton.isEnabled = true
 //    }
 }
-
+extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCollectionViewCell
+        
+        cell.setup(wallet: wallet[counter])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemWidth = (collectionView.frame.width - 32)
+//        let itemHeight = (collectionView.frame.height)
+        return CGSize(width: itemWidth, height: 150)
+        
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let walletVC = UserViewController(counter: indexPath.row)
+//        self.navigationController?.pushViewController(walletVC, animated: true)
+//    }
+//    
+}

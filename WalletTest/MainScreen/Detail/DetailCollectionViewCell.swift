@@ -1,5 +1,5 @@
 //
-//  CheckCollectionViewCell.swift
+//  DetailCollectionViewCell.swift
 //  WalletTest
 //
 //  Created by ROMAN VRONSKY on 24.01.2023.
@@ -7,9 +7,7 @@
 
 import UIKit
 
-class CheckCollectionViewCell: UICollectionViewCell {
-    
-    
+class DetailCollectionViewCell: UICollectionViewCell {
     private lazy var walletView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false

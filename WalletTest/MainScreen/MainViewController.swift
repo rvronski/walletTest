@@ -43,6 +43,12 @@ class MainViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.chekCollectionView)
@@ -80,6 +86,10 @@ extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let walletVC = UserViewController(counter: indexPath.row)
+        self.navigationController?.pushViewController(walletVC, animated: true)
+    }
     
 }
 extension MainViewController: NSFetchedResultsControllerDelegate {

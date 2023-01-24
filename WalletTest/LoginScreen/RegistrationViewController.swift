@@ -23,6 +23,7 @@ class RegistrationViewController: UIViewController {
         return view
     }()
     
+    
     private lazy var registerLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -257,7 +258,7 @@ class RegistrationViewController: UIViewController {
         NetworkManager().createWallet(description: "", name: userName) { newWallet in
             CoreDataManager().createWallet(email: email, userName: userName, password: password, nameWallet: nameWallet, newWallet: newWallet) {
                 DispatchQueue.main.async{
-                    self.navigationController?.pushViewController(UserViewController(), animated: true)
+                    self.navigationController?.pushViewController(MainViewController(), animated: true)
                 }
             }
         }
