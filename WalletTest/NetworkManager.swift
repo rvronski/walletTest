@@ -91,8 +91,8 @@ struct DebitPost: Codable {
 struct CreditPost: Codable {
     var amount: String
     var id: String  //"5e41b926-5bf6-45de-935c-9d0b39eab6ce"
-    var reference: String // "test credit"
-    var visible: Bool  //true
+    var reference: String  = "test credit"
+    var visible: Bool = true
 }
 
 struct TransferPost: Codable {
@@ -215,6 +215,54 @@ class NetworkManager {
         
     }
     
+    func credit(amount: String, id: String) {
+        
+        guard let url = URL(string: "https://api.m3o.com/v1/wallet/Credit") else {return}
+       
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = self.headers
+        let body = CreditPost.init(amount: amount, id: id)
+        let encoder = JSONEncoder()
+        
+        do {
+            let jsonData = try encoder.encode(body)
+            request.httpBody = jsonData
+        } catch {
+            print(error)
+        }
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if let error {
+                print(error.localizedDescription)
+                
+                return
+            }
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            print(statusCode ?? "")
+            if statusCode != 200 {
+                print("Status Code = \(String(describing: statusCode))")
+                
+                return
+            }
+            guard let data else {
+                print("data = nil")
+                
+                return
+            }
+            do {
+                let answer = try JSONDecoder().decode(Balance.self, from: data)
+                
+                print(answer)
+                
+            } catch {
+                print(error)
+                
+            }
+        }
+        task.resume()
+        
+    }
     
     func downloadCard(completion: @escaping ((CardCodable?) -> Void)) {
         

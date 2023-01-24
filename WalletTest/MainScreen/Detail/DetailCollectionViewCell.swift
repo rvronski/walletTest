@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol DetailCollectionViewDelegate: AnyObject {
+    func credit()
+}
+
 class DetailCollectionViewCell: UICollectionViewCell {
     private lazy var walletView: UIView = {
         let view = UIView()
@@ -30,13 +34,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var cardImageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "CardImageNewMW")
-        imageView.clipsToBounds = true
-        return imageView
-    }()
+    var delegate: DetailCollectionViewDelegate?
     
     private lazy var balanceLabel: UILabel = {
         let label = UILabel()
@@ -45,6 +43,14 @@ class DetailCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private lazy var creditButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Пополнить", for: .normal)
+        button.setTitleColor(.systemRed, for: .normal)
+        button.addTarget(self, action: #selector(tapCreditButton), for: .touchUpInside)
+        return button
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,7 +69,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
         self.contentView.addSubview(self.walletView)
         self.walletView.addSubview(self.balanceLabel)
         self.walletView.addSubview(self.rubleImageView)
-        self.walletView.addSubview(self.cardImageView)
+        self.walletView.addSubview(self.creditButton)
         
         NSLayoutConstraint.activate([
             
@@ -80,12 +86,13 @@ class DetailCollectionViewCell: UICollectionViewCell {
             self.balanceLabel.centerYAnchor.constraint(equalTo: self.rubleImageView.centerYAnchor),
             self.balanceLabel.leftAnchor.constraint(equalTo: self.rubleImageView.rightAnchor, constant: 16),
             
-            self.cardImageView.topAnchor.constraint(equalTo: self.balanceLabel.bottomAnchor, constant: 16),
-            self.cardImageView.leftAnchor.constraint(equalTo: self.balanceLabel.leftAnchor, constant: -8),
-            self.cardImageView.heightAnchor.constraint(equalToConstant: 30),
-            self.cardImageView.widthAnchor.constraint(equalToConstant: 40),
-            
-            
+            self.creditButton.centerYAnchor.constraint(equalTo: self.walletView.centerYAnchor),
+            self.creditButton.rightAnchor.constraint(equalTo: self.walletView.rightAnchor, constant: -16),
         ])
     }
+    
+    @objc private func tapCreditButton() {
+        self.delegate?.credit()
+    }
+    
 }

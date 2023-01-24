@@ -204,26 +204,27 @@ class UserViewController: UIViewController {
         isBackView.toggle()
     }
     
-//    private func alertAction(title: String, message: String?, completionHandler: @escaping (String,String) -> Void) {
-//
-//        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-//        alertController.addTextField()
-//        alertController.addTextField()
-////        alertController.textFields[0]
-//
-//        let ok = UIAlertAction(title: "ОК", style: .default) {[unowned alertController] _ in
-//            guard  let name = alertController.textFields?[0] else {return}
-//            let lastName = alertController.textFields?[1]
-//            completionHandler(name,lastName)
-//        }
-//        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-//        alertController.addAction(ok)
-//        alertController.addAction(cancel)
-////        alertController.view.addSubview(nameTextView)
-////        alertController.view.addSubview(nameLastTextView)
-//
-//        present(alertController, animated: true, completion: nil)
-//    }
+    private func alertAction(title: String, message: String?) {
+        let alertController = UIAlertController(title: title, message: "", preferredStyle: .alert)
+
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Введите сумму"
+        }
+
+        let saveAction = UIAlertAction(title: "Пополнить", style: .default, handler: { alert -> Void in
+//            let firstTextField = alertController.textFields![0] as UITextField
+            
+        })
+
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
+
+
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+
+        self.present(alertController, animated: true, completion: nil)
+    
+    }
 //
 //    @objc private func createCard() {
 //        self.alertAction(title: "Выпустить новую карту?", message: nil) { name, lastName in
@@ -258,6 +259,7 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCollectionViewCell
         
         cell.setup(wallet: wallet[counter])
+        cell.delegate = self
         return cell
     }
     
@@ -274,4 +276,11 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 //        self.navigationController?.pushViewController(walletVC, animated: true)
 //    }
 //    
+}
+extension UserViewController: DetailCollectionViewDelegate {
+    func credit() {
+        self.alertAction(title: "Полнить баланс", message: nil)
+    }
+    
+    
 }
