@@ -82,7 +82,7 @@ class UserViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.backgroundColor = .clear
-        label.text = wallet[counter].nameWallet ?? ""
+        label.text = wallet.nameWallet ?? ""
         return label
     }()
     
@@ -214,7 +214,7 @@ class UserViewController: UIViewController {
         let saveAction = UIAlertAction(title: "Пополнить", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             guard let text = firstTextField.text else {return}
-            guard let id = self.wallet[self.counter].id else {return}
+            guard let id = self.wallet.id else {return}
             NetworkManager().credit(amount: text, id: id) { balance in
                 self.coreManager.changeBalance(id: id, newBalance: balance) {
                     DispatchQueue.main.async {
@@ -246,7 +246,7 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCollectionViewCell
         
-        cell.setup(wallet: wallet[counter])
+        cell.setup(wallet: wallet)
         cell.delegate = self
         return cell
     }

@@ -50,6 +50,12 @@ class CoreDataManager {
        
     }
     
+    func reloadWallets() {
+        let request = Wallet.fetchRequest()
+        self.wallets = (try? persistentContainer.viewContext.fetch(request)) ?? []
+       
+    }
+    
     func createUser(email: String, password: String, userName: String, completion: @escaping () -> Void ) {
         persistentContainer.performBackgroundTask { backgroundContext in
             let user = User(context: backgroundContext)
@@ -84,14 +90,15 @@ class CoreDataManager {
         }
     }
     
-    func getUser(email: String, completion: @escaping (User) -> Void ) {
+    func getUser(email: String, completion: (((User)?) -> Void) ) {
         let fetchRequest = User.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         do {
-            guard let user = try persistentContainer.viewContext.fetch(fetchRequest).first else { return }
+            guard let user = try persistentContainer.viewContext.fetch(fetchRequest).first else {  return }
             completion(user)
         } catch {
             print(error)
+            completion(nil)
         }
         
     }
@@ -112,13 +119,13 @@ class CoreDataManager {
     }
     
     
-    func getWallets(email: String) {
-        let fetchRequest = User.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
-        
-        let user = try? persistentContainer.viewContext.fetch(fetchRequest).first
-        let wallets = user?.wallets
-        
-      
-    }
+//    func getWallets(email: String) {
+//        let fetchRequest = User.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+//        
+//        let user = try? persistentContainer.viewContext.fetch(fetchRequest).first
+//        let wallets = user?.wallets
+//        
+//      
+//    }
 }

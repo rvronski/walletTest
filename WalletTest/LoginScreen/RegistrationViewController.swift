@@ -256,6 +256,13 @@ class RegistrationViewController: UIViewController {
         
         coreManager.createUser(email: email, password: password, userName: userName) {
             self.coreManager.getUser(email: email) { user in
+                guard let user else { self.alertDismiss(title: "Oшибка!", message: "Что-то пошло не так. Попробуйте еще раз") {
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                    self.userNameTextField.text = ""
+                    self.userNameTextField.becomeFirstResponder()
+                }
+                    return}
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
                 }

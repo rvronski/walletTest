@@ -131,15 +131,15 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return fetchResultController.sections?[section].numberOfObjects ?? 0
-        return  self.wallets.count
+        return fetchResultController.sections?[section].numberOfObjects ?? 0
+//        return  self.wallets.count÷
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChekCell", for: indexPath) as! CheckCollectionViewCell
         
-        cell.setup(wallet: wallets[indexPath.row])
-//        cell.setup(wallet: )
+//        cell.setup(wallet: wallets[indexPath.row])
+        cell.setup(wallet: fetchResultController.object(at: indexPath))
         return cell
     }
     
