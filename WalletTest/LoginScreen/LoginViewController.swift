@@ -8,7 +8,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    let coreManager = CoreDataManager.shared
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -164,9 +164,16 @@ class LoginViewController: UIViewController {
     
     
     @objc private func didTapButton() {
+        guard let email = loginTextField.text else {return}
         
         
-        self.navigationController?.pushViewController(MainViewController(), animated: true)
+        
+        coreManager.getUser(email: email) { user in
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
+            }
+        }
+        
     }
             
     @objc private func didPushSignUpButton() {

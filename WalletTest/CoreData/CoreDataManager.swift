@@ -13,11 +13,11 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     
     init() {
-        self.reloadWallets()
+        self.reloadUsers()
     }
     
-    var wallet = [Wallet]()
-    
+    var users = [User]()
+    var wallets = [Wallet]()
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WalletTest")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -44,25 +44,21 @@ class CoreDataManager {
         }
     }
     
-    func reloadWallets() {
-        let request = Wallet.fetchRequest()
-        self.wallet = (try? persistentContainer.viewContext.fetch(request)) ?? []
+    func reloadUsers() {
+        let request = User.fetchRequest()
+        self.users = (try? persistentContainer.viewContext.fetch(request)) ?? []
        
     }
     
-    func createWallet(email: String, userName: String, password: String, nameWallet: String, newWallet: NewWallet, completion: @escaping () -> Void ) {
+    func createUser(email: String, password: String, userName: String, completion: @escaping () -> Void ) {
         persistentContainer.performBackgroundTask { backgroundContext in
-            let wallet = Wallet(context: backgroundContext)
-            wallet.userName = userName
-            wallet.email = email
-            wallet.id = newWallet.account.id
-            wallet.password = password
-            wallet.balance = newWallet.account.balance
-            wallet.nameWallet = nameWallet
-            
+            let user = User(context: backgroundContext)
+            user.email = email
+            user.password = password
+            user.userName = userName
             do {
                 try backgroundContext.save()
-                self.reloadWallets()
+                self.reloadUsers()
             } catch {
                 print(error)
             }
@@ -70,4 +66,59 @@ class CoreDataManager {
         }
     }
     
+    func createWallet(newWallet: NewWallet, user: User, completion: @escaping () -> Void ) {
+        persistentContainer.performBackgroundTask { backgroundContext in
+            let wallet = Wallet(context: backgroundContext)
+            wallet.id = newWallet.account.id
+            wallet.balance = newWallet.account.balance
+            wallet.nameWallet = newWallet.account.name
+            wallet.user = user
+            wallet.createDate = Date()
+            do {
+                try backgroundContext.save()
+                self.reloadUsers()
+            } catch {
+                print(error)
+            }
+            completion()
+        }
+    }
+    
+    func getUser(email: String, completion: @escaping (User) -> Void ) {
+        let fetchRequest = User.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+        do {
+            guard let user = try persistentContainer.viewContext.fetch(fetchRequest).first else { return }
+            completion(user)
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    func changeBalance(id: String, newBalance: String, completion: @escaping () -> Void ) {
+        let fetchRequest = Wallet.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+        do {
+            let wallet = try persistentContainer.viewContext.fetch(fetchRequest).first
+            wallet?.balance = newBalance
+            saveContext()
+            reloadUsers()
+        }
+        catch {
+            print(error)
+        }
+        completion()
+    }
+    
+    
+    func getWallets(email: String) {
+        let fetchRequest = User.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+        
+        let user = try? persistentContainer.viewContext.fetch(fetchRequest).first
+        let wallets = user?.wallets
+        
+      
+    }
 }

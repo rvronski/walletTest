@@ -10,11 +10,11 @@ import UIKit
 class UserViewController: UIViewController {
     private let coreManager = CoreDataManager.shared
     private var isBackView = false
-    private var wallet = [Wallet]()
-    let counter: Int
+   
+    let wallet: Wallet
     
-    init(counter: Int) {
-        self.counter = counter
+    init(wallet: Wallet) {
+        self.wallet = wallet
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -82,7 +82,7 @@ class UserViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.backgroundColor = .clear
-        label.text = wallet[counter].userName ?? ""
+        label.text = wallet[counter].nameWallet ?? ""
         return label
     }()
     
@@ -115,7 +115,7 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.wallet = coreManager.wallet
+//        self.wallet = coreManager.users[counter].wallets
         self.setupView()
         self.gestureView()
         self.gestureBackView()
@@ -212,7 +212,17 @@ class UserViewController: UIViewController {
         }
 
         let saveAction = UIAlertAction(title: "Пополнить", style: .default, handler: { alert -> Void in
-//            let firstTextField = alertController.textFields![0] as UITextField
+            let firstTextField = alertController.textFields![0] as UITextField
+            guard let text = firstTextField.text else {return}
+            guard let id = self.wallet[self.counter].id else {return}
+            NetworkManager().credit(amount: text, id: id) { balance in
+                self.coreManager.changeBalance(id: id, newBalance: balance) {
+                    DispatchQueue.main.async {
+                        self.detailCollectionView.reloadData()
+                    }
+                }
+            }
+            
             
         })
 
@@ -225,29 +235,7 @@ class UserViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     
     }
-//
-//    @objc private func createCard() {
-//        self.alertAction(title: "Выпустить новую карту?", message: nil) { name, lastName in
-//            downloadCard { cards in
-//                CoreDataManager().addUser(name: name, lastName: lastName, cards: cards) {
-//                    DispatchQueue.main.async {
-//
-//                    }
-//                }
-//            }
-//        }
-//
-//        self.cardImageView.image = UIImage(named: "CardImageNewMW")
-//        self.cardBackImageView.image = UIImage(named: "BackCardImageNew")
-//        self.cardNameLabel.backgroundColor = .clear
-//        self.cardNameLabel.text = "Roman Vronsky"
-//        self.cardCVCLabel.text = "CVC"
-//        self.cardNumberLabel.text = "1234 5678 9012 3456"
-//        self.cardInvalidDateLabel.text = "12/25"
-//        self.cardView.bringSubviewToFront(cardNameLabel)
-//        self.addUserButton.isHidden = true
-//        self.addUserButton.isEnabled = true
-//    }
+
 }
 extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     

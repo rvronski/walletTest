@@ -8,6 +8,7 @@
 import UIKit
 
 class RegistrationViewController: UIViewController {
+    let coreManager = CoreDataManager.shared
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -45,15 +46,15 @@ class RegistrationViewController: UIViewController {
         return userNameTextField
     }()
     
-    private lazy var walletNameTextField: UITextField = {
-        let userNameTextField = UITextField()
-        userNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        userNameTextField.placeholder = "Имя для вашего кошелька"
-        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
-        userNameTextField.leftView = paddingView
-        userNameTextField.leftViewMode = .always
-        return userNameTextField
-    }()
+//    private lazy var walletNameTextField: UITextField = {
+//        let userNameTextField = UITextField()
+//        userNameTextField.translatesAutoresizingMaskIntoConstraints = false
+//        userNameTextField.placeholder = "Имя для вашего кошелька"
+//        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
+//        userNameTextField.leftView = paddingView
+//        userNameTextField.leftViewMode = .always
+//        return userNameTextField
+//    }()
     
     private lazy var emailTextField: UITextField = {
         let emailTextField = UITextField()
@@ -133,7 +134,7 @@ class RegistrationViewController: UIViewController {
         self.registerView.addSubview(self.passwordTextField)
         self.registerView.addSubview(self.registrationButton)
         self.registerView.addSubview(self.userNameTextField)
-        self.registerView.addSubview(self.walletNameTextField)
+//        self.registerView.addSubview(self.walletNameTextField)
         self.registerView.addSubview(self.OutButton)
         
         NSLayoutConstraint.activate([
@@ -168,13 +169,13 @@ class RegistrationViewController: UIViewController {
             self.passwordTextField.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
             self.passwordTextField.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
-            self.walletNameTextField.heightAnchor.constraint(equalToConstant: 50),
-            self.walletNameTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 16),
-            self.walletNameTextField.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
-            self.walletNameTextField.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
+//            self.walletNameTextField.heightAnchor.constraint(equalToConstant: 50),
+//            self.walletNameTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 16),
+//            self.walletNameTextField.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
+//            self.walletNameTextField.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
             self.registrationButton.heightAnchor.constraint(equalToConstant: 50),
-            self.registrationButton.topAnchor.constraint(equalTo: self.walletNameTextField.bottomAnchor, constant: 30),
+            self.registrationButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 30),
             self.registrationButton.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
             self.registrationButton.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
@@ -240,12 +241,10 @@ class RegistrationViewController: UIViewController {
     }
     
     @objc private func didTapRegButton() {
-       
+        
         guard let email = self.emailTextField.text, !email.isEmpty,
               let password = self.passwordTextField.text, !password.isEmpty,
-              let userName = self.userNameTextField.text, !userName.isEmpty,
-              let nameWallet = self.walletNameTextField.text,
-              !nameWallet.isEmpty else {
+              let userName = self.userNameTextField.text, !userName.isEmpty else {
             self.alertOk(title: "Ошибка!", message: "Заполните все поля регистрации")
             return
         }
@@ -255,13 +254,15 @@ class RegistrationViewController: UIViewController {
             return
         }
         
-        NetworkManager().createWallet(description: "", name: userName) { newWallet in
-            CoreDataManager().createWallet(email: email, userName: userName, password: password, nameWallet: nameWallet, newWallet: newWallet) {
-                DispatchQueue.main.async{
-                    self.navigationController?.pushViewController(MainViewController(), animated: true)
+        coreManager.createUser(email: email, password: password, userName: userName) {
+            self.coreManager.getUser(email: email) { user in
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
                 }
             }
         }
-        
     }
+    
 }
+
+

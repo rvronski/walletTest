@@ -73,7 +73,7 @@ struct NewWallet: Codable {
 }
 
 struct NewWalletPost: Codable {
-    var description: String
+    var description: String = ""
     var name: String
 }
 
@@ -119,13 +119,13 @@ class NetworkManager {
         "Authorization": "Bearer NGEyNDRmZmEtZmQ0OS00MmU4LWE3MjAtZTMzZTI2ZTRkOGI4"
     ]
     
-    func createWallet(description: String, name: String, completion: @escaping ((NewWallet) -> Void)) {
+    func createWallet(name: String, completion: @escaping ((NewWallet) -> Void)) {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Create") else {return}
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
-        let body = NewWalletPost.init(description: description, name: name)
+        let body = NewWalletPost.init(name: name)
         let encoder = JSONEncoder()
         
         do {
@@ -215,7 +215,7 @@ class NetworkManager {
         
     }
     
-    func credit(amount: String, id: String) {
+    func credit(amount: String, id: String, completion: @escaping ((_ balance: String) -> Void)) {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Credit") else {return}
        
@@ -252,8 +252,9 @@ class NetworkManager {
             }
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
+                let balance = answer.balance
+                completion(balance)
                 
-                print(answer)
                 
             } catch {
                 print(error)

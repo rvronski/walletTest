@@ -8,20 +8,21 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
+    
     var window: UIWindow?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-        let userViewController = UINavigationController(rootViewController: LoginViewController())
+        let mainViewController = UINavigationController(rootViewController: LoginViewController())
         let paymentsViewController = UINavigationController(rootViewController: PaymentsViewController())
         let walletViewController = UINavigationController(rootViewController: WalletViewController())
         let tabBarController = UITabBarController()
         tabBarController.tabBar.tintColor = .systemRed
-        tabBarController.viewControllers = [userViewController, paymentsViewController, walletViewController]
-        userViewController.title = "Главная"
+        tabBarController.viewControllers = [mainViewController, paymentsViewController, walletViewController]
+        mainViewController.title = "Главная"
         paymentsViewController.title = "Платежи"
         walletViewController.title = "Кошелек"
         let images = ["person", "arrow.left.arrow.right.square", "creditcard"]
@@ -31,6 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         for i in 0..<items.count {
             items[i].image = UIImage(systemName: images[i])
         }
+        
         self.window?.rootViewController = tabBarController
         self.window?.makeKeyAndVisible()
     }
