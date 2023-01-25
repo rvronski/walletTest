@@ -56,10 +56,13 @@ class MainViewController: UIViewController {
         return collectionView
     }()
 
+  
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        self.wallets = user.walletArray
+        self.wallets = coreManager.wallets(user: user)
         fetchResultController.delegate = self
         try? self.fetchResultController.performFetch()
         
@@ -112,6 +115,7 @@ class MainViewController: UIViewController {
             NetworkManager().createWallet(name: name) { wallet in
                 self.coreManager.createWallet(newWallet: wallet, user: self.user) {
                     DispatchQueue.main.async {
+                        self.wallets = self.coreManager.wallets(user: self.user)
                         self.chekCollectionView.reloadData()
                     }
                 }

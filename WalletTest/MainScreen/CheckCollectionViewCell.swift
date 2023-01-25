@@ -47,6 +47,13 @@ class CheckCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    private lazy var walletNameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 20)
+        return label
+    }()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,6 +66,7 @@ class CheckCollectionViewCell: UICollectionViewCell {
     
     func setup(wallet: Wallet) {
         self.balanceLabel.text = "\(wallet.balance ?? "")  ₽"
+        self.walletNameLabel.text = wallet.nameWallet
     }
     
     private func setupView() {
@@ -66,7 +74,7 @@ class CheckCollectionViewCell: UICollectionViewCell {
         self.walletView.addSubview(self.balanceLabel)
         self.walletView.addSubview(self.rubleImageView)
         self.walletView.addSubview(self.cardImageView)
-        
+        self.walletView.addSubview(self.walletNameLabel)
         NSLayoutConstraint.activate([
             
             self.walletView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
@@ -86,6 +94,9 @@ class CheckCollectionViewCell: UICollectionViewCell {
             self.cardImageView.leftAnchor.constraint(equalTo: self.balanceLabel.leftAnchor, constant: -8),
             self.cardImageView.heightAnchor.constraint(equalToConstant: 30),
             self.cardImageView.widthAnchor.constraint(equalToConstant: 40),
+            
+            self.walletNameLabel.centerYAnchor.constraint(equalTo: self.cardImageView.centerYAnchor),
+            self.walletNameLabel.leftAnchor.constraint(equalTo: self.cardImageView.rightAnchor, constant: 16),
             
             
         ])

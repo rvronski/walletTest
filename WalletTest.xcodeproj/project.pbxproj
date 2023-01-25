@@ -22,7 +22,7 @@
 		450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A1297F607100274D48 /* RegistrationViewController.swift */; };
 		450AE9A429800C7700274D48 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A329800C7700274D48 /* MainViewController.swift */; };
 		450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */; };
-		451583582980C11B003A1222 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583572980C11B003A1222 /* Wallet.swift */; };
+		451583582980C11B003A1222 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583572980C11B003A1222 /* User.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +44,7 @@
 		450AE9A1297F607100274D48 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		450AE9A329800C7700274D48 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCollectionViewCell.swift; sourceTree = "<group>"; };
-		451583572980C11B003A1222 /* Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
+		451583572980C11B003A1222 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,7 +99,7 @@
 			children = (
 				450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */,
 				450AE99A297D8D3200274D48 /* CoreDataManager.swift */,
-				451583572980C11B003A1222 /* Wallet.swift */,
+				451583572980C11B003A1222 /* User.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -211,7 +211,7 @@
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
-				451583582980C11B003A1222 /* Wallet.swift in Sources */,
+				451583582980C11B003A1222 /* User.swift in Sources */,
 				450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */,
 				450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */,
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,

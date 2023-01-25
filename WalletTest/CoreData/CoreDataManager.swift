@@ -22,7 +22,7 @@ class CoreDataManager {
         let container = NSPersistentContainer(name: "WalletTest")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-              
+                
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
@@ -47,13 +47,13 @@ class CoreDataManager {
     func reloadUsers() {
         let request = User.fetchRequest()
         self.users = (try? persistentContainer.viewContext.fetch(request)) ?? []
-       
+        
     }
     
     func reloadWallets() {
         let request = Wallet.fetchRequest()
         self.wallets = (try? persistentContainer.viewContext.fetch(request)) ?? []
-       
+        
     }
     
     func createUser(email: String, password: String, userName: String, completion: @escaping () -> Void ) {
@@ -73,22 +73,17 @@ class CoreDataManager {
     }
     
     func createWallet(newWallet: NewWallet, user: User, completion: @escaping () -> Void ) {
-        persistentContainer.performBackgroundTask { backgroundContext in
-            let wallet = Wallet(context: backgroundContext)
-            wallet.id = newWallet.account.id
-            wallet.balance = newWallet.account.balance
-            wallet.nameWallet = newWallet.account.name
-            wallet.user = user
-            wallet.createDate = Date()
-            do {
-                try backgroundContext.save()
-                self.reloadUsers()
-            } catch {
-                print(error)
-            }
-            completion()
-        }
+        
+        let wallet = Wallet(context: persistentContainer.viewContext)
+        wallet.id = newWallet.account.id
+        wallet.balance = newWallet.account.balance
+        wallet.nameWallet = newWallet.account.name
+        user.addToWallets(wallet)
+        wallet.createDate = Date()
+        saveContext()
+        completion()
     }
+    
     
     func getUser(email: String, completion: (((User)?) -> Void) ) {
         let fetchRequest = User.fetchRequest()
@@ -118,14 +113,27 @@ class CoreDataManager {
         completion()
     }
     
+    func wallets(user: User) -> [Wallet] {
+      let request: NSFetchRequest<Wallet> = Wallet.fetchRequest()
+      request.predicate = NSPredicate(format: "user = %@", user)
+      request.sortDescriptors = [NSSortDescriptor(key: "createDate", ascending: true)]
+      var fetchedWallets: [Wallet] = []
+      do {
+          fetchedWallets = try persistentContainer.viewContext.fetch(request)
+      } catch let error {
+        print("Error fetching songs \(error)")
+      }
+      return fetchedWallets
+    }
     
-//    func getWallets(email: String) {
-//        let fetchRequest = User.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
-//        
-//        let user = try? persistentContainer.viewContext.fetch(fetchRequest).first
-//        let wallets = user?.wallets
-//        
-//      
-//    }
+    func user() -> [User] {
+      let request: NSFetchRequest<User> = User.fetchRequest()
+      var fetchedUsers: [User] = []
+      do {
+          fetchedUsers = try persistentContainer.viewContext.fetch(request)
+      } catch let error {
+         print("Error fetching singers \(error)")
+      }
+      return fetchedUsers
+    }
 }

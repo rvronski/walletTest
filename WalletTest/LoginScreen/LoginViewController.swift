@@ -9,6 +9,9 @@ import UIKit
 
 class LoginViewController: UIViewController {
     
+    
+//    var user = UserDefaults.standard.object(forKey: "User")
+    
     let coreManager = CoreDataManager.shared
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -19,7 +22,8 @@ class LoginViewController: UIViewController {
     private lazy var passwordTextField: UITextField = {
         let passwordTextField = UITextField()
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.placeholder = "Password"
+//        passwordTextField.placeholder = "Password"
+        passwordTextField.text = "qwertyu"
         passwordTextField.layer.borderColor = UIColor.lightGray.cgColor
         passwordTextField.layer.borderWidth = 0.5
         passwordTextField.textColor = .black
@@ -35,7 +39,8 @@ class LoginViewController: UIViewController {
     private lazy var loginTextField: UITextField = {
         var loginTextfield = UITextField()
         loginTextfield.translatesAutoresizingMaskIntoConstraints = false
-        loginTextfield.placeholder = "Login/email"
+//        loginTextfield.placeholder = "Login/email"
+        loginTextfield.text = "roman@mail.ru"
         loginTextfield.layer.borderColor = UIColor.gray.cgColor
         loginTextfield.font = UIFont(name: "sysemFont", size: 16)
         loginTextfield.textColor = .black
@@ -146,21 +151,24 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//        if UserDefaults.standard.bool(forKey: "isLogin") == true {
+//            self.navigationController?.pushViewController(MainViewController(user: user as! User), animated: true)
+//        }
+            navigationController?.setNavigationBarHidden(true, animated: false)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(self.didShowKeyboard(_:)),
+                                                   name: UIResponder.keyboardWillShowNotification,
+                                                   object: nil)
+            NotificationCenter.default.addObserver(self,
+                                                   selector: #selector(self.didHideKeyboard(_:)),
+                                                   name: UIResponder.keyboardDidHideNotification,
+                                                   object: nil)
         
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.didShowKeyboard(_:)),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.didHideKeyboard(_:)),
-                                               name: UIResponder.keyboardDidHideNotification,
-                                               object: nil)
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loginTextField.becomeFirstResponder()
+        UserDefaults.standard.object(forKey: "User")
     }
     
     
@@ -180,6 +188,8 @@ class LoginViewController: UIViewController {
                 }
                 if user.password == password {
                     DispatchQueue.main.async {
+//                        UserDefaults.standard.set(user, forKey: "User")
+//                        UserDefaults.standard.set(true, forKey: "isLogin")
                         self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
                     }
                 } else {
