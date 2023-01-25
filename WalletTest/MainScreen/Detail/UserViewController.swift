@@ -10,10 +10,11 @@ import UIKit
 class UserViewController: UIViewController {
     private let coreManager = CoreDataManager.shared
     private var isBackView = false
-   
+    let user: User
     let wallet: Wallet
     var users = [User]()
-    init(wallet: Wallet) {
+    init(user: User, wallet: Wallet) {
+        self.user = user
         self.wallet = wallet
         super.init(nibName: nil, bundle: nil)
     }
@@ -332,7 +333,8 @@ class UserViewController: UIViewController {
     }
     
     @objc private func tapTransButton() {
-        
+        let vc = TransferViewController(user: self.user)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     @objc private func tapCreditButton() {

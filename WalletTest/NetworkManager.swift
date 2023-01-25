@@ -83,14 +83,14 @@ struct Balance: Codable {
 
 struct DebitPost: Codable {
     var amount: String
-    var id: String //"5e41b926-5bf6-45de-935c-9d0b39eab6ce"
-    var reference: String // "test debit"
-    var visible: Bool // true
+    var id: String
+    var reference: String
+    var visible: Bool
 }
 
 struct CreditPost: Codable {
     var amount: String
-    var id: String  //"5e41b926-5bf6-45de-935c-9d0b39eab6ce"
+    var id: String
     var reference: String  = "test credit"
     var visible: Bool = true
 }
