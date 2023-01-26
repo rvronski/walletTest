@@ -75,18 +75,24 @@ class MainViewController: UIViewController {
         self.wallets = coreManager.wallets(user: user)
         fetchResultController.delegate = self
         try? self.fetchResultController.performFetch()
-        print(wallets[0].id)
-        print(wallets[1].id)
+        self.setupNavigationBar()
+//        print(wallets[0].id)
+//        print(wallets[1].id)
         
+    }
+    
+    private func setupNavigationBar() {
+        self.navigationItem.title = "Мои счета"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationItem.hidesBackButton = true
+        self.navigationController?.navigationBar.tintColor = .systemRed
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if ((fetchResultController.fetchedObjects?.isEmpty) != nil) {
-            
-        }
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        self.tabBarController?.tabBar.isHidden = false
+        self.chekCollectionView.reloadData()
     }
     
     private func setupView() {

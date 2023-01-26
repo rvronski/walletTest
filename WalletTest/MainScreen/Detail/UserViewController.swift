@@ -87,67 +87,27 @@ class UserViewController: UIViewController {
         return label
     }()
     
-    // MARK: Wallet View
+    // MARK: WalletCollectionVIew
     
-//    private lazy var layout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .vertical
-//        layout.minimumLineSpacing = 16
-//        layout.minimumInteritemSpacing = 16
-//        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-//        return layout
-//    }()
-//
-//    private lazy var detailCollectionView: UICollectionView = {
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-//        collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: "DetailCell")
-//        collectionView.delegate = self
-//        collectionView.dataSource = self
-//        return collectionView
-//    }()
-    
-    private lazy var walletView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 30
-//        view.layer.borderWidth = 0.09
-        view.layer.shadowOffset = CGSize(width: 3, height: 3)
-        view.layer.shadowRadius = 5
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.6
-        return view
+    private lazy var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        return layout
+    }()
+
+    private lazy var detailCollectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(DetailCollectionViewCell.self, forCellWithReuseIdentifier: "DetailCell")
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        return collectionView
     }()
     
-    private lazy var rubleImageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "rublesign.circle")
-        imageView.tintColor = .systemRed
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
-    
-    private lazy var balanceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 30)
-        label.text = wallet.balance
-        return label
-    }()
-    
-    private lazy var creditButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Пополнить", for: .normal)
-        button.setTitleColor(.systemRed, for: .normal)
-        button.addTarget(self, action: #selector(tapCreditButton), for: .touchUpInside)
-        return button
-    }()
-   
-    
+  
    //MARK: Transfer View
     
     private lazy var transferView: UIView = {
@@ -190,7 +150,8 @@ class UserViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.
+        self.detailCollectionView.reloadData()
+        self.navigationItem.title = wallet.nameWallet
         navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = false
     }
@@ -199,10 +160,7 @@ class UserViewController: UIViewController {
         self.view.backgroundColor = .white
         self.view.addSubview(self.conteinerView)
         self.view.addSubview(self.transferView)
-        self.view.addSubview(self.walletView)
-        self.walletView.addSubview(self.balanceLabel)
-        self.walletView.addSubview(self.rubleImageView)
-        self.walletView.addSubview(self.creditButton)
+        self.view.addSubview(self.detailCollectionView)
         self.conteinerView.addSubview(self.cardBackView)
         self.cardBackView.addSubview(self.cardBackImageView)
         self.cardBackView.addSubview(self.cardCVCLabel)
@@ -248,23 +206,12 @@ class UserViewController: UIViewController {
             self.cardCVCLabel.trailingAnchor.constraint(equalTo: self.cardBackView.trailingAnchor, constant: -16),
             self.cardCVCLabel.topAnchor.constraint(equalTo: self.cardBackView.topAnchor, constant: 50),
             
-            self.walletView.topAnchor.constraint(equalTo: self.conteinerView.bottomAnchor, constant: 16),
-            self.walletView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
-            self.walletView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.walletView.heightAnchor.constraint(equalToConstant: 150),
+            self.detailCollectionView.topAnchor.constraint(equalTo: self.conteinerView.bottomAnchor, constant: 16),
+            self.detailCollectionView.heightAnchor.constraint(equalToConstant: 190),
+            self.detailCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.detailCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             
-            self.rubleImageView.centerYAnchor.constraint(equalTo: self.walletView.centerYAnchor),
-            self.rubleImageView.leftAnchor.constraint(equalTo: self.walletView.leftAnchor, constant: 16),
-            self.rubleImageView.heightAnchor.constraint(equalTo: self.walletView.heightAnchor, multiplier: 0.3),
-            self.rubleImageView.widthAnchor.constraint(equalTo: self.rubleImageView.heightAnchor),
-            
-            self.balanceLabel.centerYAnchor.constraint(equalTo: self.rubleImageView.centerYAnchor),
-            self.balanceLabel.leftAnchor.constraint(equalTo: self.rubleImageView.rightAnchor, constant: 16),
-            
-            self.creditButton.centerYAnchor.constraint(equalTo: self.walletView.centerYAnchor),
-            self.creditButton.rightAnchor.constraint(equalTo: self.walletView.rightAnchor, constant: -16),
-            
-            self.transferView.topAnchor.constraint(equalTo: self.walletView.bottomAnchor, constant: 16),
+            self.transferView.topAnchor.constraint(equalTo: self.detailCollectionView.bottomAnchor, constant: 10),
             self.transferView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
             self.transferView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             self.transferView.heightAnchor.constraint(equalToConstant: 150),
@@ -275,7 +222,7 @@ class UserViewController: UIViewController {
             self.transferImageView.widthAnchor.constraint(equalTo: self.transferImageView.heightAnchor),
             
             self.transferButton.centerYAnchor.constraint(equalTo: self.transferImageView.centerYAnchor),
-            self.transferButton.leftAnchor.constraint(equalTo: self.transferImageView.rightAnchor, constant: 16),
+            self.transferButton.leftAnchor.constraint(equalTo: self.transferImageView.rightAnchor, constant: 25),
             
         ])
     }
@@ -315,7 +262,7 @@ class UserViewController: UIViewController {
             NetworkManager().credit(amount: text, id: id) { balance in
                 self.coreManager.changeBalance(id: id, newBalance: balance) {
                     DispatchQueue.main.async {
-                        self.balanceLabel.text = balance
+                        self.detailCollectionView.reloadData()
                     }
                 }
             }
@@ -339,6 +286,31 @@ class UserViewController: UIViewController {
     }
 
     @objc private func tapCreditButton() {
+        self.alertAction(title: "Полнить баланс", message: nil)
+    }
+    
+}
+extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DetailCell", for: indexPath) as! DetailCollectionViewCell
+        cell.setup(wallet: wallet)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let itemWidth = (collectionView.frame.width - 32)
+       
+        return CGSize(width: itemWidth, height: 150)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.alertAction(title: "Полнить баланс", message: nil)
     }
     
