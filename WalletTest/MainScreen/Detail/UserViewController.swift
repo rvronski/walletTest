@@ -280,15 +280,32 @@ class UserViewController: UIViewController {
     
     }
     
-    @objc private func tapTransButton() {
-        let vc = TransferViewController(user: self.user)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-
     @objc private func tapCreditButton() {
         self.alertAction(title: "Полнить баланс", message: nil)
     }
     
+
+
+    @objc private func tapTransButton() {
+        let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
+        
+        let anotherBank = UIAlertAction(title: "В другой банк", style: .default) {_ in 
+            let vc = AnotherTransferViewController(user: self.user)
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        }
+        
+        let betweenAction = UIAlertAction(title: "Между своими счетами", style: .default) {_ in
+            let vc = TransferViewController(user: self.user)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
+        
+        alertController.addAction(betweenAction)
+        alertController.addAction(anotherBank)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
 extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
@@ -311,7 +328,7 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.alertAction(title: "Полнить баланс", message: nil)
+//        self.alertAction(title: "Полнить баланс", message: nil)
     }
     
 }

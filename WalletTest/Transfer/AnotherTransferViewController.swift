@@ -1,5 +1,5 @@
 //
-//  TransferViewController.swift
+//  AnotherTransferViewController.swift
 //  WalletTest
 //
 //  Created by ROMAN VRONSKY on 25.01.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TransferViewController: UIViewController {
+class AnotherTransferViewController: UIViewController {
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
@@ -20,14 +20,6 @@ class TransferViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let toInLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "На счет"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
-        label.isUserInteractionEnabled = true
-        return label
-    }()
     
     private let fromInLabel: UILabel = {
         let label = UILabel()
@@ -55,10 +47,8 @@ class TransferViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .white
         label.textAlignment = .center
-        label.layer.borderWidth = 0.09
-        label.layer.cornerRadius = 30
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.isUserInteractionEnabled = true
+        label.text = "Кому"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
         return label
     }()
     
@@ -86,6 +76,20 @@ class TransferViewController: UIViewController {
         return sumTextField
     }()
     
+    private lazy var toTextField: UITextField = {
+        let sumTextField = UITextField()
+        sumTextField.translatesAutoresizingMaskIntoConstraints = false
+        sumTextField.textColor = .black
+        sumTextField.font = UIFont.systemFont(ofSize: 20)
+        sumTextField.layer.borderColor = UIColor.lightGray.cgColor
+        sumTextField.layer.borderWidth = 0.5
+        sumTextField.layer.cornerRadius = 20
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
+        sumTextField.leftView = paddingView
+        sumTextField.leftViewMode = .always
+        return sumTextField
+    }()
+    
     private lazy var transferButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -100,7 +104,6 @@ class TransferViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         self.wallets = coreManager.wallets(user: user)
-        self.gestureToLabel()
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
@@ -118,11 +121,11 @@ class TransferViewController: UIViewController {
        
         self.view.addSubview(self.fromLabel)
         self.view.addSubview(self.toLabel)
-        self.view.addSubview(self.toInLabel)
         self.view.addSubview(self.fromInLabel)
         self.view.addSubview(self.sumLabel)
         self.view.addSubview(self.sumTextField)
         self.view.addSubview(self.transferButton)
+        self.view.addSubview(self.toTextField)
         
         
         NSLayoutConstraint.activate([
@@ -136,17 +139,16 @@ class TransferViewController: UIViewController {
             self.fromLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             self.fromLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
             
-            self.toInLabel.topAnchor.constraint(equalTo: self.fromLabel.bottomAnchor, constant: 16),
-            self.toInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.toInLabel.heightAnchor.constraint(equalToConstant: 20),
-            
-            
-            self.toLabel.topAnchor.constraint(equalTo: self.toInLabel.bottomAnchor, constant: 16),
-            self.toLabel.heightAnchor.constraint(equalToConstant: 80),
+            self.toLabel.topAnchor.constraint(equalTo: self.fromLabel.bottomAnchor, constant: 36),
+            self.toLabel.heightAnchor.constraint(equalToConstant: 20),
             self.toLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.toLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
             
-            self.sumLabel.topAnchor.constraint(equalTo: self.toLabel.bottomAnchor, constant: 30),
+            self.toTextField.centerYAnchor.constraint(equalTo: self.toLabel.centerYAnchor),
+            self.toTextField.centerXAnchor.constraint(equalTo: self.sumTextField.centerXAnchor),
+            self.toTextField.heightAnchor.constraint(equalToConstant: 50),
+            self.toTextField.widthAnchor.constraint(equalToConstant: 200),
+            
+            self.sumLabel.topAnchor.constraint(equalTo: self.toLabel.bottomAnchor, constant: 46),
             self.sumLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             
             self.sumTextField.centerYAnchor.constraint(equalTo: self.sumLabel.centerYAnchor),
@@ -176,31 +178,12 @@ class TransferViewController: UIViewController {
             
     }
     
-    @objc private func tapToLabel() {
-         let popVC = MenuTableViewController(wallet: self.wallets)
-        
-        popVC.modalPresentationStyle = .popover
-        popVC.delegate = self
-        let popOverVC = popVC.popoverPresentationController
-        popOverVC?.delegate = self
-        popOverVC?.sourceView = self.toLabel
-        popOverVC?.sourceRect = CGRect(x: self.toLabel.bounds.midX , y: self.toLabel.bounds.maxY, width: 0, height: 0)
-        popVC.preferredContentSize = CGSize(width: 250, height: 250)
-        self.present(popVC, animated: true)
-    }
-    
     
     
     private func gestureFromLabel(){
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapFromLabel))
         gesture.numberOfTapsRequired = 1
         self.fromLabel.addGestureRecognizer(gesture)
-    }
-    
-    private func gestureToLabel(){
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(tapToLabel))
-        gesture.numberOfTapsRequired = 1
-        self.toLabel.addGestureRecognizer(gesture)
     }
     
     @objc private func hideKeyboard() {
@@ -212,34 +195,34 @@ class TransferViewController: UIViewController {
     }
     
     @objc private func didTapTransferButton() {
-        guard let fromId = wallets[self.fromLabel.tag].id else { return }
-        guard let toId = wallets[self.toLabel.tag].id else { return }
-        guard (wallets[self.toLabel.tag].balance != nil) else {return}
-        guard (wallets[self.fromLabel.tag].balance != nil) else {return}
-        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
-        guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
-        guard sumTextField.text != nil else {return}
-        guard let sum = Int(sumTextField.text!) else {return}
-        
-        let fromBalance = sum1 - sum
-        let toBalance = sum2 + sum
-        let fromNewBalance = String(fromBalance)
-        let toNewBalance = String(toBalance)
-        
-        coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
-            self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
+//        guard let fromId = wallets[self.fromLabel.tag].id else { return }
+//        guard let toId = wallets[self.toLabel.tag].id else { return }
+//        guard (wallets[self.toLabel.tag].balance != nil) else {return}
+//        guard (wallets[self.fromLabel.tag].balance != nil) else {return}
+//        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
+//        guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
+//        guard sumTextField.text != nil else {return}
+//        guard let sum = Int(sumTextField.text!) else {return}
+//
+//        let fromBalance = sum1 - sum
+//        let toBalance = sum2 + sum
+//        let fromNewBalance = String(fromBalance)
+//        let toNewBalance = String(toBalance)
+//
+//        coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
+//            self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
+//                self.navigationController?.popViewController(animated: true)
+//            }
+//        }
     }
 }
-extension TransferViewController: UIPopoverPresentationControllerDelegate {
+extension AnotherTransferViewController: UIPopoverPresentationControllerDelegate {
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
 }
-extension TransferViewController: TableViewDelegate {
+extension AnotherTransferViewController: TableViewDelegate {
     func transferNameWallet(index: Int, view: UIView) {
         let label = view as! UILabel
         guard let nameWallet = wallets[index].nameWallet else { return }
