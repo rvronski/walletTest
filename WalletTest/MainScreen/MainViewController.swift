@@ -102,7 +102,7 @@ class MainViewController: UIViewController {
         
         NSLayoutConstraint.activate([
         
-            self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -10),
+            self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.addWalletButton.heightAnchor.constraint(equalToConstant: 50),

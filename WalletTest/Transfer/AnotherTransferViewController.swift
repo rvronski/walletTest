@@ -8,9 +8,12 @@
 import UIKit
 
 class AnotherTransferViewController: UIViewController {
+    
+    let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
+    
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -194,26 +197,42 @@ class AnotherTransferViewController: UIViewController {
         self.view.addGestureRecognizer(tapGesture)
     }
     
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     @objc private func didTapTransferButton() {
-//        guard let fromId = wallets[self.fromLabel.tag].id else { return }
-//        guard let toId = wallets[self.toLabel.tag].id else { return }
-//        guard (wallets[self.toLabel.tag].balance != nil) else {return}
-//        guard (wallets[self.fromLabel.tag].balance != nil) else {return}
-//        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
-//        guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
-//        guard sumTextField.text != nil else {return}
-//        guard let sum = Int(sumTextField.text!) else {return}
-//
-//        let fromBalance = sum1 - sum
-//        let toBalance = sum2 + sum
-//        let fromNewBalance = String(fromBalance)
-//        let toNewBalance = String(toBalance)
-//
-//        coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
-//            self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
-//                self.navigationController?.popViewController(animated: true)
-//            }
-//        }
+        guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
+              let toText = self.toLabel.text, !toText.isEmpty
+              else {
+            self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
+            return
+        }
+        guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
+            return
+        }
+        
+        guard var text = sumTextField.text else { self.alertOk(title: "Ошибка!", message: "Укажите сумму перевода")
+            return
+        }
+        guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
+            return
+        }
+        guard let fromId = wallets[self.fromLabel.tag].id else { return }
+        networkManager.debit(amount: text, id: fromId, reference: toText) { balance in
+            self.coreManager.changeBalance(id: fromId, newBalance: balance) {
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+            }
+        }
     }
 }
 extension AnotherTransferViewController: UIPopoverPresentationControllerDelegate {

@@ -85,27 +85,27 @@ struct DebitPost: Codable {
     var amount: String
     var id: String
     var reference: String
-    var visible: Bool
+    var visible: Bool = true
 }
 
 struct CreditPost: Codable {
     var amount: String
     var id: String
-    var reference: String  = "test credit"
+    var reference: String  = "Пополнение"
     var visible: Bool = true
 }
 
 struct TransferPost: Codable {
     var amount: String
     var from_id: String
-    var reference: String = "transfer"
+    var reference: String
     var to_id: String
     var visible: Bool = true
     
 }
 
 class NetworkManager {
-    
+    static let shared: NetworkManager = .init()
     enum Operations {
         case create
         case debit
@@ -166,14 +166,14 @@ class NetworkManager {
         
     }
     
-    func debit() {
+    func debit(amount: String, id: String, reference: String, completion: @escaping ((_ balance: String) -> Void) ) {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Debit") else {return}
        
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
-        let body = DebitPost(amount: "10", id: "a3d9cf5f-1735-4757-842f-9a52d6132a4b", reference: "test debit", visible: true)
+        let body = DebitPost(amount: amount, id: id, reference: "Перевод в другой банк \(reference)" )
         let encoder = JSONEncoder()
         
         do {
@@ -203,8 +203,8 @@ class NetworkManager {
             }
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
-                
-                print(answer)
+                let balance = answer.balance
+               completion(balance)
                 
             } catch {
                 print(error)
@@ -215,7 +215,7 @@ class NetworkManager {
         
     }
     
-    func credit(amount: String, id: String, completion: @escaping ((_ balance: String) -> Void)) {
+    func credit(amount: String, id: String, completion: @escaping ((_ balance: String) -> Void))  {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Credit") else {return}
        
@@ -253,7 +253,7 @@ class NetworkManager {
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
                 let balance = answer.balance
-                completion(balance)
+                print(balance)
                 
                 
             } catch {
@@ -265,14 +265,14 @@ class NetworkManager {
         
     }
     
-    func transfer(amount: String, from_id: String, to_id: String, completion: @escaping ((_ balance: String) -> Void)) {
+    func transfer(amount: String, from_id: String, to_id: String, completion: @escaping () -> Void )  {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Transfer") else {return}
-       
+        
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
-        let body = TransferPost.init(amount: amount, from_id: from_id, to_id: to_id)
+        let body = TransferPost.init(amount: amount, from_id: from_id, reference: "перевод между счетами", to_id: to_id)
         let encoder = JSONEncoder()
         
         do {
@@ -295,21 +295,11 @@ class NetworkManager {
                 
                 return
             }
-            guard let data else {
+            guard data != nil else {
                 print("data = nil")
-                
                 return
             }
-            do {
-                let answer = try JSONDecoder().decode(Balance.self, from: data)
-                let balance = answer.balance
-                print(balance)
-                
-                
-            } catch {
-                print(error)
-                
-            }
+            completion()
         }
         task.resume()
         
