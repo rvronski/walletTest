@@ -14,10 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
+        
         return true
     }
-
+//    Optional("71a90f41-dcf2-4b28-9cb3-02b7468c05df")
+//    Optional("3ae5520d-d38e-4782-9e72-4d456a6c28f1")
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {

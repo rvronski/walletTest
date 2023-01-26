@@ -75,6 +75,8 @@ class MainViewController: UIViewController {
         self.wallets = coreManager.wallets(user: user)
         fetchResultController.delegate = self
         try? self.fetchResultController.performFetch()
+        print(wallets[0].id)
+        print(wallets[1].id)
         
     }
     

@@ -24,6 +24,8 @@
 		450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */; };
 		451583582980C11B003A1222 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583572980C11B003A1222 /* User.swift */; };
 		4515835A298185E6003A1222 /* TransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45158359298185E6003A1222 /* TransferViewController.swift */; };
+		4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835B2981D6E9003A1222 /* MenuTableViewController.swift */; };
+		4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835D2981E403003A1222 /* TransferTableViewCell.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCollectionViewCell.swift; sourceTree = "<group>"; };
 		451583572980C11B003A1222 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		45158359298185E6003A1222 /* TransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferViewController.swift; sourceTree = "<group>"; };
+		4515835B2981D6E9003A1222 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		4515835D2981E403003A1222 /* TransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTableViewCell.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,7 +88,7 @@
 				450AE97F297C35C200274D48 /* SceneDelegate.swift */,
 				450AE9A829800F6600274D48 /* LoginScreen */,
 				450AE9A729800F3300274D48 /* MainScreen */,
-				45158359298185E6003A1222 /* TransferViewController.swift */,
+				4515835F2981F224003A1222 /* Transfer */,
 				450AE994297C381200274D48 /* PaymentsViewController.swift */,
 				450AE996297C385200274D48 /* WalletViewController.swift */,
 				450AE998297CA1A400274D48 /* NetworkManager.swift */,
@@ -124,6 +128,16 @@
 				450AE9A1297F607100274D48 /* RegistrationViewController.swift */,
 			);
 			path = LoginScreen;
+			sourceTree = "<group>";
+		};
+		4515835F2981F224003A1222 /* Transfer */ = {
+			isa = PBXGroup;
+			children = (
+				45158359298185E6003A1222 /* TransferViewController.swift */,
+				4515835B2981D6E9003A1222 /* MenuTableViewController.swift */,
+				4515835D2981E403003A1222 /* TransferTableViewCell.swift */,
+			);
+			path = Transfer;
 			sourceTree = "<group>";
 		};
 		4592829F29803AC3007271DD /* Detail */ = {
@@ -210,12 +224,14 @@
 				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
 				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
+				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
 				450AE995297C381200274D48 /* PaymentsViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
 				451583582980C11B003A1222 /* User.swift in Sources */,
+				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,
 				450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */,
 				450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */,
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,

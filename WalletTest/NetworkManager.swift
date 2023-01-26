@@ -98,9 +98,9 @@ struct CreditPost: Codable {
 struct TransferPost: Codable {
     var amount: String
     var from_id: String
-    var reference: String
+    var reference: String = "transfer"
     var to_id: String
-    var visible: Bool
+    var visible: Bool = true
     
 }
 
@@ -265,38 +265,54 @@ class NetworkManager {
         
     }
     
-    func downloadCard(completion: @escaping ((CardCodable?) -> Void)) {
+    func transfer(amount: String, from_id: String, to_id: String, completion: @escaping ((_ balance: String) -> Void)) {
         
-        guard let urlServer = URL(string: "https://api.generadordni.es/v2/bank/card" ) else {return}
+        guard let url = URL(string: "https://api.m3o.com/v1/wallet/Transfer") else {return}
+       
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = self.headers
+        let body = TransferPost.init(amount: amount, from_id: from_id, to_id: to_id)
+        let encoder = JSONEncoder()
+        
+        do {
+            let jsonData = try encoder.encode(body)
+            request.httpBody = jsonData
+        } catch {
+            print(error)
+        }
         let session = URLSession(configuration: .default)
-        let task = session.dataTask(with: urlServer) { data, response, error in
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if let error {
                 print(error.localizedDescription)
-                completion(nil)
+                
                 return
             }
             let statusCode = (response as? HTTPURLResponse)?.statusCode
             print(statusCode ?? "")
             if statusCode != 200 {
                 print("Status Code = \(String(describing: statusCode))")
-                completion(nil)
+                
                 return
             }
             guard let data else {
                 print("data = nil")
-                completion(nil)
+                
                 return
             }
             do {
-                let answer = try JSONDecoder().decode([CardCodable].self, from: data)
-                let card = answer.first
-                completion(card)
+                let answer = try JSONDecoder().decode(Balance.self, from: data)
+                let balance = answer.balance
+                print(balance)
+                
+                
             } catch {
                 print(error)
-                completion(nil)
+                
             }
         }
         task.resume()
+        
     }
     
 }
