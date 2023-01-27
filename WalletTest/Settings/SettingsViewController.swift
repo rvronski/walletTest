@@ -8,13 +8,13 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
-
+    
     let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
     
-    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить все счета", "Удалить аккаунт"]
+    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить аккаунт"]
     
     init(user: User) {
         self.user = user
@@ -55,15 +55,15 @@ class SettingsViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.tableView)
-       
-        NSLayoutConstraint.activate([
         
+        NSLayoutConstraint.activate([
+            
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16),
             self.tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
-        
-        
+            
+            
         ])
     }
     
@@ -78,16 +78,16 @@ class SettingsViewController: UIViewController {
     }
     
     private func alertDismiss(title: String, message: String?, completionHandler: @escaping () -> Void) {
-         
-         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-         let ok = UIAlertAction(title: "ОК", style: .destructive) { _ in
-             completionHandler()
-         }
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .destructive) { _ in
+            completionHandler()
+        }
         let cancel = UIAlertAction(title: "Отмена", style: .default)
-         alertController.addAction(ok)
+        alertController.addAction(ok)
         alertController.addAction(cancel)
-         present(alertController, animated: true, completion: nil)
-     }
+        present(alertController, animated: true, completion: nil)
+    }
 }
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -115,35 +115,36 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }
         if indexPath.section == 0 && indexPath.row == 1 {
-            self.navigationController?.pushViewController(DeleteViewController(user: self.user), animated: true)
-            
+            if self.wallets.count == 0 {
+                self.alertOk(title: "У вас нет счетов", message: nil)
+            } else {
+                self.navigationController?.pushViewController(DeleteViewController(user: self.user), animated: true)
+            }
         }
         if indexPath.section == 0 && indexPath.row == 2 {
-            guard wallets.count != 0 else { self.alertOk(title: "У вас нет счетов", message: nil)
-                return
-            }
-            self.alertDismiss(title: "Вы уверенны что хотите удалить все счета?", message: "Операцию нельзя будет отменить. Все ваши счета автоматически удалятся") {
-                for i in self.wallets {
-                    guard let id = i.id else {return}
-                    self.networkManager.deleteWallet(id: id)
-                }
-                self.coreManager.deleteUser(user: self.user)
-                self.navigationController?.pushViewController(MainViewController(user: self.user), animated: true)
-            }
-        }
-        if indexPath.section == 0 && indexPath.row == 3 {
             self.alertDismiss(title: "Вы уверенны что хотите удалить аккаунт?", message: "Операцию нельзя будет отменить. Все ваши счета автоматически удалятся") {
-                for i in self.wallets {
-                    guard let id = i.id else {return}
-                    self.networkManager.deleteWallet(id: id)
+                if  self.wallets.count > 0 {
+                    for i in self.wallets {
+                        guard let id = i.id else {return}
+                        self.networkManager.deleteWallet(id: id) {
+                            self.coreManager.deleteUser(user: self.user) {
+                                DispatchQueue.main.async {
+                                    self.navigationController?.pushViewController(LoginViewController(), animated: true)
+                                }
+                            }
+                        }
+                        
+                    }
+                } else {
+                    self.coreManager.deleteUser(user: self.user) {
+                        DispatchQueue.main.async {
+                            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+                        }
+                    }
                 }
-                self.coreManager.deleteUser(user: self.user)
-                self.navigationController?.pushViewController(LoginViewController(), animated: true)
                 
             }
             
-            
         }
     }
-    
 }

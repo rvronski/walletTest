@@ -20,9 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        dateFormater.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 //        guard let string = dateFormater.date(from: date) else { return false }
 //        print(string)
-        NetworkManager().transactions(id: "71a90f41-dcf2-4b28-9cb3-02b7468c05df") { trans in
-            print(trans)
-        }
+//        NetworkManager().transactions(id: "71a90f41-dcf2-4b28-9cb3-02b7468c05df") { trans in
+//            print(trans)
+//        }
         return true
     }
     

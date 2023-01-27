@@ -46,6 +46,11 @@ class DeleteViewController: UIViewController {
         self.wallets = coreManager.wallets(user: self.user)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.wallets = coreManager.wallets(user: self.user)
+    }
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.tableView)
@@ -62,6 +67,16 @@ class DeleteViewController: UIViewController {
         
         
     }
+    
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
+    }
 }
 extension DeleteViewController:  UITableViewDelegate,  UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,5 +87,28 @@ extension DeleteViewController:  UITableViewDelegate,  UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TransferTableViewCell
         cell.setup(wallet: wallets[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            
+            let walletForDel = wallets[indexPath.row]
+            let nameWallet = walletForDel.nameWallet
+            guard let id = wallets[indexPath.row].id else {return}
+            wallets.remove(at: indexPath.row)
+            self.coreManager.deleteWallet(wallet: walletForDel)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            networkManager.deleteWallet(id: id) {
+                DispatchQueue.main.async {
+                    self.alertOk(title: "Счет \(nameWallet ?? "") удален", message: nil )
+                }
+            }
+        } else if editingStyle == .insert {
+            //
+        }
     }
 }

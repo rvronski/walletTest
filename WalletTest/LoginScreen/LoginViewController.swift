@@ -23,7 +23,7 @@ class LoginViewController: UIViewController {
         let passwordTextField = UITextField()
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
 //        passwordTextField.placeholder = "Password"
-        passwordTextField.text = "qwertyu"
+        passwordTextField.text = "qwerty"
         passwordTextField.layer.borderColor = UIColor.lightGray.cgColor
         passwordTextField.layer.borderWidth = 0.5
         passwordTextField.textColor = .black
@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
         var loginTextfield = UITextField()
         loginTextfield.translatesAutoresizingMaskIntoConstraints = false
 //        loginTextfield.placeholder = "Login/email"
-        loginTextfield.text = "roman@mail.ru"
+        loginTextfield.text = "qwerty"
         loginTextfield.layer.borderColor = UIColor.gray.cgColor
         loginTextfield.font = UIFont(name: "sysemFont", size: 16)
         loginTextfield.textColor = .black

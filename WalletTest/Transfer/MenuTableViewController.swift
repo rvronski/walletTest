@@ -58,6 +58,7 @@ class MenuTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let view = popoverPresentationController?.sourceView else { return }
         self.delegate?.transferNameWallet(index: indexPath.row, view: view)
+        self.dismiss(animated: true)
     }
     
     /*

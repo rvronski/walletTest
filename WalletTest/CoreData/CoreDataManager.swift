@@ -160,9 +160,10 @@ class CoreDataManager {
         saveContext()
     }
     
-    func deleteUser(user: User) {
+    func deleteUser(user: User, completion: @escaping () -> Void) {
         persistentContainer.viewContext.delete(user)
         saveContext()
+        completion()
     }
     
 }

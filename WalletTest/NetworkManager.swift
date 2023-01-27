@@ -311,7 +311,7 @@ class NetworkManager {
         
     }
     
-    func deleteWallet(id: String)  {
+    func deleteWallet(id: String, completion: @escaping () -> Void )  {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Delete") else {return}
         
@@ -345,7 +345,7 @@ class NetworkManager {
                 print("data = nil")
                 return
             }
-            
+            completion()
         }
         task.resume()
     }
