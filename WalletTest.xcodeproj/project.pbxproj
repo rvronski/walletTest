@@ -9,25 +9,61 @@
 /* Begin PBXBuildFile section */
 		450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE97D297C35C200274D48 /* AppDelegate.swift */; };
 		450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE97F297C35C200274D48 /* SceneDelegate.swift */; };
-		450AE982297C35C200274D48 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE981297C35C200274D48 /* UserViewController.swift */; };
+		450AE982297C35C200274D48 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE981297C35C200274D48 /* DetailViewController.swift */; };
 		450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */; };
 		450AE98A297C35C600274D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 450AE989297C35C600274D48 /* Assets.xcassets */; };
 		450AE98D297C35C600274D48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 450AE98B297C35C600274D48 /* LaunchScreen.storyboard */; };
-		450AE995297C381200274D48 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE994297C381200274D48 /* PaymentsViewController.swift */; };
-		450AE997297C385200274D48 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE996297C385200274D48 /* WalletViewController.swift */; };
+		450AE995297C381200274D48 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE994297C381200274D48 /* TransactionViewController.swift */; };
+		450AE997297C385200274D48 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE996297C385200274D48 /* SettingsViewController.swift */; };
+		450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE998297CA1A400274D48 /* NetworkManager.swift */; };
+		450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE99A297D8D3200274D48 /* CoreDataManager.swift */; };
+		450AE99E297DF3B000274D48 /* MyWalletLogo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */; };
+		450AE9A0297F546500274D48 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE99F297F546400274D48 /* LoginViewController.swift */; };
+		450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A1297F607100274D48 /* RegistrationViewController.swift */; };
+		450AE9A429800C7700274D48 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A329800C7700274D48 /* MainViewController.swift */; };
+		450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */; };
+		451583582980C11B003A1222 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583572980C11B003A1222 /* User.swift */; };
+		4515835A298185E6003A1222 /* TransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45158359298185E6003A1222 /* TransferViewController.swift */; };
+		4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835B2981D6E9003A1222 /* MenuTableViewController.swift */; };
+		4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835D2981E403003A1222 /* TransferTableViewCell.swift */; };
+		451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583602982E232003A1222 /* AnotherTransferViewController.swift */; };
+		45158364298355A4003A1222 /* TransactionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45158363298355A4003A1222 /* TransactionsTableViewCell.swift */; };
+		4515836629836731003A1222 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836529836731003A1222 /* TabBarViewController.swift */; };
+		4515836929838D50003A1222 /* DetailTransViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836829838D50003A1222 /* DetailTransViewController.swift */; };
+		4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836A29839D41003A1222 /* SettingsTableViewCell.swift */; };
+		4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836D2983B4F4003A1222 /* DeleteViewController.swift */; };
+		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		450AE97A297C35C200274D48 /* WalletTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalletTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		450AE97D297C35C200274D48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		450AE97F297C35C200274D48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		450AE981297C35C200274D48 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		450AE981297C35C200274D48 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		450AE987297C35C200274D48 /* WalletTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WalletTest.xcdatamodel; sourceTree = "<group>"; };
 		450AE989297C35C600274D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		450AE98C297C35C600274D48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		450AE98E297C35C600274D48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		450AE994297C381200274D48 /* PaymentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
-		450AE996297C385200274D48 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		450AE994297C381200274D48 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		450AE996297C385200274D48 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		450AE998297CA1A400274D48 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		450AE99A297D8D3200274D48 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyWalletLogo1.png; sourceTree = "<group>"; };
+		450AE99F297F546400274D48 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		450AE9A1297F607100274D48 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		450AE9A329800C7700274D48 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCollectionViewCell.swift; sourceTree = "<group>"; };
+		451583572980C11B003A1222 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		45158359298185E6003A1222 /* TransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferViewController.swift; sourceTree = "<group>"; };
+		4515835B2981D6E9003A1222 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		4515835D2981E403003A1222 /* TransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTableViewCell.swift; sourceTree = "<group>"; };
+		451583602982E232003A1222 /* AnotherTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherTransferViewController.swift; sourceTree = "<group>"; };
+		45158363298355A4003A1222 /* TransactionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsTableViewCell.swift; sourceTree = "<group>"; };
+		4515836529836731003A1222 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		4515836829838D50003A1222 /* DetailTransViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTransViewController.swift; sourceTree = "<group>"; };
+		4515836A29839D41003A1222 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		4515836D2983B4F4003A1222 /* DeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
+		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,15 +98,97 @@
 			children = (
 				450AE97D297C35C200274D48 /* AppDelegate.swift */,
 				450AE97F297C35C200274D48 /* SceneDelegate.swift */,
-				450AE981297C35C200274D48 /* UserViewController.swift */,
-				450AE994297C381200274D48 /* PaymentsViewController.swift */,
-				450AE996297C385200274D48 /* WalletViewController.swift */,
+				450AE998297CA1A400274D48 /* NetworkManager.swift */,
+				4515836729836A4D003A1222 /* TabBar */,
+				450AE9A829800F6600274D48 /* LoginScreen */,
+				450AE9A729800F3300274D48 /* MainScreen */,
+				4515835F2981F224003A1222 /* Transfer */,
+				4515836229835126003A1222 /* Transactions */,
+				4515836C2983AAC7003A1222 /* Settings */,
+				450AE99C297D94A900274D48 /* CoreData */,
 				450AE989297C35C600274D48 /* Assets.xcassets */,
 				450AE98B297C35C600274D48 /* LaunchScreen.storyboard */,
 				450AE98E297C35C600274D48 /* Info.plist */,
-				450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */,
+				450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */,
 			);
 			path = WalletTest;
+			sourceTree = "<group>";
+		};
+		450AE99C297D94A900274D48 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */,
+				450AE99A297D8D3200274D48 /* CoreDataManager.swift */,
+				451583572980C11B003A1222 /* User.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		450AE9A729800F3300274D48 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				450AE9A329800C7700274D48 /* MainViewController.swift */,
+				450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */,
+				4592829F29803AC3007271DD /* Detail */,
+			);
+			path = MainScreen;
+			sourceTree = "<group>";
+		};
+		450AE9A829800F6600274D48 /* LoginScreen */ = {
+			isa = PBXGroup;
+			children = (
+				450AE99F297F546400274D48 /* LoginViewController.swift */,
+				450AE9A1297F607100274D48 /* RegistrationViewController.swift */,
+			);
+			path = LoginScreen;
+			sourceTree = "<group>";
+		};
+		4515835F2981F224003A1222 /* Transfer */ = {
+			isa = PBXGroup;
+			children = (
+				45158359298185E6003A1222 /* TransferViewController.swift */,
+				451583602982E232003A1222 /* AnotherTransferViewController.swift */,
+				4515835B2981D6E9003A1222 /* MenuTableViewController.swift */,
+				4515835D2981E403003A1222 /* TransferTableViewCell.swift */,
+			);
+			path = Transfer;
+			sourceTree = "<group>";
+		};
+		4515836229835126003A1222 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				450AE994297C381200274D48 /* TransactionViewController.swift */,
+				4515836829838D50003A1222 /* DetailTransViewController.swift */,
+				45158363298355A4003A1222 /* TransactionsTableViewCell.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		4515836729836A4D003A1222 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				4515836529836731003A1222 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		4515836C2983AAC7003A1222 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				450AE996297C385200274D48 /* SettingsViewController.swift */,
+				4515836A29839D41003A1222 /* SettingsTableViewCell.swift */,
+				4515836D2983B4F4003A1222 /* DeleteViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		4592829F29803AC3007271DD /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				450AE981297C35C200274D48 /* DetailViewController.swift */,
+				459282A029803C07007271DD /* DetailCollectionViewCell.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,6 +251,7 @@
 			files = (
 				450AE98D297C35C600274D48 /* LaunchScreen.storyboard in Resources */,
 				450AE98A297C35C600274D48 /* Assets.xcassets in Resources */,
+				450AE99E297DF3B000274D48 /* MyWalletLogo1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,12 +262,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				450AE995297C381200274D48 /* PaymentsViewController.swift in Sources */,
+				450AE9A0297F546500274D48 /* LoginViewController.swift in Sources */,
+				4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */,
+				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
+				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
+				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
+				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
+				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
+				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
-				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
+				4515836629836731003A1222 /* TabBarViewController.swift in Sources */,
+				450AE982297C35C200274D48 /* DetailViewController.swift in Sources */,
+				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
+				451583582980C11B003A1222 /* User.swift in Sources */,
+				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,
+				4515836929838D50003A1222 /* DetailTransViewController.swift in Sources */,
+				450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */,
+				45158364298355A4003A1222 /* TransactionsTableViewCell.swift in Sources */,
 				450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */,
+				4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */,
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,
-				450AE997297C385200274D48 /* WalletViewController.swift in Sources */,
+				451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */,
+				450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */,
+				450AE997297C385200274D48 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

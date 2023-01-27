@@ -8,29 +8,16 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
+    
     var window: UIWindow?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-        let userViewController = UINavigationController(rootViewController: UserViewController())
-        let paymentsViewController = UINavigationController(rootViewController: PaymentsViewController())
-        let walletViewController = UINavigationController(rootViewController: WalletViewController())
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [userViewController, paymentsViewController, walletViewController]
-        userViewController.title = "Главная"
-        paymentsViewController.title = "Платежи"
-        walletViewController.title = "Кошелек"
-        let images = ["person", "arrow.left.arrow.right.square", "creditcard"]
-        guard let items = tabBarController.tabBar.items else {
-            return
-        }
-        for i in 0..<items.count {
-            items[i].image = UIImage(systemName: images[i])
-        }
-        self.window?.rootViewController = tabBarController
+        let rootVC = UINavigationController(rootViewController: LoginViewController())
+        self.window?.rootViewController = rootVC
         self.window?.makeKeyAndVisible()
     }
 
@@ -62,7 +49,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+       
     }
 
 
