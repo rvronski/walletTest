@@ -76,7 +76,7 @@ class MainViewController: UIViewController {
         fetchResultController.delegate = self
         try? self.fetchResultController.performFetch()
         self.setupNavigationBar()
-//        print(wallets[0].id)
+        print(wallets[0].id)
 //        print(wallets[1].id)
         
     }

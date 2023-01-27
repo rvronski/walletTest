@@ -209,7 +209,7 @@ class AnotherTransferViewController: UIViewController {
     
     @objc private func didTapTransferButton() {
         guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-              let toText = self.toLabel.text, !toText.isEmpty
+              let toText = self.toTextField.text, !toText.isEmpty
               else {
             self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
             return
@@ -218,9 +218,11 @@ class AnotherTransferViewController: UIViewController {
             return
         }
         
-        guard var text = sumTextField.text else { self.alertOk(title: "Ошибка!", message: "Укажите сумму перевода")
+        guard  let text = self.sumTextField.text, !text.isEmpty
+         else { self.alertOk(title: "Введите сумму", message: nil)
             return
         }
+        
         guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }

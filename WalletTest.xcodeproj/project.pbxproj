@@ -13,8 +13,8 @@
 		450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */; };
 		450AE98A297C35C600274D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 450AE989297C35C600274D48 /* Assets.xcassets */; };
 		450AE98D297C35C600274D48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 450AE98B297C35C600274D48 /* LaunchScreen.storyboard */; };
-		450AE995297C381200274D48 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE994297C381200274D48 /* PaymentsViewController.swift */; };
-		450AE997297C385200274D48 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE996297C385200274D48 /* WalletViewController.swift */; };
+		450AE995297C381200274D48 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE994297C381200274D48 /* TransactionViewController.swift */; };
+		450AE997297C385200274D48 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE996297C385200274D48 /* SettingsViewController.swift */; };
 		450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE998297CA1A400274D48 /* NetworkManager.swift */; };
 		450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE99A297D8D3200274D48 /* CoreDataManager.swift */; };
 		450AE99E297DF3B000274D48 /* MyWalletLogo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */; };
@@ -39,8 +39,8 @@
 		450AE989297C35C600274D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		450AE98C297C35C600274D48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		450AE98E297C35C600274D48 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		450AE994297C381200274D48 /* PaymentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
-		450AE996297C385200274D48 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		450AE994297C381200274D48 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		450AE996297C385200274D48 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		450AE998297CA1A400274D48 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		450AE99A297D8D3200274D48 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyWalletLogo1.png; sourceTree = "<group>"; };
@@ -91,8 +91,8 @@
 				450AE9A829800F6600274D48 /* LoginScreen */,
 				450AE9A729800F3300274D48 /* MainScreen */,
 				4515835F2981F224003A1222 /* Transfer */,
-				450AE994297C381200274D48 /* PaymentsViewController.swift */,
-				450AE996297C385200274D48 /* WalletViewController.swift */,
+				450AE994297C381200274D48 /* TransactionViewController.swift */,
+				450AE996297C385200274D48 /* SettingsViewController.swift */,
 				450AE998297CA1A400274D48 /* NetworkManager.swift */,
 				450AE99C297D94A900274D48 /* CoreData */,
 				450AE989297C35C600274D48 /* Assets.xcassets */,
@@ -229,7 +229,7 @@
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
 				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
-				450AE995297C381200274D48 /* PaymentsViewController.swift in Sources */,
+				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
@@ -240,7 +240,7 @@
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,
 				451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */,
 				450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */,
-				450AE997297C385200274D48 /* WalletViewController.swift in Sources */,
+				450AE997297C385200274D48 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

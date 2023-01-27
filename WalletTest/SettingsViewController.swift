@@ -1,5 +1,5 @@
 //
-//  PaymentsViewController.swift
+//  WalletViewController.swift
 //  WalletTest
 //
 //  Created by ROMAN VRONSKY on 21.01.2023.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PaymentsViewController: UIViewController {
+class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

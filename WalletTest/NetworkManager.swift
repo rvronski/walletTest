@@ -60,6 +60,38 @@ struct CardCodable: Codable {
 //    } catch {
 //    print("ERROR")
 //    }
+/*
+{
+    "transactions": [
+        {
+            "id": "a5455d1a-c090-4cf1-a6a1-8ef8fb38b462",
+            "created": "2022-07-25T21:54:13.380533678+01:00",
+            "amount": "10",
+            "reference": "test credit",
+            "metadata": {}
+        },
+        {
+            "id": "a5455d1a-c090-4cf1-a6a1-8ef8fb38b462",
+            "created": "2022-07-25T21:54:10.380533678+01:00",
+            "amount": "5",
+            "reference": "test debit",
+            "metadata": {}
+        },
+ */
+struct TransactionCodable: Codable {
+    var id: String
+    var created: String
+    var amount: String
+    var reference: String
+}
+
+struct TransAnswer: Codable {
+    var transactions: [TransactionCodable]
+}
+
+struct TransactionPost: Codable {
+    var id: String
+}
 
 struct Account: Codable {
     var id: String
@@ -73,7 +105,7 @@ struct NewWallet: Codable {
 }
 
 struct NewWalletPost: Codable {
-    var description: String = ""
+    var description: String = "Новый счет"
     var name: String
 }
 
@@ -118,6 +150,55 @@ class NetworkManager {
         "Content-Type": "application/json",
         "Authorization": "Bearer NGEyNDRmZmEtZmQ0OS00MmU4LWE3MjAtZTMzZTI2ZTRkOGI4"
     ]
+    
+    
+    func transactions(id: String, completion: @escaping ([TransactionCodable]) -> Void) {
+        
+        guard let url = URL(string: "https://api.m3o.com/v1/wallet/Transactions") else {return}
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = self.headers
+        let body = TransactionPost.init(id: id)
+        let encoder = JSONEncoder()
+        
+        do {
+            let jsonData = try encoder.encode(body)
+            request.httpBody = jsonData
+        } catch {
+            print(error)
+        }
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if let error {
+                print(error.localizedDescription)
+                
+                return
+            }
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            print(statusCode ?? "")
+            if statusCode != 200 {
+                print("Status Code = \(String(describing: statusCode))")
+                
+                return
+            }
+            guard let data else {
+                print("data = nil")
+                
+                return
+            }
+            do {
+                let answer = try JSONDecoder().decode(TransAnswer.self, from: data)
+                let transactions = answer.transactions
+                completion(transactions)
+                
+            } catch {
+                print(error)
+                
+            }
+        }
+        task.resume()
+        
+    }
     
     func createWallet(name: String, completion: @escaping ((NewWallet) -> Void)) {
         
@@ -253,9 +334,7 @@ class NetworkManager {
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
                 let balance = answer.balance
-                print(balance)
-                
-                
+               completion(balance)
             } catch {
                 print(error)
                 

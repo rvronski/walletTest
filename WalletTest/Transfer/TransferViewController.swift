@@ -8,10 +8,12 @@
 import UIKit
 
 class TransferViewController: UIViewController {
+    
     let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
+    
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)

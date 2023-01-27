@@ -8,11 +8,14 @@
 import UIKit
 
 class UserViewController: UIViewController {
+    
+    private let networkManager = NetworkManager.shared
     private let coreManager = CoreDataManager.shared
     private var isBackView = false
     let user: User
     let wallet: Wallet
     var users = [User]()
+    
     init(user: User, wallet: Wallet) {
         self.user = user
         self.wallet = wallet
@@ -247,7 +250,15 @@ class UserViewController: UIViewController {
         UIView.transition(from: fromView, to: toView, duration: 1, options: [.transitionFlipFromRight, .showHideTransitionViews] )
         isBackView.toggle()
     }
-    
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     private func alertAction(title: String, message: String?) {
         let alertController = UIAlertController(title: title, message: "", preferredStyle: .alert)
 
@@ -257,9 +268,16 @@ class UserViewController: UIViewController {
 
         let saveAction = UIAlertAction(title: "Пополнить", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
-            guard let text = firstTextField.text else {return}
+            
+            guard  let text = firstTextField.text, !text.isEmpty
+             else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
+                return
+            }
             guard let id = self.wallet.id else {return}
-            NetworkManager().credit(amount: text, id: id) { balance in
+            self.networkManager.credit(amount: text, id: id) { balance in
                 self.coreManager.changeBalance(id: id, newBalance: balance) {
                     DispatchQueue.main.async {
                         self.detailCollectionView.reloadData()
@@ -280,12 +298,6 @@ class UserViewController: UIViewController {
     
     }
     
-    @objc private func tapCreditButton() {
-        self.alertAction(title: "Полнить баланс", message: nil)
-    }
-    
-
-
     @objc private func tapTransButton() {
         let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
         
@@ -328,7 +340,7 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        self.alertAction(title: "Полнить баланс", message: nil)
+        self.alertAction(title: "Полнить баланс", message: nil)
     }
     
 }

@@ -17,8 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
         let mainViewController = UINavigationController(rootViewController: LoginViewController())
-        let paymentsViewController = UINavigationController(rootViewController: PaymentsViewController())
-        let walletViewController = UINavigationController(rootViewController: WalletViewController())
+        let paymentsViewController = UINavigationController(rootViewController: TransactionViewController())
+        let walletViewController = UINavigationController(rootViewController: SettingsViewController())
         let tabBarController = UITabBarController()
         tabBarController.tabBar.tintColor = .systemRed
         tabBarController.viewControllers = [mainViewController, paymentsViewController, walletViewController]

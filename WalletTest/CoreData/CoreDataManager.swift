@@ -30,8 +30,6 @@ class CoreDataManager {
         return container
     }()
     
-    
-    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -84,6 +82,36 @@ class CoreDataManager {
         completion()
     }
     
+    func createTransactions(transactions: [TransactionCodable], wallet: Wallet, completion: @escaping () -> Void ) {
+        
+        persistentContainer.performBackgroundTask { backgroundContext in
+            for transaction in transactions {
+                if self.getTransaction(byId: transaction.id, context: backgroundContext) != nil { continue }
+                let newTransaction = Transaction(context: backgroundContext)
+                let stringDate = transaction.created
+                let dateFormater = ISO8601DateFormatter()
+                dateFormater.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                guard let date = dateFormater.date(from: stringDate) else { return }
+                newTransaction.id = transaction.id
+                newTransaction.amount = transaction.amount
+                newTransaction.created = date
+                newTransaction.reference = transaction.reference
+                wallet.addToTransactions(newTransaction)
+                do {
+                    try backgroundContext.save()
+                } catch {
+                    print(error)
+                }
+                completion()
+            }
+        }
+    }
+    
+    func getTransaction(byId: String, context: NSManagedObjectContext) -> Transaction? {
+        let fetchRequest = Transaction.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", byId)
+        return (try? context.fetch(fetchRequest))?.first
+    }
     
     func getUser(email: String, completion: (((User)?) -> Void) ) {
         let fetchRequest = User.fetchRequest()
