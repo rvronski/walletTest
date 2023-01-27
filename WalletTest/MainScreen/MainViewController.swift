@@ -21,13 +21,6 @@ class MainViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let fetchResultController: NSFetchedResultsController = {
-        let fetchRequest = Wallet.fetchRequest()
-        fetchRequest.sortDescriptors = []
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        return frc
-    }()
-    
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -73,10 +66,8 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         self.wallets = coreManager.wallets(user: user)
-        fetchResultController.delegate = self
-        try? self.fetchResultController.performFetch()
         self.setupNavigationBar()
-        print(wallets[0].id)
+//        print(wallets[0].id)
 //        print(wallets[1].id)
         
     }
@@ -153,22 +144,22 @@ class MainViewController: UIViewController {
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchResultController.sections?[section].numberOfObjects ?? 0
-//        return  self.wallets.count÷
+        return wallets.count
+       
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChekCell", for: indexPath) as! CheckCollectionViewCell
         
-//        cell.setup(wallet: wallets[indexPath.row])
-        cell.setup(wallet: fetchResultController.object(at: indexPath))
+        cell.setup(wallet: wallets[indexPath.row])
+       
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemWidth = (collectionView.frame.width - 32)
-//        let itemHeight = (collectionView.frame.height)
+       
         return CGSize(width: itemWidth, height: 150)
         
     }

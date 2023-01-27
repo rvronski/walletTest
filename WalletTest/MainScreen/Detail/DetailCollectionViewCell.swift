@@ -17,7 +17,6 @@ class DetailCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
         view.layer.cornerRadius = 30
-//        view.layer.borderWidth = 0.09
         view.layer.shadowOffset = CGSize(width: 3, height: 3)
         view.layer.shadowRadius = 5
         view.layer.shadowColor = UIColor.black.cgColor
@@ -26,7 +25,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var rubleImageView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "rublesign.circle")
         imageView.tintColor = .systemRed

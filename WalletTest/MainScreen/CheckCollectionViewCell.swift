@@ -23,7 +23,7 @@ class CheckCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var rubleImageView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "rublesign.circle")
         imageView.tintColor = .systemRed
@@ -32,7 +32,7 @@ class CheckCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var cardImageView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "CardImageNewMW")
         imageView.clipsToBounds = true

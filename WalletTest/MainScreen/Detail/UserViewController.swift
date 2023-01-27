@@ -14,7 +14,6 @@ class UserViewController: UIViewController {
     private var isBackView = false
     let user: User
     let wallet: Wallet
-    var users = [User]()
     
     init(user: User, wallet: Wallet) {
         self.user = user
@@ -100,7 +99,7 @@ class UserViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         return layout
     }()
-
+    
     private lazy var detailCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,15 +109,14 @@ class UserViewController: UIViewController {
         return collectionView
     }()
     
-  
-   //MARK: Transfer View
+    
+    //MARK: Transfer View
     
     private lazy var transferView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
         view.layer.cornerRadius = 30
-//        view.layer.borderWidth = 0.09
         view.layer.shadowOffset = CGSize(width: 3, height: 3)
         view.layer.shadowRadius = 5
         view.layer.shadowColor = UIColor.black.cgColor
@@ -127,7 +125,7 @@ class UserViewController: UIViewController {
     }()
     
     private lazy var transferImageView: UIImageView = {
-       let imageView = UIImageView()
+        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "shuffle")
         imageView.tintColor = .systemRed
@@ -146,10 +144,10 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.wallet = coreManager.users[counter].wallets
         self.setupView()
         self.gestureView()
         self.gestureBackView()
+        self.gestureTransferView()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -173,7 +171,7 @@ class UserViewController: UIViewController {
         self.cardView.bringSubviewToFront(cardNameLabel)
         self.transferView.addSubview(self.transferImageView)
         self.transferView.addSubview(self.transferButton)
-       
+        
         
         NSLayoutConstraint.activate([
             
@@ -261,16 +259,16 @@ class UserViewController: UIViewController {
     }
     private func alertAction(title: String, message: String?) {
         let alertController = UIAlertController(title: title, message: "", preferredStyle: .alert)
-
+        
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Введите сумму"
         }
-
+        
         let saveAction = UIAlertAction(title: "Пополнить", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             
             guard  let text = firstTextField.text, !text.isEmpty
-             else { self.alertOk(title: "Введите сумму", message: nil)
+            else { self.alertOk(title: "Введите сумму", message: nil)
                 return
             }
             guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
@@ -287,21 +285,19 @@ class UserViewController: UIViewController {
             
             
         })
-
+        
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
-
-
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-
+        
         self.present(alertController, animated: true, completion: nil)
-    
+        
     }
     
     @objc private func tapTransButton() {
         let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
         
-        let anotherBank = UIAlertAction(title: "В другой банк", style: .default) {_ in 
+        let anotherBank = UIAlertAction(title: "В другой банк", style: .default) {_ in
             let vc = AnotherTransferViewController(user: self.user)
             self.navigationController?.pushViewController(vc, animated: true)
             
@@ -334,7 +330,7 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemWidth = (collectionView.frame.width - 32)
-       
+        
         return CGSize(width: itemWidth, height: 150)
         
     }
@@ -342,5 +338,9 @@ extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.alertAction(title: "Полнить баланс", message: nil)
     }
-    
+    private func gestureTransferView(){
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tapTransButton))
+        gesture.numberOfTapsRequired = 1
+        self.transferView.addGestureRecognizer(gesture)
+    }
 }

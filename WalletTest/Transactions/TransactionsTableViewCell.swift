@@ -8,11 +8,10 @@
 import UIKit
 
 class TransactionsTableViewCell: UITableViewCell {
-
+    
     private lazy var operationLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 20)
         label.numberOfLines = 0
         return label
     }()
@@ -27,7 +26,7 @@ class TransactionsTableViewCell: UITableViewCell {
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 10)
         return label
     }()
     
@@ -42,24 +41,31 @@ class TransactionsTableViewCell: UITableViewCell {
     
     func setup(transaction: Transaction) {
         self.operationLabel.text = transaction.reference
+        self.sumLabel.text = transaction.amount
+        self.dateLabel.text = transaction.stringDate
     }
     
     private func setupView(){
         
         self.contentView.addSubview(self.operationLabel)
-//        self.contentView.addSubview(self.sumLabel)
-//        self.contentView.addSubview(self.dateLabel)
+        self.contentView.addSubview(self.sumLabel)
+        self.contentView.addSubview(self.dateLabel)
         
         NSLayoutConstraint.activate([
-            self.operationLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 16),
+            self.operationLabel.topAnchor.constraint(equalTo: self.dateLabel.bottomAnchor, constant: 10),
             self.operationLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 16),
             self.operationLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -16),
             self.operationLabel.widthAnchor.constraint(equalToConstant: 150),
             
+            self.sumLabel.centerYAnchor.constraint(equalTo: self.operationLabel.centerYAnchor),
+            self.sumLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -16),
+            
+            self.dateLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
+            self.dateLabel.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 10),
             
             
-        
-        
+            
+            
         ])
         
         

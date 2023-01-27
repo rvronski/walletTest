@@ -7,77 +7,7 @@
 
 import Foundation
 
-/*
- {
-     "card": "5923761798059986",
-     "card_formatted": "5923 7617 9805 9986",
-     "expiration_date": "09/23",
-     "cvc": "786",
-     "name": "Mastercard"
- }
- 
- */
 
-struct CardCodable: Codable {
-    var card_formatted: String
-    var expiration_date: String
-    var cvc: String
-}
-
-
-/*
- curl "https://api.m3o.com/v1/wallet/Create" \
- -H "Content-Type: application/json" \
- -H "Authorization: Bearer $M3O_API_TOKEN" \
- -d '{
-   "description": "No explanation needed",
-   "name": "Greatness"
- }
- 
- 
- "account": {
-        "id": "b6407edd-2e26-45c0-9e2c-343689bbe5f6",
-        "name": "Greatness",
-        "description": "No description needed",
-        "balance": "0"
-    }
-}
- */
-
-
-//func resAPI(Login : String, Password : String) {
-//
-//    let request = NSMutableURLRequest(url: NSURL(string: "http:/index.php")! as URL)
-//    request.httpMethod = "POST"
-//
-//    let myID = Picklist.init(code: Login, password: Password)
-//    let encoder = JSONEncoder()
-//
-//    do {
-//    let jsonData = try encoder.encode(myID)
-//    request.httpBody = jsonData
-//    print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
-//    } catch {
-//    print("ERROR")
-//    }
-/*
-{
-    "transactions": [
-        {
-            "id": "a5455d1a-c090-4cf1-a6a1-8ef8fb38b462",
-            "created": "2022-07-25T21:54:13.380533678+01:00",
-            "amount": "10",
-            "reference": "test credit",
-            "metadata": {}
-        },
-        {
-            "id": "a5455d1a-c090-4cf1-a6a1-8ef8fb38b462",
-            "created": "2022-07-25T21:54:10.380533678+01:00",
-            "amount": "5",
-            "reference": "test debit",
-            "metadata": {}
-        },
- */
 struct TransactionCodable: Codable {
     var id: String
     var created: String
@@ -137,14 +67,8 @@ struct TransferPost: Codable {
 }
 
 class NetworkManager {
+    
     static let shared: NetworkManager = .init()
-    enum Operations {
-        case create
-        case debit
-        case credit
-        case balance
-        case transfer
-    }
     
     let headers = [
         "Content-Type": "application/json",
@@ -250,7 +174,7 @@ class NetworkManager {
     func debit(amount: String, id: String, reference: String, completion: @escaping ((_ balance: String) -> Void) ) {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Debit") else {return}
-       
+        
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
@@ -285,7 +209,7 @@ class NetworkManager {
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
                 let balance = answer.balance
-               completion(balance)
+                completion(balance)
                 
             } catch {
                 print(error)
@@ -299,7 +223,7 @@ class NetworkManager {
     func credit(amount: String, id: String, completion: @escaping ((_ balance: String) -> Void))  {
         
         guard let url = URL(string: "https://api.m3o.com/v1/wallet/Credit") else {return}
-       
+        
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
@@ -334,7 +258,7 @@ class NetworkManager {
             do {
                 let answer = try JSONDecoder().decode(Balance.self, from: data)
                 let balance = answer.balance
-               completion(balance)
+                completion(balance)
             } catch {
                 print(error)
                 

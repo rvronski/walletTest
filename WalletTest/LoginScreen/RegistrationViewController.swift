@@ -24,7 +24,6 @@ class RegistrationViewController: UIViewController {
         return view
     }()
     
-    
     private lazy var registerLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -42,19 +41,9 @@ class RegistrationViewController: UIViewController {
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
         userNameTextField.leftView = paddingView
         userNameTextField.leftViewMode = .always
-        //        userNameTextField.becomeFirstResponder()
         return userNameTextField
     }()
     
-//    private lazy var walletNameTextField: UITextField = {
-//        let userNameTextField = UITextField()
-//        userNameTextField.translatesAutoresizingMaskIntoConstraints = false
-//        userNameTextField.placeholder = "Имя для вашего кошелька"
-//        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
-//        userNameTextField.leftView = paddingView
-//        userNameTextField.leftViewMode = .always
-//        return userNameTextField
-//    }()
     
     private lazy var emailTextField: UITextField = {
         let emailTextField = UITextField()
@@ -75,8 +64,6 @@ class RegistrationViewController: UIViewController {
         let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
         passwordTextField.leftView = paddingView
         passwordTextField.leftViewMode = .always
-        //        passwordTextField.textInputMode =
-        //        passwordTextField.becomeFirstResponder()
         return passwordTextField
     }()
     
@@ -134,7 +121,7 @@ class RegistrationViewController: UIViewController {
         self.registerView.addSubview(self.passwordTextField)
         self.registerView.addSubview(self.registrationButton)
         self.registerView.addSubview(self.userNameTextField)
-//        self.registerView.addSubview(self.walletNameTextField)
+        //        self.registerView.addSubview(self.walletNameTextField)
         self.registerView.addSubview(self.OutButton)
         
         NSLayoutConstraint.activate([
@@ -151,8 +138,8 @@ class RegistrationViewController: UIViewController {
             
             self.registerLabel.centerXAnchor.constraint(equalTo: self.registerView.centerXAnchor),
             self.registerLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.registerView.topAnchor, constant: -20),
-//            self.registerLabel.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
-//            self.registerLabel.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
+            //            self.registerLabel.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
+            //            self.registerLabel.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
             self.userNameTextField.heightAnchor.constraint(equalToConstant: 50),
             self.userNameTextField.topAnchor.constraint(equalTo: self.registerView.topAnchor, constant: 20),
@@ -168,11 +155,6 @@ class RegistrationViewController: UIViewController {
             self.passwordTextField.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 16),
             self.passwordTextField.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
             self.passwordTextField.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
-            
-//            self.walletNameTextField.heightAnchor.constraint(equalToConstant: 50),
-//            self.walletNameTextField.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 16),
-//            self.walletNameTextField.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
-//            self.walletNameTextField.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
             self.registrationButton.heightAnchor.constraint(equalToConstant: 50),
             self.registrationButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 30),
@@ -264,7 +246,7 @@ class RegistrationViewController: UIViewController {
                 }
                     return}
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
+                    self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
                 }
             }
         }

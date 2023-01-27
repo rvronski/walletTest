@@ -19,7 +19,7 @@
         <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="nameWallet" optional="YES" attributeType="String"/>
-        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Transaction" inverseName="wallet" inverseEntity="Transaction"/>
+        <relationship name="transactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Transaction" inverseName="wallet" inverseEntity="Transaction"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="wallets" inverseEntity="User"/>
     </entity>
 </model>

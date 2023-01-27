@@ -94,7 +94,7 @@ class AnotherTransferViewController: UIViewController {
     }()
     
     private lazy var transferButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Перевести", for: .normal)
         button.backgroundColor = .systemRed
@@ -121,7 +121,7 @@ class AnotherTransferViewController: UIViewController {
     
     private func setupView() {
         self.view.backgroundColor = .white
-       
+        
         self.view.addSubview(self.fromLabel)
         self.view.addSubview(self.toLabel)
         self.view.addSubview(self.fromInLabel)
@@ -132,7 +132,7 @@ class AnotherTransferViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-        
+            
             self.fromInLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
             self.fromInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             self.fromInLabel.heightAnchor.constraint(equalToConstant: 20),
@@ -164,11 +164,11 @@ class AnotherTransferViewController: UIViewController {
             self.transferButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.transferButton.heightAnchor.constraint(equalToConstant: 50),
             
-        
+            
         ])
     }
     @objc private func tapFromLabel() {
-         let popVC = MenuTableViewController(wallet: self.wallets)
+        let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
         popVC.delegate = self
@@ -178,7 +178,7 @@ class AnotherTransferViewController: UIViewController {
         popOverVC?.sourceRect = CGRect(x: self.fromLabel.bounds.midX, y: self.fromLabel.bounds.maxY, width: 0, height: 0)
         popVC.preferredContentSize = CGSize(width: 250, height: 250)
         self.present(popVC, animated: true)
-            
+        
     }
     
     
@@ -209,8 +209,8 @@ class AnotherTransferViewController: UIViewController {
     
     @objc private func didTapTransferButton() {
         guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-              let toText = self.toTextField.text, !toText.isEmpty
-              else {
+               let toText = self.toTextField.text, !toText.isEmpty
+        else {
             self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
             return
         }
@@ -219,7 +219,7 @@ class AnotherTransferViewController: UIViewController {
         }
         
         guard  let text = self.sumTextField.text, !text.isEmpty
-         else { self.alertOk(title: "Введите сумму", message: nil)
+        else { self.alertOk(title: "Введите сумму", message: nil)
             return
         }
         

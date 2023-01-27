@@ -10,11 +10,9 @@ import CoreData
 
 class CoreDataManager {
     
-    static let shared = CoreDataManager()
+    static let shared: CoreDataManager = .init()
     
-    init() {
-        self.reloadUsers()
-    }
+   
     
     var users = [User]()
     var wallets = [Wallet]()
@@ -42,12 +40,6 @@ class CoreDataManager {
         }
     }
     
-    func reloadUsers() {
-        let request = User.fetchRequest()
-        self.users = (try? persistentContainer.viewContext.fetch(request)) ?? []
-        
-    }
-    
     func reloadWallets() {
         let request = Wallet.fetchRequest()
         self.wallets = (try? persistentContainer.viewContext.fetch(request)) ?? []
@@ -62,7 +54,6 @@ class CoreDataManager {
             user.userName = userName
             do {
                 try backgroundContext.save()
-                self.reloadUsers()
             } catch {
                 print(error)
             }
@@ -83,11 +74,9 @@ class CoreDataManager {
     }
     
     func createTransactions(transactions: [TransactionCodable], wallet: Wallet, completion: @escaping () -> Void ) {
-        
-        persistentContainer.performBackgroundTask { backgroundContext in
             for transaction in transactions {
-                if self.getTransaction(byId: transaction.id, context: backgroundContext) != nil { continue }
-                let newTransaction = Transaction(context: backgroundContext)
+                if self.getTransaction(byId: transaction.id, context: persistentContainer.viewContext) != nil { continue }
+                let newTransaction = Transaction(context: persistentContainer.viewContext)
                 let stringDate = transaction.created
                 let dateFormater = ISO8601DateFormatter()
                 dateFormater.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -101,15 +90,11 @@ class CoreDataManager {
                 newTransaction.reference = transaction.reference
                 newTransaction.stringDate = dateString
                 wallet.addToTransactions(newTransaction)
-                do {
-                    try backgroundContext.save()
-                } catch {
-                    print(error)
-                }
+                saveContext()
                 completion()
             }
         }
-    }
+    
     
     func getTransaction(byId: String, context: NSManagedObjectContext) -> Transaction? {
         let fetchRequest = Transaction.fetchRequest()
@@ -127,7 +112,6 @@ class CoreDataManager {
             print(error)
             completion(nil)
         }
-        
     }
     
     func changeBalance(id: String, newBalance: String, completion: @escaping () -> Void ) {
@@ -137,7 +121,6 @@ class CoreDataManager {
             let wallet = try persistentContainer.viewContext.fetch(fetchRequest).first
             wallet?.balance = newBalance
             saveContext()
-            reloadUsers()
         }
         catch {
             print(error)
@@ -181,4 +164,15 @@ class CoreDataManager {
       }
       return fetchedUsers
     }
+    
+    func deleteWallet(wallet: Wallet) {
+        persistentContainer.viewContext.delete(wallet)
+        saveContext()
+    }
+    
+    func deleteUser(user: User) {
+        persistentContainer.viewContext.delete(user)
+        saveContext()
+    }
+    
 }

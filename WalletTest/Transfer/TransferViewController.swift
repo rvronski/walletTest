@@ -90,7 +90,7 @@ class TransferViewController: UIViewController {
     }()
     
     private lazy var transferButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Перевести", for: .normal)
         button.backgroundColor = .systemRed
@@ -118,7 +118,7 @@ class TransferViewController: UIViewController {
     
     private func setupView() {
         self.view.backgroundColor = .white
-       
+        
         self.view.addSubview(self.fromLabel)
         self.view.addSubview(self.toLabel)
         self.view.addSubview(self.toInLabel)
@@ -129,7 +129,7 @@ class TransferViewController: UIViewController {
         
         
         NSLayoutConstraint.activate([
-        
+            
             self.fromInLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
             self.fromInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             self.fromInLabel.heightAnchor.constraint(equalToConstant: 20),
@@ -162,11 +162,11 @@ class TransferViewController: UIViewController {
             self.transferButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.transferButton.heightAnchor.constraint(equalToConstant: 50),
             
-        
+            
         ])
     }
     @objc private func tapFromLabel() {
-         let popVC = MenuTableViewController(wallet: self.wallets)
+        let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
         popVC.delegate = self
@@ -176,11 +176,11 @@ class TransferViewController: UIViewController {
         popOverVC?.sourceRect = CGRect(x: self.fromLabel.bounds.midX, y: self.fromLabel.bounds.maxY, width: 0, height: 0)
         popVC.preferredContentSize = CGSize(width: 250, height: 250)
         self.present(popVC, animated: true)
-            
+        
     }
     
     @objc private func tapToLabel() {
-         let popVC = MenuTableViewController(wallet: self.wallets)
+        let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
         popVC.delegate = self
@@ -226,19 +226,19 @@ class TransferViewController: UIViewController {
     
     @objc private func didTapTransferButton() {
         guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-              let toText = self.toLabel.text, !toText.isEmpty
-              else {
+               let toText = self.toLabel.text, !toText.isEmpty
+        else {
             self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
             return
         }
         guard  let text = self.sumTextField.text, !text.isEmpty
-         else { self.alertOk(title: "Введите сумму", message: nil)
+        else { self.alertOk(title: "Введите сумму", message: nil)
             return
         }
         guard fromText != toText else { self.alertOk(title: "Ошибка!", message: "Выберете разные счета")
             return
         }
-       
+        
         guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
@@ -277,5 +277,6 @@ extension TransferViewController: TableViewDelegate {
         guard let balance = wallets[index].balance else { return }
         label.text = " " + nameWallet + " " + balance + "₽"
         label.tag = index
+        
     }
 }

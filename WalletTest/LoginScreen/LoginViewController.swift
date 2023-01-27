@@ -8,10 +8,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-    
-    
-//    var user = UserDefaults.standard.object(forKey: "User")
-    
+//    let networkManager
     let coreManager = CoreDataManager.shared
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -151,9 +148,7 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        if UserDefaults.standard.bool(forKey: "isLogin") == true {
-//            self.navigationController?.pushViewController(MainViewController(user: user as! User), animated: true)
-//        }
+        
             navigationController?.setNavigationBarHidden(true, animated: false)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.didShowKeyboard(_:)),
@@ -168,7 +163,6 @@ class LoginViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loginTextField.becomeFirstResponder()
-        UserDefaults.standard.object(forKey: "User")
     }
     
     
@@ -188,8 +182,6 @@ class LoginViewController: UIViewController {
                 }
                 if user.password == password {
                     DispatchQueue.main.async {
-//                        UserDefaults.standard.set(user, forKey: "User")
-//                        UserDefaults.standard.set(true, forKey: "isLogin")
                         self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
                     }
                 } else {
