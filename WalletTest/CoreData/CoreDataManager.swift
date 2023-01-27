@@ -96,7 +96,7 @@ class CoreDataManager {
         let fetchRequest = User.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "email == %@", email)
         do {
-            guard let user = try persistentContainer.viewContext.fetch(fetchRequest).first else {  return }
+             let user = try persistentContainer.viewContext.fetch(fetchRequest).first 
             completion(user)
         } catch {
             print(error)

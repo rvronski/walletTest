@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
     }()
     
     private lazy var addWalletButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Создать кошелек", for: .normal)
         button.backgroundColor = .systemRed
@@ -48,13 +48,12 @@ class MainViewController: UIViewController {
         collectionView.dataSource = self
         return collectionView
     }()
-
+    
     private lazy var transferView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
         view.layer.cornerRadius = 30
-//        view.layer.borderWidth = 0.09
         view.layer.shadowOffset = CGSize(width: 3, height: 3)
         view.layer.shadowRadius = 5
         view.layer.shadowColor = UIColor.black.cgColor
@@ -67,9 +66,6 @@ class MainViewController: UIViewController {
         self.setupView()
         self.wallets = coreManager.wallets(user: user)
         self.setupNavigationBar()
-//        print(wallets[0].id)
-//        print(wallets[1].id)
-        
     }
     
     private func setupNavigationBar() {
@@ -93,7 +89,7 @@ class MainViewController: UIViewController {
         self.view.addSubview(self.addWalletButton)
         
         NSLayoutConstraint.activate([
-        
+            
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
@@ -104,7 +100,7 @@ class MainViewController: UIViewController {
             self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             
-        
+            
         ])
     }
     @objc private func didTapWalletButton() {
@@ -113,15 +109,15 @@ class MainViewController: UIViewController {
     
     private func alertAction() {
         let alertController = UIAlertController(title: "Создать новый кошелек?", message: "", preferredStyle: .alert)
-
+        
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "Имя кошелька"
         }
-
+        
         let saveAction = UIAlertAction(title: "Создать", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             guard let name = firstTextField.text else {return}
-           
+            
             NetworkManager().createWallet(name: name) { wallet in
                 self.coreManager.createWallet(newWallet: wallet, user: self.user) {
                     DispatchQueue.main.async {
@@ -132,41 +128,41 @@ class MainViewController: UIViewController {
             }
         })
         let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
-
-
+        
+        
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-
+        
         self.present(alertController, animated: true, completion: nil)
-    
+        
     }
-
+    
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return wallets.count
-       
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ChekCell", for: indexPath) as! CheckCollectionViewCell
         
         cell.setup(wallet: wallets[indexPath.row])
-       
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemWidth = (collectionView.frame.width - 32)
-       
+        
         return CGSize(width: itemWidth, height: 150)
         
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let walletVC = UserViewController(user: user, wallet: wallets[indexPath.row])
+        let walletVC = DetailViewController(user: user, wallet: wallets[indexPath.row])
         self.navigationController?.pushViewController(walletVC, animated: true)
     }
     

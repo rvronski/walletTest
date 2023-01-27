@@ -66,6 +66,11 @@ class TransactionViewController: UIViewController {
         self.setupNavigationBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+    
     private func setupNavigationBar() {
         self.navigationItem.title = "Транзакции"
         self.navigationController?.navigationBar.prefersLargeTitles = true

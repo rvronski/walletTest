@@ -42,10 +42,16 @@ class DeleteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-//        self.setupNavigationBar()
+        self.setupNavigationBar()
         self.wallets = coreManager.wallets(user: self.user)
     }
     
+    private func setupNavigationBar() {
+        self.navigationItem.title = "Удалить счет"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.navigationBar.tintColor = .systemRed
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.wallets = coreManager.wallets(user: self.user)
@@ -77,6 +83,17 @@ class DeleteViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+    private func alertDismiss(title: String, message: String?, completionHandler: @escaping () -> Void) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .destructive) { _ in
+            completionHandler()
+        }
+        let cancel = UIAlertAction(title: "Отмена", style: .default)
+        alertController.addAction(ok)
+        alertController.addAction(cancel)
+        present(alertController, animated: true, completion: nil)
+    }
 }
 extension DeleteViewController:  UITableViewDelegate,  UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,7 +105,12 @@ extension DeleteViewController:  UITableViewDelegate,  UITableViewDataSource {
         cell.setup(wallet: wallets[indexPath.row])
         return cell
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.alertDismiss(title: "Удалить счет?", message: nil) {
+            self.tableView(self.tableView, commit: .delete, forRowAt: indexPath)
+        }
+    }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         true
     }
@@ -97,15 +119,19 @@ extension DeleteViewController:  UITableViewDelegate,  UITableViewDataSource {
         if editingStyle == .delete {
             
             let walletForDel = wallets[indexPath.row]
-            let nameWallet = walletForDel.nameWallet
-            guard let id = wallets[indexPath.row].id else {return}
-            wallets.remove(at: indexPath.row)
-            self.coreManager.deleteWallet(wallet: walletForDel)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            networkManager.deleteWallet(id: id) {
-                DispatchQueue.main.async {
-                    self.alertOk(title: "Счет \(nameWallet ?? "") удален", message: nil )
+            if walletForDel.balance == "0" {
+                let nameWallet = walletForDel.nameWallet
+                guard let id = wallets[indexPath.row].id else {return}
+                wallets.remove(at: indexPath.row)
+                self.coreManager.deleteWallet(wallet: walletForDel)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                networkManager.deleteWallet(id: id) {
+                    DispatchQueue.main.async {
+                        self.alertOk(title: "Счет \(nameWallet ?? "") удален", message: nil )
+                    }
                 }
+            } else {
+                self.alertOk(title: "Для удаления переведите деньги на другой счет", message: nil )
             }
         } else if editingStyle == .insert {
             //

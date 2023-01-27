@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE97D297C35C200274D48 /* AppDelegate.swift */; };
 		450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE97F297C35C200274D48 /* SceneDelegate.swift */; };
-		450AE982297C35C200274D48 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE981297C35C200274D48 /* UserViewController.swift */; };
+		450AE982297C35C200274D48 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE981297C35C200274D48 /* DetailViewController.swift */; };
 		450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 450AE986297C35C200274D48 /* WalletTest.xcdatamodeld */; };
 		450AE98A297C35C600274D48 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 450AE989297C35C600274D48 /* Assets.xcassets */; };
 		450AE98D297C35C600274D48 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 450AE98B297C35C600274D48 /* LaunchScreen.storyboard */; };
@@ -39,7 +39,7 @@
 		450AE97A297C35C200274D48 /* WalletTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalletTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		450AE97D297C35C200274D48 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		450AE97F297C35C200274D48 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		450AE981297C35C200274D48 /* UserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
+		450AE981297C35C200274D48 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		450AE987297C35C200274D48 /* WalletTest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WalletTest.xcdatamodel; sourceTree = "<group>"; };
 		450AE989297C35C600274D48 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		450AE98C297C35C600274D48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 		4592829F29803AC3007271DD /* Detail */ = {
 			isa = PBXGroup;
 			children = (
-				450AE981297C35C200274D48 /* UserViewController.swift */,
+				450AE981297C35C200274D48 /* DetailViewController.swift */,
 				459282A029803C07007271DD /* DetailCollectionViewCell.swift */,
 			);
 			path = Detail;
@@ -272,7 +272,7 @@
 				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				4515836629836731003A1222 /* TabBarViewController.swift in Sources */,
-				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
+				450AE982297C35C200274D48 /* DetailViewController.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
 				451583582980C11B003A1222 /* User.swift in Sources */,
 				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,

@@ -12,7 +12,7 @@ class LoginViewController: UIViewController {
     
    
     let coreManager = CoreDataManager.shared
-    var users = [User]()
+    var use = [User]()
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,8 +22,7 @@ class LoginViewController: UIViewController {
     private lazy var passwordTextField: UITextField = {
         let passwordTextField = UITextField()
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-//        passwordTextField.placeholder = "Password"
-        passwordTextField.text = "qwerty"
+        passwordTextField.placeholder = "Password"
         passwordTextField.layer.borderColor = UIColor.lightGray.cgColor
         passwordTextField.layer.borderWidth = 0.5
         passwordTextField.textColor = .black
@@ -39,8 +38,7 @@ class LoginViewController: UIViewController {
     private lazy var loginTextField: UITextField = {
         var loginTextfield = UITextField()
         loginTextfield.translatesAutoresizingMaskIntoConstraints = false
-//        loginTextfield.placeholder = "Login/email"
-        loginTextfield.text = "qwerty"
+        loginTextfield.placeholder = "email"
         loginTextfield.layer.borderColor = UIColor.gray.cgColor
         loginTextfield.font = UIFont(name: "sysemFont", size: 16)
         loginTextfield.textColor = .black
@@ -104,7 +102,7 @@ class LoginViewController: UIViewController {
         self.setupView()
         self.setupGesture()
         self.tabBarController?.tabBar.isHidden = true
-        self.users = coreManager.user()
+        self.use = coreManager.user()
       
     }
     private func setupView() {
@@ -151,7 +149,10 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        if self.use.count == 0 {
+            self.navigationController?.pushViewController(RegistrationViewController(), animated: true)
+        } else {
+            
             navigationController?.setNavigationBarHidden(true, animated: false)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.didShowKeyboard(_:)),
@@ -161,7 +162,8 @@ class LoginViewController: UIViewController {
                                                    selector: #selector(self.didHideKeyboard(_:)),
                                                    name: UIResponder.keyboardDidHideNotification,
                                                    object: nil)
-        
+            
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -170,17 +172,13 @@ class LoginViewController: UIViewController {
     
     
     @objc private func didTapButton() {
-        if users.count == 0 {
-            didPushSignUpButton()
-        } else {
-            
             guard let email = self.loginTextField.text, !email.isEmpty,
                   let password = self.passwordTextField.text, !password.isEmpty else {
                 self.alertOk(title: "Ошибка!", message: "Заполните все поля регистрации")
                 return
             }
             coreManager.getUser(email: email) { user in
-                guard let user else { self.alertOk(title: "Ошибка!", message: "Пользователь не найден")
+                guard let user  else { self.alertOk(title: "Ошибка!", message: "Пользователь не найден")
                     return
                 }
                 if user.password == password {
@@ -193,7 +191,6 @@ class LoginViewController: UIViewController {
                 
             }
         }
-    }
     @objc private func didPushSignUpButton() {
         self.navigationController?.pushViewController(RegistrationViewController(), animated: true)
     }

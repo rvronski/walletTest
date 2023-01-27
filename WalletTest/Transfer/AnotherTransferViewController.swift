@@ -226,13 +226,19 @@ class AnotherTransferViewController: UIViewController {
         guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
-        guard let fromId = wallets[self.fromLabel.tag].id else { return }
-        networkManager.debit(amount: text, id: fromId, reference: toText) { balance in
-            self.coreManager.changeBalance(id: fromId, newBalance: balance) {
-                DispatchQueue.main.async {
-                    self.navigationController?.popViewController(animated: true)
+        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
+        guard let sum2 = Int(text) else { return }
+        if sum2 > sum1 {
+            self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
+        } else {
+            guard let fromId = wallets[self.fromLabel.tag].id else { return }
+            networkManager.debit(amount: text, id: fromId, reference: toText) { balance in
+                self.coreManager.changeBalance(id: fromId, newBalance: balance) {
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    
                 }
-                
             }
         }
     }

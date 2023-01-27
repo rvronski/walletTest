@@ -248,16 +248,19 @@ class TransferViewController: UIViewController {
         guard (wallets[self.fromLabel.tag].balance != nil) else {return}
         guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
         guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
-        
-        let fromBalance = sum1 - sum
-        let toBalance = sum2 + sum
-        let fromNewBalance = String(fromBalance)
-        let toNewBalance = String(toBalance)
-        networkManager.transfer(amount: text, from_id: fromId, to_id: toId) {
-            self.coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
-                self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
+        if sum2 > sum1 {
+            self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
+        } else {
+            let fromBalance = sum1 - sum
+            let toBalance = sum2 + sum
+            let fromNewBalance = String(fromBalance)
+            let toNewBalance = String(toBalance)
+            networkManager.transfer(amount: text, from_id: fromId, to_id: toId) {
+                self.coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
+                    self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
+                        DispatchQueue.main.async {
+                            self.navigationController?.popViewController(animated: true)
+                        }
                     }
                 }
             }
@@ -277,6 +280,5 @@ extension TransferViewController: TableViewDelegate {
         guard let balance = wallets[index].balance else { return }
         label.text = " " + nameWallet + " " + balance + "₽"
         label.tag = index
-        
     }
 }

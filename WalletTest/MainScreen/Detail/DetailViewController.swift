@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserViewController: UIViewController {
+class DetailViewController: UIViewController {
     
     private let networkManager = NetworkManager.shared
     private let coreManager = CoreDataManager.shared
@@ -315,7 +315,7 @@ class UserViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
 }
-extension UserViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension DetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
