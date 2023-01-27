@@ -71,7 +71,13 @@ class DetailTransViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        
+        self.setupNavigationBar()
+    }
+   private func setupNavigationBar() {
+       self.navigationItem.title = self.transaction.stringDate
+       self.navigationController?.navigationBar.prefersLargeTitles = false
+       self.navigationController?.setNavigationBarHidden(false, animated: false)
+       self.navigationController?.navigationBar.tintColor = .systemRed
     }
     
     private func setupView(){

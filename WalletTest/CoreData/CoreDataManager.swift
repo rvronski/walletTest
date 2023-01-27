@@ -72,7 +72,7 @@ class CoreDataManager {
                 dateFormater.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
                 guard let date = dateFormater.date(from: stringDate) else { return }
                 let formatter = DateFormatter()
-                formatter.dateFormat = "d MMM,YYYY"
+                formatter.dateFormat = "d MMM YYYY"
                 let dateString = formatter.string(from: date)
                 newTransaction.id = transaction.id
                 newTransaction.amount = transaction.amount

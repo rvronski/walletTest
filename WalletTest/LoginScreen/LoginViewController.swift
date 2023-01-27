@@ -149,10 +149,6 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if self.use.count == 0 {
-            self.navigationController?.pushViewController(RegistrationViewController(), animated: true)
-        } else {
-            
             navigationController?.setNavigationBarHidden(true, animated: false)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.didShowKeyboard(_:)),
@@ -163,7 +159,6 @@ class LoginViewController: UIViewController {
                                                    name: UIResponder.keyboardDidHideNotification,
                                                    object: nil)
             
-        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

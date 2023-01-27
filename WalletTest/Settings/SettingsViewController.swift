@@ -125,6 +125,12 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             self.alertDismiss(title: "Вы уверенны что хотите удалить аккаунт?", message: "Операцию нельзя будет отменить. Все ваши счета автоматически удалятся") {
                 if  self.wallets.count > 0 {
                     for i in self.wallets {
+                        if i.balance != "0" {
+                            self.alertOk(title: "Переведите деньги на другие счета", message: nil)
+                            return
+                        }
+                    }
+                    for i in self.wallets {
                         guard let id = i.id else {return}
                         self.networkManager.deleteWallet(id: id) {
                             self.coreManager.deleteUser(user: self.user) {
