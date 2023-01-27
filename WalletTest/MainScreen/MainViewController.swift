@@ -83,6 +83,7 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.wallets = coreManager.wallets(user: user)
         self.chekCollectionView.reloadData()
     }
     

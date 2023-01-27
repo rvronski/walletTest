@@ -66,6 +66,10 @@ struct TransferPost: Codable {
     
 }
 
+struct Delete: Codable {
+    var id: String
+}
+
 class NetworkManager {
     
     static let shared: NetworkManager = .init()
@@ -155,7 +159,6 @@ class NetworkManager {
             }
             guard let data else {
                 print("data = nil")
-                
                 return
             }
             do {
@@ -308,4 +311,42 @@ class NetworkManager {
         
     }
     
+    func deleteWallet(id: String)  {
+        
+        guard let url = URL(string: "https://api.m3o.com/v1/wallet/Delete") else {return}
+        
+        let request = NSMutableURLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = self.headers
+        let body = Delete.init(id: id)
+        let encoder = JSONEncoder()
+        
+        do {
+            let jsonData = try encoder.encode(body)
+            request.httpBody = jsonData
+        } catch {
+            print(error)
+        }
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if let error {
+                print(error.localizedDescription)
+                
+                return
+            }
+            let statusCode = (response as? HTTPURLResponse)?.statusCode
+            print(statusCode ?? "")
+            if statusCode != 200 {
+                print("Status Code = \(String(describing: statusCode))")
+                
+                return
+            }
+            guard data != nil else {
+                print("data = nil")
+                return
+            }
+            
+        }
+        task.resume()
+    }
 }

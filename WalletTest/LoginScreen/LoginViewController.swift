@@ -9,7 +9,10 @@ import UIKit
 
 class LoginViewController: UIViewController {
 //    let networkManager
+    
+   
     let coreManager = CoreDataManager.shared
+    var users = [User]()
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +104,7 @@ class LoginViewController: UIViewController {
         self.setupView()
         self.setupGesture()
         self.tabBarController?.tabBar.isHidden = true
-        
+        self.users = coreManager.user()
       
     }
     private func setupView() {
@@ -167,7 +170,7 @@ class LoginViewController: UIViewController {
     
     
     @objc private func didTapButton() {
-        if coreManager.users.count == 0 {
+        if users.count == 0 {
             didPushSignUpButton()
         } else {
             

@@ -31,6 +31,7 @@
 		4515836629836731003A1222 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836529836731003A1222 /* TabBarViewController.swift */; };
 		4515836929838D50003A1222 /* DetailTransViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836829838D50003A1222 /* DetailTransViewController.swift */; };
 		4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836A29839D41003A1222 /* SettingsTableViewCell.swift */; };
+		4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836D2983B4F4003A1222 /* DeleteViewController.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,7 @@
 		4515836529836731003A1222 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		4515836829838D50003A1222 /* DetailTransViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTransViewController.swift; sourceTree = "<group>"; };
 		4515836A29839D41003A1222 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		4515836D2983B4F4003A1222 /* DeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,6 +177,7 @@
 			children = (
 				450AE996297C385200274D48 /* SettingsViewController.swift */,
 				4515836A29839D41003A1222 /* SettingsTableViewCell.swift */,
+				4515836D2983B4F4003A1222 /* DeleteViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				450AE9A0297F546500274D48 /* LoginViewController.swift in Sources */,
+				4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */,
 				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
 				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,

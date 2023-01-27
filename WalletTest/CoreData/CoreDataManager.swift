@@ -12,10 +12,6 @@ class CoreDataManager {
     
     static let shared: CoreDataManager = .init()
     
-   
-    
-    var users = [User]()
-    var wallets = [Wallet]()
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "WalletTest")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -38,12 +34,6 @@ class CoreDataManager {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-    }
-    
-    func reloadWallets() {
-        let request = Wallet.fetchRequest()
-        self.wallets = (try? persistentContainer.viewContext.fetch(request)) ?? []
-        
     }
     
     func createUser(email: String, password: String, userName: String, completion: @escaping () -> Void ) {

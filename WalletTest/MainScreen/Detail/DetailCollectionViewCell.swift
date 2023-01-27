@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol DetailCollectionViewDelegate: AnyObject {
-    func credit()
-}
-
 class DetailCollectionViewCell: UICollectionViewCell {
     private lazy var walletView: UIView = {
         let view = UIView()
@@ -33,7 +29,6 @@ class DetailCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    var delegate: DetailCollectionViewDelegate?
     
     private lazy var balanceLabel: UILabel = {
         let label = UILabel()
@@ -87,10 +82,6 @@ class DetailCollectionViewCell: UICollectionViewCell {
             self.creditLable.centerYAnchor.constraint(equalTo: self.walletView.centerYAnchor),
             self.creditLable.rightAnchor.constraint(equalTo: self.walletView.rightAnchor, constant: -25),
         ])
-    }
-    
-    @objc private func tapCreditButton() {
-        self.delegate?.credit()
     }
     
 }

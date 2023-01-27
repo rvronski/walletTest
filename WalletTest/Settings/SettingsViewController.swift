@@ -9,10 +9,12 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    let networkManager = NetworkManager.shared
+    let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
     
-    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить все счета"]
+    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить все счета", "Удалить аккаунт"]
     
     init(user: User) {
         self.user = user
@@ -40,6 +42,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         self.setupNavigationBar()
+        self.wallets = coreManager.wallets(user: self.user)
     }
     
     private func setupNavigationBar() {
@@ -64,6 +67,27 @@ class SettingsViewController: UIViewController {
         ])
     }
     
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func alertDismiss(title: String, message: String?, completionHandler: @escaping () -> Void) {
+         
+         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+         let ok = UIAlertAction(title: "ОК", style: .destructive) { _ in
+             completionHandler()
+         }
+        let cancel = UIAlertAction(title: "Отмена", style: .default)
+         alertController.addAction(ok)
+        alertController.addAction(cancel)
+         present(alertController, animated: true, completion: nil)
+     }
 }
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -91,7 +115,34 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }
         if indexPath.section == 0 && indexPath.row == 1 {
-            self.navigationController?.pushViewController(LoginViewController(), animated: true)
+            self.navigationController?.pushViewController(DeleteViewController(user: self.user), animated: true)
+            
+        }
+        if indexPath.section == 0 && indexPath.row == 2 {
+            guard wallets.count != 0 else { self.alertOk(title: "У вас нет счетов", message: nil)
+                return
+            }
+            self.alertDismiss(title: "Вы уверенны что хотите удалить все счета?", message: "Операцию нельзя будет отменить. Все ваши счета автоматически удалятся") {
+                for i in self.wallets {
+                    guard let id = i.id else {return}
+                    self.networkManager.deleteWallet(id: id)
+                }
+                self.coreManager.deleteUser(user: self.user)
+                self.navigationController?.pushViewController(MainViewController(user: self.user), animated: true)
+            }
+        }
+        if indexPath.section == 0 && indexPath.row == 3 {
+            self.alertDismiss(title: "Вы уверенны что хотите удалить аккаунт?", message: "Операцию нельзя будет отменить. Все ваши счета автоматически удалятся") {
+                for i in self.wallets {
+                    guard let id = i.id else {return}
+                    self.networkManager.deleteWallet(id: id)
+                }
+                self.coreManager.deleteUser(user: self.user)
+                self.navigationController?.pushViewController(LoginViewController(), animated: true)
+                
+            }
+            
+            
         }
     }
     
