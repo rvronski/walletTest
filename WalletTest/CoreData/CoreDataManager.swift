@@ -92,10 +92,14 @@ class CoreDataManager {
                 let dateFormater = ISO8601DateFormatter()
                 dateFormater.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
                 guard let date = dateFormater.date(from: stringDate) else { return }
+                let formatter = DateFormatter()
+                formatter.dateFormat = "d MMM,YYYY"
+                let dateString = formatter.string(from: date)
                 newTransaction.id = transaction.id
                 newTransaction.amount = transaction.amount
                 newTransaction.created = date
                 newTransaction.reference = transaction.reference
+                newTransaction.stringDate = dateString
                 wallet.addToTransactions(newTransaction)
                 do {
                     try backgroundContext.save()
@@ -152,6 +156,19 @@ class CoreDataManager {
         print("Error fetching songs \(error)")
       }
       return fetchedWallets
+    }
+    
+    func transaction(wallet: Wallet) -> [Transaction] {
+      let request: NSFetchRequest<Transaction> = Transaction.fetchRequest()
+      request.predicate = NSPredicate(format: "wallet = %@", wallet)
+      request.sortDescriptors = [NSSortDescriptor(key: "created", ascending: true)]
+      var fetchedTransactions: [Transaction] = []
+      do {
+          fetchedTransactions = try persistentContainer.viewContext.fetch(request)
+      } catch let error {
+        print("Error fetching songs \(error)")
+      }
+      return fetchedTransactions
     }
     
     func user() -> [User] {

@@ -5,6 +5,7 @@
         <attribute name="created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="reference" optional="YES" attributeType="String"/>
+        <attribute name="stringDate" optional="YES" attributeType="String"/>
         <relationship name="wallet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="transactions" inverseEntity="Wallet"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">

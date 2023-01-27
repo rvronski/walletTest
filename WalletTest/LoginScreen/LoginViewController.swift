@@ -190,7 +190,7 @@ class LoginViewController: UIViewController {
                     DispatchQueue.main.async {
 //                        UserDefaults.standard.set(user, forKey: "User")
 //                        UserDefaults.standard.set(true, forKey: "isLogin")
-                        self.navigationController?.pushViewController(MainViewController(user: user), animated: true)
+                        self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
                     }
                 } else {
                     self.alertOk(title: "Ошибка!", message: "Неверный пароль")

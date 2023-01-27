@@ -27,6 +27,8 @@
 		4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835B2981D6E9003A1222 /* MenuTableViewController.swift */; };
 		4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515835D2981E403003A1222 /* TransferTableViewCell.swift */; };
 		451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451583602982E232003A1222 /* AnotherTransferViewController.swift */; };
+		45158364298355A4003A1222 /* TransactionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45158363298355A4003A1222 /* TransactionsTableViewCell.swift */; };
+		4515836629836731003A1222 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836529836731003A1222 /* TabBarViewController.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		4515835B2981D6E9003A1222 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		4515835D2981E403003A1222 /* TransferTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTableViewCell.swift; sourceTree = "<group>"; };
 		451583602982E232003A1222 /* AnotherTransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnotherTransferViewController.swift; sourceTree = "<group>"; };
+		45158363298355A4003A1222 /* TransactionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsTableViewCell.swift; sourceTree = "<group>"; };
+		4515836529836731003A1222 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,10 +92,11 @@
 			children = (
 				450AE97D297C35C200274D48 /* AppDelegate.swift */,
 				450AE97F297C35C200274D48 /* SceneDelegate.swift */,
+				4515836729836A4D003A1222 /* TabBar */,
 				450AE9A829800F6600274D48 /* LoginScreen */,
 				450AE9A729800F3300274D48 /* MainScreen */,
 				4515835F2981F224003A1222 /* Transfer */,
-				450AE994297C381200274D48 /* TransactionViewController.swift */,
+				4515836229835126003A1222 /* Transactions */,
 				450AE996297C385200274D48 /* SettingsViewController.swift */,
 				450AE998297CA1A400274D48 /* NetworkManager.swift */,
 				450AE99C297D94A900274D48 /* CoreData */,
@@ -141,6 +146,23 @@
 				4515835D2981E403003A1222 /* TransferTableViewCell.swift */,
 			);
 			path = Transfer;
+			sourceTree = "<group>";
+		};
+		4515836229835126003A1222 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				450AE994297C381200274D48 /* TransactionViewController.swift */,
+				45158363298355A4003A1222 /* TransactionsTableViewCell.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		4515836729836A4D003A1222 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				4515836529836731003A1222 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		4592829F29803AC3007271DD /* Detail */ = {
@@ -231,11 +253,13 @@
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
 				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
+				4515836629836731003A1222 /* TabBarViewController.swift in Sources */,
 				450AE982297C35C200274D48 /* UserViewController.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
 				451583582980C11B003A1222 /* User.swift in Sources */,
 				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,
 				450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */,
+				45158364298355A4003A1222 /* TransactionsTableViewCell.swift in Sources */,
 				450AE97E297C35C200274D48 /* AppDelegate.swift in Sources */,
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,
 				451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */,

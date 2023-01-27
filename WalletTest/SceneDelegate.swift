@@ -16,24 +16,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: windowScene)
-        let mainViewController = UINavigationController(rootViewController: LoginViewController())
-        let paymentsViewController = UINavigationController(rootViewController: TransactionViewController())
-        let walletViewController = UINavigationController(rootViewController: SettingsViewController())
-        let tabBarController = UITabBarController()
-        tabBarController.tabBar.tintColor = .systemRed
-        tabBarController.viewControllers = [mainViewController, paymentsViewController, walletViewController]
-        mainViewController.title = "Главная"
-        paymentsViewController.title = "Платежи"
-        walletViewController.title = "Кошелек"
-        let images = ["person", "arrow.left.arrow.right.square", "creditcard"]
-        guard let items = tabBarController.tabBar.items else {
-            return
-        }
-        for i in 0..<items.count {
-            items[i].image = UIImage(systemName: images[i])
-        }
+//        let mainViewController = UINavigationController(rootViewController: LoginViewController())
+//        let paymentsViewController = UINavigationController(rootViewController: TransactionViewController())
+//        let walletViewController = UINavigationController(rootViewController: SettingsViewController())
+//        let tabBarController = UITabBarController()
+//        tabBarController.tabBar.tintColor = .systemRed
+//        tabBarController.viewControllers = [mainViewController, paymentsViewController, walletViewController]
+//        mainViewController.title = "Главная"
+//        paymentsViewController.title = "Платежи"
+//        walletViewController.title = "Кошелек"
+//        let images = ["person", "arrow.left.arrow.right.square", "creditcard"]
+//        guard let items = tabBarController.tabBar.items else {
+//            return
+//        }
+//        for i in 0..<items.count {
+//            items[i].image = UIImage(systemName: images[i])
+//        }
+        let rootVC = UINavigationController(rootViewController: LoginViewController())
         
-        self.window?.rootViewController = tabBarController
+        self.window?.rootViewController = rootVC
         self.window?.makeKeyAndVisible()
     }
 
