@@ -248,7 +248,7 @@ class TransferViewController: UIViewController {
         guard (wallets[self.fromLabel.tag].balance != nil) else {return}
         guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
         guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
-        if sum2 > sum1 {
+        if sum > sum1 {
             self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
         } else {
             let fromBalance = sum1 - sum
