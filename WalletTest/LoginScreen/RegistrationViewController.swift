@@ -138,8 +138,6 @@ class RegistrationViewController: UIViewController {
             
             self.registerLabel.centerXAnchor.constraint(equalTo: self.registerView.centerXAnchor),
             self.registerLabel.bottomAnchor.constraint(lessThanOrEqualTo: self.registerView.topAnchor, constant: -20),
-            //            self.registerLabel.leftAnchor.constraint(equalTo: self.registerView.leftAnchor, constant: 20),
-            //            self.registerLabel.rightAnchor.constraint(equalTo: self.registerView.rightAnchor, constant: -20),
             
             self.userNameTextField.heightAnchor.constraint(equalToConstant: 50),
             self.userNameTextField.topAnchor.constraint(equalTo: self.registerView.topAnchor, constant: 20),
@@ -172,7 +170,7 @@ class RegistrationViewController: UIViewController {
     
     
     @objc private func didPushOutButton() {
-        self.navigationController?.popToRootViewController(animated: true)
+      self.dismiss(animated: true)
     }
     
     @objc private func didShowKeyboard(_ notification: Notification) {
