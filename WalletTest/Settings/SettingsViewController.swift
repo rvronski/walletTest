@@ -52,6 +52,12 @@ class SettingsViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .systemRed
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+        self.wallets = coreManager.wallets(user: self.user)
+    }
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.tableView)
