@@ -36,18 +36,23 @@ class CoreDataManager {
         }
     }
     
-    func createUser(email: String, password: String, userName: String, completion: @escaping () -> Void ) {
+    func createUser(email: String, password: String, userName: String, completion: @escaping (User?) -> Void ) {
         persistentContainer.performBackgroundTask { backgroundContext in
-            let user = User(context: backgroundContext)
-            user.email = email
-            user.password = password
-            user.userName = userName
-            do {
-                try backgroundContext.save()
-            } catch {
-                print(error)
+            if self.chekUser(email: email, context: backgroundContext) != nil {
+                completion(nil)
+            } else {
+                let user = User(context: backgroundContext)
+                user.email = email
+                user.password = password
+                user.userName = userName
+                do {
+                    try backgroundContext.save()
+                } catch {
+                    print(error)
+                    completion(nil)
+                }
+                completion(user)
             }
-            completion()
         }
     }
     
@@ -90,6 +95,12 @@ class CoreDataManager {
         let fetchRequest = Transaction.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", byId)
         return (try? context.fetch(fetchRequest))?.first
+    }
+    
+    func chekUser(email: String, context: NSManagedObjectContext) -> User? {
+        let fetchRequest = User.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "email == %@", email)
+       return (try? context.fetch(fetchRequest))?.first
     }
     
     func getUser(email: String, completion: (((User)?) -> Void) ) {

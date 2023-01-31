@@ -170,7 +170,7 @@ class RegistrationViewController: UIViewController {
     
     
     @objc private func didPushOutButton() {
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func didShowKeyboard(_ notification: Notification) {
@@ -234,22 +234,23 @@ class RegistrationViewController: UIViewController {
             return
         }
         
-        coreManager.createUser(email: email, password: password, userName: userName) {
-            self.coreManager.getUser(email: email) { user in
-                guard let user else { self.alertDismiss(title: "Oшибка!", message: "Что-то пошло не так. Попробуйте еще раз") {
-                    self.emailTextField.text = ""
-                    self.passwordTextField.text = ""
-                    self.userNameTextField.text = ""
-                    self.userNameTextField.becomeFirstResponder()
-                }
-                    return}
+        coreManager.createUser(email: email, password: password, userName: userName) { user in
+            guard let user else {
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
+                    self.alertDismiss(title: "Oшибка!", message: "Что-то пошло не так. Возможно такой пользователь уже зарегестрирован") {
+                        self.emailTextField.text = ""
+                        self.passwordTextField.text = ""
+                        self.userNameTextField.text = ""
+                        self.userNameTextField.becomeFirstResponder()
+                    }
                 }
+                return }
+            
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
             }
         }
     }
-    
 }
 
 
