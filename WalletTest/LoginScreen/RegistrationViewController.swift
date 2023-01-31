@@ -170,7 +170,7 @@ class RegistrationViewController: UIViewController {
     
     
     @objc private func didPushOutButton() {
-      self.dismiss(animated: true)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     @objc private func didShowKeyboard(_ notification: Notification) {

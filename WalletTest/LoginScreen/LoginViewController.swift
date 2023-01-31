@@ -188,8 +188,7 @@ class LoginViewController: UIViewController {
         }
     @objc private func didPushSignUpButton() {
         let registrVC = RegistrationViewController()
-        registrVC.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(registrVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(registrVC, animated: true)
     }
     
     private func alertDismiss(title: String, message: String?, completionHandler: @escaping () -> Void) {
