@@ -121,7 +121,6 @@ class RegistrationViewController: UIViewController {
         self.registerView.addSubview(self.passwordTextField)
         self.registerView.addSubview(self.registrationButton)
         self.registerView.addSubview(self.userNameTextField)
-        //        self.registerView.addSubview(self.walletNameTextField)
         self.registerView.addSubview(self.OutButton)
         
         NSLayoutConstraint.activate([

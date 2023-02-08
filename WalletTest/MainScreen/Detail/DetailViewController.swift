@@ -337,6 +337,7 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout, UICollection
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.alertAction(title: "Полнить баланс", message: nil)
+    
     }
     private func gestureTransferView(){
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapTransButton))

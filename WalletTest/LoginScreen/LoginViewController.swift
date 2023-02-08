@@ -10,7 +10,7 @@ import UIKit
 class LoginViewController: UIViewController {
 //    let networkManager
     
-   
+    let email = UserDefaults.standard.string(forKey: "email")
     let coreManager = CoreDataManager.shared
     var use = [User]()
     private lazy var scrollView: UIScrollView = {
@@ -149,6 +149,16 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if UserDefaults.standard.bool(forKey: "isLogin") {
+            guard let email else { return }
+            coreManager.getUser(email: email) { user in
+                guard let user else { return }
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
+                }
+            }
+        }
+        
             navigationController?.setNavigationBarHidden(true, animated: false)
             NotificationCenter.default.addObserver(self,
                                                    selector: #selector(self.didShowKeyboard(_:)),
@@ -177,6 +187,7 @@ class LoginViewController: UIViewController {
                     return
                 }
                 if user.password == password {
+                    UserDefaults.standard.set(email, forKey: "email")
                     DispatchQueue.main.async {
                         self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
                     }

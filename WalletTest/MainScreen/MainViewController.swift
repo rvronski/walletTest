@@ -12,6 +12,7 @@ class MainViewController: UIViewController {
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
+    var isStoriesIncreased = false
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -20,6 +21,17 @@ class MainViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private lazy var storiesView: UIImageView = {
+        let stories = UIImageView()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.isUserInteractionEnabled = true
+        stories.layer.borderWidth = 3
+        stories.image = UIImage(named: "background_image")
+        stories.clipsToBounds = true
+        stories.layer.borderColor = UIColor.systemRed.cgColor
+        return stories
+    }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -48,7 +60,8 @@ class MainViewController: UIViewController {
         collectionView.dataSource = self
         return collectionView
     }()
-    
+    let vc = StoriesViewController()
+
     private lazy var transferView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -61,14 +74,26 @@ class MainViewController: UIViewController {
         return view
     }()
     
+    private lazy var nameUserLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.textAlignment = .center
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
         self.wallets = coreManager.wallets(user: user)
         self.setupNavigationBar()
+        UserDefaults.standard.set(true, forKey: "isLogin")
+        self.storiesGesture()
+        self.vc.delegate = self
     }
     
     private func setupNavigationBar() {
+        self.nameUserLabel.text = user.userName?.capitalized
         self.navigationItem.title = "Мои счета"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.setNavigationBarHidden(false, animated: false)
@@ -83,19 +108,37 @@ class MainViewController: UIViewController {
         self.chekCollectionView.reloadData()
     }
     
+   
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.storiesView.layer.cornerRadius = self.storiesView.frame.height/2
+       
+    }
+    
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.chekCollectionView)
         self.view.addSubview(self.addWalletButton)
+        self.view.addSubview(self.nameUserLabel)
+        self.view.addSubview(self.storiesView)
         
         NSLayoutConstraint.activate([
+            
+            self.nameUserLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,constant: 10),
+            self.nameUserLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            
+            self.storiesView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor, constant: 20),
+            self.storiesView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20),
+            self.storiesView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.25),
+            self.storiesView.heightAnchor.constraint(equalTo: self.storiesView.widthAnchor),
+            
             
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.addWalletButton.heightAnchor.constraint(equalToConstant: 50),
             
-            self.chekCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            self.chekCollectionView.topAnchor.constraint(equalTo: self.storiesView.bottomAnchor, constant: 10),
             self.chekCollectionView.bottomAnchor.constraint(equalTo: self.addWalletButton.topAnchor),
             self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
@@ -137,6 +180,46 @@ class MainViewController: UIViewController {
         
     }
     
+   @objc func changeLayoutAvatar() {
+        let stories = self.storiesView
+       let storiesCentrY = self.storiesView.frame.origin.x + (self.storiesView.frame.height/2)
+       let storiesCentrX = self.storiesView.frame.origin.y + (self.storiesView.frame.height/2)
+       print(storiesCentrY,storiesCentrX)
+        let widthScreen = UIScreen.main.bounds.width
+        let heightScreen = UIScreen.main.bounds.height
+        let widthStories = stories.bounds.width
+        let width = widthScreen / widthStories
+        let height = heightScreen / widthStories
+      let hidden = self.isStoriesIncreased ? false : true
+        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic) {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) { [self] in
+                stories.transform = self.isStoriesIncreased ? .identity : CGAffineTransform(scaleX: width, y: height)
+                stories.layer.borderWidth = self.isStoriesIncreased ? 3 : 0
+                stories.center = self.isStoriesIncreased ? CGPoint(x: 69.16666666666666, y:264.8333333333333): CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+                self.view.bringSubviewToFront(stories)
+                self.tabBarController?.tabBar.isHidden = hidden
+                navigationController?.navigationBar.isHidden = hidden
+                stories.layer.cornerRadius = self.isStoriesIncreased ? stories.frame.height/2 : 0
+               
+                stories.layoutIfNeeded()
+            }
+                
+            } completion: { _ in
+                
+                if self.isStoriesIncreased == false {
+                    self.navigationController?.pushViewController(self.vc, animated: false)
+                }
+                self.isStoriesIncreased.toggle()
+        }
+            
+            
+    }
+    
+    private func storiesGesture() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(changeLayoutAvatar))
+        gesture.numberOfTapsRequired = 1
+        self.storiesView.addGestureRecognizer(gesture)
+    }
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
@@ -172,4 +255,13 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         self.chekCollectionView.reloadData()
     }
+}
+extension MainViewController: StoriesViewDelegate {
+    func pop() {
+        
+        self.vc.navigationController?.popViewController(animated: false)
+        changeLayoutAvatar()
+    }
+    
+    
 }
