@@ -7,8 +7,10 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class MainViewController: UIViewController {
+    var locationManager = CLLocationManager()
     var storiesCentrY = 0.0
     var storiesCentrX = 0.0
     let transition = CircularTransition()
@@ -16,6 +18,10 @@ class MainViewController: UIViewController {
     let user: User
     var wallets = [Wallet]()
     var isStoriesIncreased = false
+    var indexPath = IndexPath()
+    private var lat: Double = 0
+    private var lon: Double = 0
+    private var weather = [WheatherAnswer]()
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -28,6 +34,7 @@ class MainViewController: UIViewController {
     private lazy var storiesCollection: StoriesCollection = {
        let stories = StoriesCollection()
         stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.delegate = self
         return stories
     }()
     
@@ -37,58 +44,6 @@ class MainViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
        
         return scrollView
-    }()
-    private lazy var storiesView: UIImageView = {
-        let stories = UIImageView()
-        stories.translatesAutoresizingMaskIntoConstraints = false
-        stories.isUserInteractionEnabled = true
-        stories.layer.borderWidth = 3
-        stories.image = UIImage(named: "background_image")
-        stories.clipsToBounds = true
-        stories.layer.borderColor = UIColor.systemRed.cgColor
-        return stories
-    }()
-    
-    private lazy var storiesView1: UIImageView = {
-        let stories = UIImageView()
-        stories.translatesAutoresizingMaskIntoConstraints = false
-        stories.isUserInteractionEnabled = true
-        stories.layer.borderWidth = 3
-        stories.image = UIImage(named: "background_image")
-        stories.clipsToBounds = true
-        stories.layer.borderColor = UIColor.systemRed.cgColor
-        return stories
-    }()
-    private lazy var storiesView2: UIImageView = {
-        let stories = UIImageView()
-        stories.translatesAutoresizingMaskIntoConstraints = false
-        stories.isUserInteractionEnabled = true
-        stories.layer.borderWidth = 3
-        stories.image = UIImage(named: "background_image")
-        stories.clipsToBounds = true
-        stories.layer.borderColor = UIColor.systemRed.cgColor
-        return stories
-    }()
-    private lazy var storiesView3: UIImageView = {
-        let stories = UIImageView()
-        stories.translatesAutoresizingMaskIntoConstraints = false
-        stories.isUserInteractionEnabled = true
-        stories.layer.borderWidth = 3
-        stories.image = UIImage(named: "background_image")
-        stories.clipsToBounds = true
-        stories.layer.borderColor = UIColor.systemRed.cgColor
-        return stories
-    }()
-    
-    private lazy var storiesView4: UIImageView = {
-        let stories = UIImageView()
-        stories.translatesAutoresizingMaskIntoConstraints = false
-        stories.isUserInteractionEnabled = true
-        stories.layer.borderWidth = 3
-        stories.image = UIImage(named: "background_image")
-        stories.clipsToBounds = true
-        stories.layer.borderColor = UIColor.systemRed.cgColor
-        return stories
     }()
     
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -118,8 +73,7 @@ class MainViewController: UIViewController {
         collectionView.dataSource = self
         return collectionView
     }()
-    let vc = StoriesViewController()
-
+   
     private lazy var transferView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -139,21 +93,24 @@ class MainViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-//    
-//    override func loadView() {
-//        super.loadView()
-//        view = storiesCollection
-//    }
-    
+ 
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
         self.wallets = coreManager.wallets(user: user)
         self.setupNavigationBar()
         UserDefaults.standard.set(true, forKey: "isLogin")
-        self.storiesGesture()
-        self.vc.delegate = self
-        self.getCentrView()
+        self.locationManager.requestWhenInUseAuthorization()
+        let group = DispatchGroup()
+        group.enter()
+        DispatchQueue.global().async {
+            self.location()
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            self.getWeather()
+        }
     }
     
     private func setupNavigationBar() {
@@ -168,71 +125,36 @@ class MainViewController: UIViewController {
         super.viewWillAppear(animated)
         self.wallets = coreManager.wallets(user: user)
         self.chekCollectionView.reloadData()
-    }
-    
-   
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        self.storiesView.layer.cornerRadius = self.storiesView.frame.height/2
-        self.storiesView1.layer.cornerRadius = self.storiesView.frame.height/2
-        self.storiesView2.layer.cornerRadius = self.storiesView.frame.height/2
-        self.storiesView3.layer.cornerRadius = self.storiesView.frame.height/2
-       
+        self.storiesCollection.storiesCollectionView.reloadData()
     }
     
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.chekCollectionView)
-        self.scrollView.addSubview(self.addWalletButton)
-        self.scrollView.addSubview(self.nameUserLabel)
-        self.scrollView.addSubview(self.storiesView)
-        self.scrollView.addSubview(self.storiesView1)
-        self.scrollView.addSubview(self.storiesView2)
-        self.scrollView.addSubview(self.storiesView3)
-//        self.scrollView.addSubview(self.storiesView4)
+        self.view.addSubview(self.chekCollectionView)
+        self.view.addSubview(self.addWalletButton)
+        self.view.addSubview(self.nameUserLabel)
+        self.view.addSubview(self.storiesCollection)
         
         NSLayoutConstraint.activate([
-            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            
+           
             self.nameUserLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,constant: 10),
             self.nameUserLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
             
             
-            self.storiesView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor, constant: 16),
-            self.storiesView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor,constant: 16),
-            self.storiesView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.25),
-            self.storiesView.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
-//
-            self.storiesView1.leftAnchor.constraint(equalTo: self.storiesView.rightAnchor, constant: 16),
-//            self.storiesView1.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
-            self.storiesView1.centerYAnchor.constraint(equalTo: self.storiesView.centerYAnchor),
-            self.storiesView1.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
-            self.storiesView1.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
-        
-            self.storiesView2.leftAnchor.constraint(equalTo: self.storiesView1.rightAnchor, constant: 16),
-//            self.storiesView2.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
-            self.storiesView2.centerYAnchor.constraint(equalTo: self.storiesView1.centerYAnchor),
-            self.storiesView2.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
-            self.storiesView2.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
-
-            self.storiesView3.leftAnchor.constraint(equalTo: self.storiesView2.rightAnchor, constant: 16),
-//            self.storiesView3.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
-            self.storiesView3.centerYAnchor.constraint(equalTo: self.storiesView2.centerYAnchor),
-            self.storiesView3.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
-            self.storiesView3.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
-            self.storiesView3.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor, constant: -16),
-            
+            self.storiesCollection.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.storiesCollection.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.storiesCollection.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor,constant: 16),
+            self.storiesCollection.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
+            self.storiesCollection.widthAnchor.constraint(equalTo: self.storiesCollection.heightAnchor),
+           
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.addWalletButton.heightAnchor.constraint(equalToConstant: 50),
             
-            self.chekCollectionView.topAnchor.constraint(equalTo: self.storiesView.bottomAnchor, constant: 10),
+            self.chekCollectionView.topAnchor.constraint(equalTo: self.storiesCollection.bottomAnchor, constant: 10),
             self.chekCollectionView.bottomAnchor.constraint(equalTo: self.addWalletButton.topAnchor),
             self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
@@ -240,6 +162,22 @@ class MainViewController: UIViewController {
             
         ])
     }
+    
+    private func getWeather() {
+        getNowWeather(lat: self.lat, lon: self.lon) { weather in
+           
+            DispatchQueue.main.async {
+                self.weather.insert(weather, at: 0)
+            }
+        }
+    }
+    
+    private func location() {
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.startUpdatingLocation()
+        self.locationManager.delegate = self
+    }
+    
     @objc private func didTapWalletButton() {
         self.alertAction()
     }
@@ -274,71 +212,7 @@ class MainViewController: UIViewController {
         
     }
     
-    private func getCentrView() {
-            self.storiesCentrY = self.storiesView.frame.origin.x + (self.storiesView.frame.height/2) - 16
-            self.storiesCentrX = self.storiesView.frame.origin.y + (self.storiesView.frame.height/2) - 16
-      print(storiesCentrY)
-        print(storiesCentrX)
-        
-    }
-    
-   @objc func changeLayoutAvatar() {
-//       if self.isStoriesIncreased == false {
-//           getCentrView()
-//       }
-//        let stories = self.storiesView
-//
-        let widthScreen = UIScreen.main.bounds.width
-        let heightScreen = UIScreen.main.bounds.height
-//        let widthStories = stories.bounds.width
-//        let width = widthScreen / widthStories
-//        let height = heightScreen / widthStories
-//      let hidden = self.isStoriesIncreased ? false : true
-//        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic) {
-//            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) { [self] in
-//                self.tabBarController?.tabBar.isHidden = hidden
-////                navigationController?.navigationBar.isHidden = hidden
-//                self.view.bringSubviewToFront(stories)
-//                stories.transform = self.isStoriesIncreased ? .identity : CGAffineTransform(scaleX: width, y: height)
-//                stories.layer.borderWidth = self.isStoriesIncreased ? 3 : 0
-//                stories.center = self.isStoriesIncreased ? CGPoint(x: self.storiesCentrX, y: self.storiesCentrY): CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-////                stories.bringSubviewToFront(self)
-//
-//                stories.layer.cornerRadius = self.isStoriesIncreased ? stories.frame.height/2 : 0
-//
-//                stories.layoutIfNeeded()
-//            }
-//
-//            } completion: { _ in
-//
-//                if self.isStoriesIncreased == false {
-//                    self.navigationController?.pushViewController(self.vc, animated: false)
-//                }
-//                self.isStoriesIncreased.toggle()
-//        }
-       let popVC = StoriesViewController()
-       
-       popVC.transitioningDelegate = self
-       popVC.modalPresentationStyle = .custom
-     
-//       let popOverVC = popVC.popoverPresentationController
-//       popOverVC?.delegate = self
-//       popOverVC?.sourceView = self.storiesView
-//       popOverVC?.sourceRect = CGRect(x: self.storiesView.bounds.midX , y: self.storiesView.bounds.maxY, width: 0, height: 0)
-//       popVC.preferredContentSize = CGSize(width: widthScreen, height: heightScreen)
-       self.present(popVC, animated: true)
-            
-            
-    }
-    
-    private func storiesGesture() {
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(changeLayoutAvatar))
-        gesture.numberOfTapsRequired = 1
-        self.storiesView.addGestureRecognizer(gesture)
-//        self.storiesView1.addGestureRecognizer(gesture)
-//        self.storiesView2.addGestureRecognizer(gesture)
-//        self.storiesView3.addGestureRecognizer(gesture)
-    }
+   
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
@@ -376,29 +250,60 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
     }
 }
 extension MainViewController: StoriesViewDelegate {
-    func pop() {
-        
-        self.vc.navigationController?.popViewController(animated: false)
-        changeLayoutAvatar()
+    func present() {
+        self.indexPath = storiesCollection.indexPath
+        if self.indexPath.row == 0 {
+            let vc = WeatherStoriesViewController(weather: self.weather.first!)
+            vc.transitioningDelegate = self
+            vc.modalPresentationStyle = .custom
+            self.present(vc, animated: true)
+        } else {
+            let popVC = StoriesViewController()
+            popVC.transitioningDelegate = self
+            popVC.modalPresentationStyle = .custom
+            self.present(popVC, animated: true)
+            
+        }
     }
-    
     
 }
 extension MainViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let centrViewX = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midX
+        let centrViewY = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midY + 120
         transition.transitionMode = .present
-        transition.startingPoint = self.storiesView.center
-        transition.circleColor = self.storiesView.backgroundColor ?? .systemRed
+        transition.startingPoint = CGPoint(x: centrViewX, y: centrViewY)
+        print("🍎 \(centrViewX), \(centrViewY)")
+        transition.circleColor = .systemRed
         
         return transition
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        let centrViewX = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midX
+        let centrViewY = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midY + 120
         transition.transitionMode = .dismiss
-        transition.startingPoint = self.storiesView.center
-        transition.circleColor = self.storiesView.backgroundColor ?? .systemRed
-        
+        transition.startingPoint = CGPoint(x: centrViewX, y: centrViewY)
+        transition.circleColor = .systemRed
+        self.storiesCollection.storiesCollectionView.reloadData()
         return transition
+        
+    }
+}
+extension MainViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let lat = manager.location?.coordinate.latitude ?? 0
+        let lon = manager.location?.coordinate.longitude ?? 0
+        manager.stopUpdatingLocation()
+        self.lat = lat
+        self.lon = lon
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+        print("Can't get location")
+        
     }
 }

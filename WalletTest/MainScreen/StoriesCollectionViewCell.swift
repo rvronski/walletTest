@@ -9,22 +9,19 @@ import UIKit
 
 class StoriesCollectionViewCell: UICollectionViewCell {
     
+    
+    
     lazy var backgroundImageView: UIImageView  = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "background_image")
+//        imageView.image = UIImage(named: "background_image")
         imageView.layer.cornerRadius = self.frame.width/2
+        imageView.layer.borderColor = UIColor.systemRed.cgColor
+        imageView.layer.borderWidth = 5
         imageView.clipsToBounds = true
         
         return imageView
     }()
-    
-//    private lazy var progressView: UIProgressView = {
-//        let progress = UIProgressView(progressViewStyle: .default)
-//        progress.translatesAutoresizingMaskIntoConstraints = false
-//        progress.progressTintColor = .systemRed
-//        return progress
-//    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +32,14 @@ class StoriesCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    func setupImage(image: UIImage) {
+        self.backgroundImageView.image = image
+    }
+    
+    func changeColor() {
+        backgroundImageView.layer.borderColor = UIColor.white.cgColor
+    }
 //    override func layoutSubviews() {
 //        super.layoutSubviews()
 //        self.backgroundImageView.layer.cornerRadius = self.backgroundImageView.frame.height/2

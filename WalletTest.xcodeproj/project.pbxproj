@@ -36,6 +36,10 @@
 		45BB87C42994250B00A37CA5 /* StoriesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C32994250B00A37CA5 /* StoriesCollection.swift */; };
 		45BB87C62994257200A37CA5 /* StoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */; };
 		45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C7299481BF00A37CA5 /* CircularTransition.swift */; };
+		45BB87CC2995472300A37CA5 /* WeatherStoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */; };
+		45BB87CE299549EE00A37CA5 /* InfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CD299549EE00A37CA5 /* InfoLabel.swift */; };
+		45BB87D029954A8D00A37CA5 /* WeatherNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */; };
+		45BB87D229954F8200A37CA5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D129954F8200A37CA5 /* String.swift */; };
 		45BE247129926C1800111720 /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE247029926C1800111720 /* StoriesViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +75,10 @@
 		45BB87C32994250B00A37CA5 /* StoriesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollection.swift; sourceTree = "<group>"; };
 		45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BB87C7299481BF00A37CA5 /* CircularTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
+		45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherStoriesViewController.swift; sourceTree = "<group>"; };
+		45BB87CD299549EE00A37CA5 /* InfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoLabel.swift; sourceTree = "<group>"; };
+		45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherNetworkManager.swift; sourceTree = "<group>"; };
+		45BB87D129954F8200A37CA5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		45BE247029926C1800111720 /* StoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +115,7 @@
 				450AE97D297C35C200274D48 /* AppDelegate.swift */,
 				450AE97F297C35C200274D48 /* SceneDelegate.swift */,
 				450AE998297CA1A400274D48 /* NetworkManager.swift */,
+				45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */,
 				4515836729836A4D003A1222 /* TabBar */,
 				450AE9A829800F6600274D48 /* LoginScreen */,
 				450AE9A729800F3300274D48 /* MainScreen */,
@@ -140,6 +149,9 @@
 				45BB87C32994250B00A37CA5 /* StoriesCollection.swift */,
 				45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */,
 				45BE247029926C1800111720 /* StoriesViewController.swift */,
+				45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */,
+				45BB87D129954F8200A37CA5 /* String.swift */,
+				45BB87CD299549EE00A37CA5 /* InfoLabel.swift */,
 				450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */,
 				4592829F29803AC3007271DD /* Detail */,
 			);
@@ -278,9 +290,13 @@
 				4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */,
 				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
 				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
+				45BB87D229954F8200A37CA5 /* String.swift in Sources */,
 				45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */,
+				45BB87CC2995472300A37CA5 /* WeatherStoriesViewController.swift in Sources */,
+				45BB87CE299549EE00A37CA5 /* InfoLabel.swift in Sources */,
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
 				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
+				45BB87D029954A8D00A37CA5 /* WeatherNetworkManager.swift in Sources */,
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
 				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				45BE247129926C1800111720 /* StoriesViewController.swift in Sources */,
