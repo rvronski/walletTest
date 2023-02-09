@@ -9,6 +9,9 @@ import UIKit
 import CoreData
 
 class MainViewController: UIViewController {
+    var storiesCentrY = 0.0
+    var storiesCentrX = 0.0
+    let transition = CircularTransition()
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
@@ -22,7 +25,62 @@ class MainViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private lazy var storiesCollection: StoriesCollection = {
+       let stories = StoriesCollection()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        return stories
+    }()
+    
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsHorizontalScrollIndicator = false
+       
+        return scrollView
+    }()
     private lazy var storiesView: UIImageView = {
+        let stories = UIImageView()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.isUserInteractionEnabled = true
+        stories.layer.borderWidth = 3
+        stories.image = UIImage(named: "background_image")
+        stories.clipsToBounds = true
+        stories.layer.borderColor = UIColor.systemRed.cgColor
+        return stories
+    }()
+    
+    private lazy var storiesView1: UIImageView = {
+        let stories = UIImageView()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.isUserInteractionEnabled = true
+        stories.layer.borderWidth = 3
+        stories.image = UIImage(named: "background_image")
+        stories.clipsToBounds = true
+        stories.layer.borderColor = UIColor.systemRed.cgColor
+        return stories
+    }()
+    private lazy var storiesView2: UIImageView = {
+        let stories = UIImageView()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.isUserInteractionEnabled = true
+        stories.layer.borderWidth = 3
+        stories.image = UIImage(named: "background_image")
+        stories.clipsToBounds = true
+        stories.layer.borderColor = UIColor.systemRed.cgColor
+        return stories
+    }()
+    private lazy var storiesView3: UIImageView = {
+        let stories = UIImageView()
+        stories.translatesAutoresizingMaskIntoConstraints = false
+        stories.isUserInteractionEnabled = true
+        stories.layer.borderWidth = 3
+        stories.image = UIImage(named: "background_image")
+        stories.clipsToBounds = true
+        stories.layer.borderColor = UIColor.systemRed.cgColor
+        return stories
+    }()
+    
+    private lazy var storiesView4: UIImageView = {
         let stories = UIImageView()
         stories.translatesAutoresizingMaskIntoConstraints = false
         stories.isUserInteractionEnabled = true
@@ -81,6 +139,11 @@ class MainViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+//    
+//    override func loadView() {
+//        super.loadView()
+//        view = storiesCollection
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,13 +153,12 @@ class MainViewController: UIViewController {
         UserDefaults.standard.set(true, forKey: "isLogin")
         self.storiesGesture()
         self.vc.delegate = self
+        self.getCentrView()
     }
     
     private func setupNavigationBar() {
         self.nameUserLabel.text = user.userName?.capitalized
-        self.navigationItem.title = "Мои счета"
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.hidesBackButton = true
         self.navigationController?.navigationBar.tintColor = .systemRed
@@ -112,26 +174,58 @@ class MainViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         self.storiesView.layer.cornerRadius = self.storiesView.frame.height/2
+        self.storiesView1.layer.cornerRadius = self.storiesView.frame.height/2
+        self.storiesView2.layer.cornerRadius = self.storiesView.frame.height/2
+        self.storiesView3.layer.cornerRadius = self.storiesView.frame.height/2
        
     }
     
     private func setupView() {
         self.view.backgroundColor = .white
-        self.view.addSubview(self.chekCollectionView)
-        self.view.addSubview(self.addWalletButton)
-        self.view.addSubview(self.nameUserLabel)
-        self.view.addSubview(self.storiesView)
+        self.view.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.chekCollectionView)
+        self.scrollView.addSubview(self.addWalletButton)
+        self.scrollView.addSubview(self.nameUserLabel)
+        self.scrollView.addSubview(self.storiesView)
+        self.scrollView.addSubview(self.storiesView1)
+        self.scrollView.addSubview(self.storiesView2)
+        self.scrollView.addSubview(self.storiesView3)
+//        self.scrollView.addSubview(self.storiesView4)
         
         NSLayoutConstraint.activate([
+            self.scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            self.scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            self.scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            self.scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             
             self.nameUserLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,constant: 10),
             self.nameUserLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
-            self.storiesView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor, constant: 20),
-            self.storiesView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20),
-            self.storiesView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.25),
-            self.storiesView.heightAnchor.constraint(equalTo: self.storiesView.widthAnchor),
             
+            
+            self.storiesView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor, constant: 16),
+            self.storiesView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor,constant: 16),
+            self.storiesView.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.25),
+            self.storiesView.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
+//
+            self.storiesView1.leftAnchor.constraint(equalTo: self.storiesView.rightAnchor, constant: 16),
+//            self.storiesView1.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
+            self.storiesView1.centerYAnchor.constraint(equalTo: self.storiesView.centerYAnchor),
+            self.storiesView1.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
+            self.storiesView1.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
+        
+            self.storiesView2.leftAnchor.constraint(equalTo: self.storiesView1.rightAnchor, constant: 16),
+//            self.storiesView2.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
+            self.storiesView2.centerYAnchor.constraint(equalTo: self.storiesView1.centerYAnchor),
+            self.storiesView2.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
+            self.storiesView2.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
+
+            self.storiesView3.leftAnchor.constraint(equalTo: self.storiesView2.rightAnchor, constant: 16),
+//            self.storiesView3.topAnchor.constraint(equalTo: self.scrollView.topAnchor,constant: 16),
+            self.storiesView3.centerYAnchor.constraint(equalTo: self.storiesView2.centerYAnchor),
+            self.storiesView3.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
+            self.storiesView3.widthAnchor.constraint(equalTo: self.storiesView.heightAnchor),
+            self.storiesView3.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor, constant: -16),
             
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
@@ -180,37 +274,59 @@ class MainViewController: UIViewController {
         
     }
     
+    private func getCentrView() {
+            self.storiesCentrY = self.storiesView.frame.origin.x + (self.storiesView.frame.height/2) - 16
+            self.storiesCentrX = self.storiesView.frame.origin.y + (self.storiesView.frame.height/2) - 16
+      print(storiesCentrY)
+        print(storiesCentrX)
+        
+    }
+    
    @objc func changeLayoutAvatar() {
-        let stories = self.storiesView
-       let storiesCentrY = self.storiesView.frame.origin.x + (self.storiesView.frame.height/2)
-       let storiesCentrX = self.storiesView.frame.origin.y + (self.storiesView.frame.height/2)
-       print(storiesCentrY,storiesCentrX)
+//       if self.isStoriesIncreased == false {
+//           getCentrView()
+//       }
+//        let stories = self.storiesView
+//
         let widthScreen = UIScreen.main.bounds.width
         let heightScreen = UIScreen.main.bounds.height
-        let widthStories = stories.bounds.width
-        let width = widthScreen / widthStories
-        let height = heightScreen / widthStories
-      let hidden = self.isStoriesIncreased ? false : true
-        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic) {
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) { [self] in
-                stories.transform = self.isStoriesIncreased ? .identity : CGAffineTransform(scaleX: width, y: height)
-                stories.layer.borderWidth = self.isStoriesIncreased ? 3 : 0
-                stories.center = self.isStoriesIncreased ? CGPoint(x: 69.16666666666666, y:264.8333333333333): CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-                self.view.bringSubviewToFront(stories)
-                self.tabBarController?.tabBar.isHidden = hidden
-                navigationController?.navigationBar.isHidden = hidden
-                stories.layer.cornerRadius = self.isStoriesIncreased ? stories.frame.height/2 : 0
-               
-                stories.layoutIfNeeded()
-            }
-                
-            } completion: { _ in
-                
-                if self.isStoriesIncreased == false {
-                    self.navigationController?.pushViewController(self.vc, animated: false)
-                }
-                self.isStoriesIncreased.toggle()
-        }
+//        let widthStories = stories.bounds.width
+//        let width = widthScreen / widthStories
+//        let height = heightScreen / widthStories
+//      let hidden = self.isStoriesIncreased ? false : true
+//        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic) {
+//            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) { [self] in
+//                self.tabBarController?.tabBar.isHidden = hidden
+////                navigationController?.navigationBar.isHidden = hidden
+//                self.view.bringSubviewToFront(stories)
+//                stories.transform = self.isStoriesIncreased ? .identity : CGAffineTransform(scaleX: width, y: height)
+//                stories.layer.borderWidth = self.isStoriesIncreased ? 3 : 0
+//                stories.center = self.isStoriesIncreased ? CGPoint(x: self.storiesCentrX, y: self.storiesCentrY): CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+////                stories.bringSubviewToFront(self)
+//
+//                stories.layer.cornerRadius = self.isStoriesIncreased ? stories.frame.height/2 : 0
+//
+//                stories.layoutIfNeeded()
+//            }
+//
+//            } completion: { _ in
+//
+//                if self.isStoriesIncreased == false {
+//                    self.navigationController?.pushViewController(self.vc, animated: false)
+//                }
+//                self.isStoriesIncreased.toggle()
+//        }
+       let popVC = StoriesViewController()
+       
+       popVC.transitioningDelegate = self
+       popVC.modalPresentationStyle = .custom
+     
+//       let popOverVC = popVC.popoverPresentationController
+//       popOverVC?.delegate = self
+//       popOverVC?.sourceView = self.storiesView
+//       popOverVC?.sourceRect = CGRect(x: self.storiesView.bounds.midX , y: self.storiesView.bounds.maxY, width: 0, height: 0)
+//       popVC.preferredContentSize = CGSize(width: widthScreen, height: heightScreen)
+       self.present(popVC, animated: true)
             
             
     }
@@ -219,6 +335,9 @@ class MainViewController: UIViewController {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(changeLayoutAvatar))
         gesture.numberOfTapsRequired = 1
         self.storiesView.addGestureRecognizer(gesture)
+//        self.storiesView1.addGestureRecognizer(gesture)
+//        self.storiesView2.addGestureRecognizer(gesture)
+//        self.storiesView3.addGestureRecognizer(gesture)
     }
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
@@ -264,4 +383,22 @@ extension MainViewController: StoriesViewDelegate {
     }
     
     
+}
+extension MainViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .present
+        transition.startingPoint = self.storiesView.center
+        transition.circleColor = self.storiesView.backgroundColor ?? .systemRed
+        
+        return transition
+    }
+    
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .dismiss
+        transition.startingPoint = self.storiesView.center
+        transition.circleColor = self.storiesView.backgroundColor ?? .systemRed
+        
+        return transition
+    }
 }

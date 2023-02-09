@@ -33,6 +33,9 @@
 		4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836A29839D41003A1222 /* SettingsTableViewCell.swift */; };
 		4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836D2983B4F4003A1222 /* DeleteViewController.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
+		45BB87C42994250B00A37CA5 /* StoriesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C32994250B00A37CA5 /* StoriesCollection.swift */; };
+		45BB87C62994257200A37CA5 /* StoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */; };
+		45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C7299481BF00A37CA5 /* CircularTransition.swift */; };
 		45BE247129926C1800111720 /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE247029926C1800111720 /* StoriesViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +68,9 @@
 		4515836A29839D41003A1222 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4515836D2983B4F4003A1222 /* DeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
+		45BB87C32994250B00A37CA5 /* StoriesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollection.swift; sourceTree = "<group>"; };
+		45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionViewCell.swift; sourceTree = "<group>"; };
+		45BB87C7299481BF00A37CA5 /* CircularTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
 		45BE247029926C1800111720 /* StoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				450AE9A329800C7700274D48 /* MainViewController.swift */,
+				45BB87C7299481BF00A37CA5 /* CircularTransition.swift */,
+				45BB87C32994250B00A37CA5 /* StoriesCollection.swift */,
+				45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */,
 				45BE247029926C1800111720 /* StoriesViewController.swift */,
 				450AE9A529800E0C00274D48 /* CheckCollectionViewCell.swift */,
 				4592829F29803AC3007271DD /* Detail */,
@@ -269,6 +278,7 @@
 				4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */,
 				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
 				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
+				45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */,
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
 				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
@@ -277,9 +287,11 @@
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				4515836629836731003A1222 /* TabBarViewController.swift in Sources */,
 				450AE982297C35C200274D48 /* DetailViewController.swift in Sources */,
+				45BB87C42994250B00A37CA5 /* StoriesCollection.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
 				451583582980C11B003A1222 /* User.swift in Sources */,
 				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,
+				45BB87C62994257200A37CA5 /* StoriesCollectionViewCell.swift in Sources */,
 				4515836929838D50003A1222 /* DetailTransViewController.swift in Sources */,
 				450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */,
 				45158364298355A4003A1222 /* TransactionsTableViewCell.swift in Sources */,

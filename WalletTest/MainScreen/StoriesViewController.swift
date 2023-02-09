@@ -42,7 +42,7 @@ class StoriesViewController: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 0.1,
                              repeats: true) { timer in
             if self.progressView.progress == 1 {
-                self.delegate?.pop()
+                self.dismiss(animated: true)
                 self.progressView.setProgress(0, animated: false)
                 self.index = Float(0)
                 timer.invalidate()
