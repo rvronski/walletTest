@@ -278,7 +278,7 @@ class NetworkManager {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
-        let body = TransferPost.init(amount: amount, from_id: from_id, reference: "перевод между счетами", to_id: to_id)
+        let body = TransferPost.init(amount: amount, from_id: from_id, reference: "Перевод между счетами", to_id: to_id)
         let encoder = JSONEncoder()
         
         do {

@@ -14,7 +14,7 @@ class TransactionViewController: UIViewController {
     let user: User
     var wallets = [Wallet]()
     var transactions = [Transaction]()
-    
+    var index = 0
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -73,11 +73,7 @@ class TransactionViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         if self.wallets.count > 0 {
-            self.transactions = self.coreManager.transaction(wallet: wallets[0])
-            guard let nameWallet = self.wallets[0].nameWallet else { return }
-            guard let balance = self.wallets[0].balance else { return }
-            walletLabel.text = " " + nameWallet + " " + balance + "₽"
-            self.tableView.reloadData()
+            self.updateTransactions()
         }
     }
     
@@ -85,6 +81,9 @@ class TransactionViewController: UIViewController {
         super.viewWillAppear(animated)
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
+        if self.wallets.count > 0 {
+            self.updateTransactions()
         }
         self.wallets = coreManager.wallets(user: user)
         self.tableView.reloadData()
@@ -103,6 +102,30 @@ class TransactionViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.setNavigationBarHidden(false, animated: false)
         self.navigationController?.navigationBar.tintColor = .systemRed
+    }
+    
+    private func updateTransactions() {
+        let wallet = self.wallets[index]
+        guard let id = self.wallets[index].id else {return}
+        self.transactions = self.coreManager.transaction(wallet: wallet)
+        guard let nameWallet = self.wallets[index].nameWallet else { return }
+        guard let balance = self.wallets[index].balance else { return }
+        walletLabel.text = " " + nameWallet + " " + balance + "₽"
+        self.tableView.reloadData()
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+        networkManager.transactions(id: id) { trans in
+            DispatchQueue.main.async {
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+            }
+            self.coreManager.createTransactions(transactions: trans, wallet: wallet) {
+                self.transactions = self.coreManager.transaction(wallet: wallet)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
     }
     
     private func setupView() {
@@ -166,6 +189,7 @@ extension TransactionViewController:  TableViewDelegate {
         guard let balance = self.wallets[index].balance else { return }
         label.text = " " + nameWallet + " " + balance + "₽"
         label.tag = index
+        self.index = index
         let wallet = self.wallets[index]
         guard let id = self.wallets[index].id else {return}
         self.transactions = self.coreManager.transaction(wallet: wallet)

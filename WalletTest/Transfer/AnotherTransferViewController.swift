@@ -268,7 +268,7 @@ class AnotherTransferViewController: UIViewController {
             guard let fromId = wallets[self.fromLabel.tag].id else { return }
             self.activityIndicator.isHidden = false
             self.activityIndicator.startAnimating()
-            networkManager.debit(amount: text, id: fromId, reference: toText) { balance in
+            networkManager.debit(amount: text, id: fromId, reference: "Перевод \(toText)") { balance in
                 self.coreManager.changeBalance(id: fromId, newBalance: balance) {
                     DispatchQueue.main.async {
                         self.activityIndicator.isHidden = true

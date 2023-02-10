@@ -48,13 +48,9 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
     func gets(completion: () -> Void) {
         let contacts = self.getContactFromCNContact()
         for contact in contacts {
-//            self.string.append(contact.givenName + "" + contact.middleName)
-//            print(contact.middleName)
-//            print(contact.familyName)
-//            print(contact.givenName)
             let givenName = contact.givenName
             let middleName = contact.middleName
-//            let phoneNumber = contact.phoneNumbers.first?.label ?? ""
+           
             let phoneContact = PhoneContact(givenName: givenName, familyName: middleName)
             self.contacts.append(phoneContact)
             

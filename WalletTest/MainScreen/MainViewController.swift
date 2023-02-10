@@ -87,20 +87,21 @@ class MainViewController: UIViewController {
         return view
     }()
     
-    private lazy var nameUserLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
- 
+    
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.color = .darkGray
         return activityIndicator
     }()
+    
+    private lazy var activityIndicatorSmall: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }()
+    
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -128,8 +129,9 @@ class MainViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.nameUserLabel.text = user.userName?.capitalized
-        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = user.userName?.capitalized
         self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.hidesBackButton = true
         self.navigationController?.navigationBar.tintColor = .systemRed
@@ -140,6 +142,7 @@ class MainViewController: UIViewController {
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
+        self.getWeather()
         self.wallets = coreManager.wallets(user: user)
         self.chekCollectionView.reloadData()
         self.storiesCollection.storiesCollectionView.reloadData()
@@ -150,19 +153,17 @@ class MainViewController: UIViewController {
         self.view.addSubview(self.scrollView)
         self.view.addSubview(self.chekCollectionView)
         self.view.addSubview(self.addWalletButton)
-        self.view.addSubview(self.nameUserLabel)
         self.view.addSubview(self.activityIndicator)
-        
+        self.view.addSubview(self.activityIndicatorSmall)
         NSLayoutConstraint.activate([
            
-            self.nameUserLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,constant: 10),
-            self.nameUserLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.addWalletButton.heightAnchor.constraint(equalToConstant: 50),
             
-            self.chekCollectionView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor, constant: 10),
+            self.chekCollectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             self.chekCollectionView.bottomAnchor.constraint(equalTo: self.addWalletButton.topAnchor),
             self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
@@ -170,12 +171,15 @@ class MainViewController: UIViewController {
             self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             
+            self.activityIndicatorSmall.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 70.3),
+            self.activityIndicatorSmall.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 70.3),
+            
+            
         ])
     }
     
     private func getWeather() {
         getNowWeather(lat: self.lat, lon: self.lon) { weather in
-           
             DispatchQueue.main.async {
                 self.weather.insert(weather, at: 0)
             }
