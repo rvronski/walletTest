@@ -49,6 +49,7 @@ class DetailTransViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 30)
+        label.textAlignment = .center
         return label
     }()
     
@@ -111,12 +112,12 @@ class DetailTransViewController: UIViewController {
             self.dateLabel.centerXAnchor.constraint(equalTo: self.transferView.centerXAnchor),
             self.dateLabel.topAnchor.constraint(equalTo: self.transferView.topAnchor,constant: 20),
             
-            self.operationLabel.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
             self.operationLabel.leftAnchor.constraint(equalTo: self.transferView.leftAnchor, constant: 16),
-            self.operationLabel.widthAnchor.constraint(equalToConstant: 300),
+            self.operationLabel.rightAnchor.constraint(equalTo: self.transferView.rightAnchor, constant: -16),
+            self.operationLabel.topAnchor.constraint(equalTo: self.dateLabel.bottomAnchor, constant: 30),
             
-            self.sumLabel.centerYAnchor.constraint(equalTo: self.operationLabel.centerYAnchor),
-            self.sumLabel.rightAnchor.constraint(equalTo: self.transferView.rightAnchor, constant: -16),
+            self.sumLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.sumLabel.bottomAnchor.constraint(equalTo: self.cardImageView.topAnchor, constant: -30),
             
             self.cardImageView.bottomAnchor.constraint(equalTo: self.transferView.bottomAnchor,constant: -20),
             self.cardImageView.centerXAnchor.constraint(equalTo: self.transferView.centerXAnchor),
