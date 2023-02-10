@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSContactsUsageDescription</key>
+	<string>Для денежного перевода по номеру телефона</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Для лучшей работы приложения</string>
 	<key>UIApplicationSceneManifest</key>

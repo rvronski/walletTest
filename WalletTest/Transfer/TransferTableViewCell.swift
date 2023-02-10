@@ -48,10 +48,15 @@ class TransferTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupContacts() {
+        
+    }
     
     func setup(wallet: Wallet) {
         self.balanceLabel.text = "\(wallet.balance ?? "")  ₽"
         self.walletNameLabel.text = wallet.nameWallet
+        self.cardImageView.image = UIImage(named: "CardImageNewMW")
+        
     }
     
     

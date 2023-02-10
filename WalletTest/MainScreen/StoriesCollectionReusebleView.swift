@@ -8,17 +8,20 @@
 import UIKit
 
 protocol StoriesViewDelegate: AnyObject {
-    func present()
+    func present(indexPath: IndexPath, centrX: CGFloat, centrY: CGFloat)
 }
 
-class StoriesCollection: UIView {
+class StoriesCollectionReusebleView: UICollectionReusableView {
+    let coreManager = CoreDataManager.shared
     var delegate: StoriesViewDelegate?
-    private let reuseIdentifier = "Cell"
+    let identifire = "Cell"
     private var isStoriesIncreased = false
     let transition = CircularTransition()
     var indexPath = IndexPath()
     var indexArray = [IndexPath]()
     var images = [UIImage(named: "weatherLogo"),UIImage(named: "background_image"),UIImage(named: "MyWalletLogo1"), ]
+    let email = UserDefaults.standard.string(forKey: "email")
+    var user: User?
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -32,7 +35,7 @@ class StoriesCollection: UIView {
      lazy var storiesCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(StoriesCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(StoriesCollectionViewCell.self, forCellWithReuseIdentifier: identifire)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
@@ -40,14 +43,24 @@ class StoriesCollection: UIView {
     }()
     
     override init(frame: CGRect) {
+        
         super.init(frame: frame)
         self.setupView()
+        self.getUser()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
    
+    func getUser() {
+        guard let email else { return }
+        coreManager.getUser(email: email) { user in
+            guard let user else { return }
+            self.user = user
+        }
+    }
+    
     private func setupView() {
         self.backgroundColor = .white
         self.addSubview(self.storiesCollectionView)
@@ -63,7 +76,7 @@ class StoriesCollection: UIView {
         
     }
 }
-extension StoriesCollection: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+extension StoriesCollectionReusebleView: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         return 1
@@ -76,7 +89,7 @@ extension StoriesCollection: UICollectionViewDelegateFlowLayout, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! StoriesCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifire, for: indexPath) as! StoriesCollectionViewCell
         
         cell.setupImage(image: self.images[indexPath.row]!)
         
@@ -98,12 +111,15 @@ extension StoriesCollection: UICollectionViewDelegateFlowLayout, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = self.storiesCollectionView.cellForItem(at: indexPath)
+        let centrX = cell?.frame.midX ?? 0.0
+        let centrY = cell?.frame.midY ?? 0.0
         self.indexPath = indexPath
         self.indexArray.append(indexPath)
-        self.delegate?.present()
+        self.delegate?.present(indexPath: indexPath, centrX: centrX, centrY: centrY)
     }
 }
-extension StoriesCollection: UIViewControllerTransitioningDelegate {
+extension StoriesCollectionReusebleView: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         transition.transitionMode = .present

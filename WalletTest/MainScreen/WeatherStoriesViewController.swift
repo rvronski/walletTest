@@ -16,21 +16,21 @@ class WeatherStoriesViewController: UIViewController {
     var newY:CGFloat = 0
     var oldY:CGFloat = 0
     var oldX: CGFloat = 0
-    var weather:WheatherAnswer
-   
-    init(weather: WheatherAnswer) {
-        self.weather = weather
-        super.init(nibName: nil, bundle: nil)
-    }
+    var weather:WheatherAnswer?
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    //    init(weather: WheatherAnswer) {
+    //        self.weather = weather
+    //        super.init(nibName: nil, bundle: nil)
+    //    }
+    //
+    //    required init?(coder: NSCoder) {
+    //        fatalError("init(coder:) has not been implemented")
+    //    }
+    //
     lazy var backgroundImageView: UIImageView  = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.image = UIImage(named: "cloud")
+        //        imageView.image = UIImage(named: "cloud")
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -71,7 +71,6 @@ class WeatherStoriesViewController: UIViewController {
     
     private func setupGesture() {
         let tapGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.dismissView))
-        
         tapGesture.direction = [.up,.down]
         self.view.addGestureRecognizer(tapGesture)
     }
@@ -179,42 +178,48 @@ class WeatherStoriesViewController: UIViewController {
         self.dismiss(animated: true)
     }
     
-   
     
-   
     
-    private func setupWheather(weather: WheatherAnswer) {
-        let temp = weather.main?.temp ?? 0
-        let cityName = weather.name ?? ""
-        let description = weather.weather.first?.description ?? ""
-        let main = weather.weather.first?.main ?? "clear"
-        self.tempLabel.text = "\(Int(temp))˚"
-        self.desccriptionLabel.text = description.capitalizedSentence
-        self.cityLabel.text = cityName
-        self.backgroundImageView.image = getImageBackground(main: main)
+    
+    private func setupWheather(weather: WheatherAnswer?=nil) {
+        if let weather {
+            let temp = weather.main?.temp ?? 0
+            let cityName = weather.name ?? "Земля"
+            let description = weather.weather.first?.description ?? ""
+            let main = weather.weather.first?.main ?? "clear"
+            self.tempLabel.text = "\(Int(temp))˚"
+            self.desccriptionLabel.text = description.capitalizedSentence
+            self.cityLabel.text = cityName
+            self.backgroundImageView.image = getImageBackground(main: main)
+        } else {
+            self.tempLabel.text = "0˚"
+            self.desccriptionLabel.text = "Проверьте интернет соединение"
+            self.cityLabel.text = "Земля"
+            self.backgroundImageView.image = UIImage(named: "cloudy")!
+        }
     }
-    
-    func getImageBackground(main: String) -> UIImage {
-        if main == "Thunderstorm" {
-            return UIImage(named: "rain")!
-        }
-        if main == "Drizzle" {
-            return UIImage(named: "rain")!
-        }
-        if main == "Rain" {
-            return UIImage(named: "rain")!
-        }
-        if main == "Snow" {
-            return UIImage(named: "snow")!
-        }
-        if main == "Clear" {
+        
+        func getImageBackground(main: String) -> UIImage {
+            if main == "Thunderstorm" {
+                return UIImage(named: "rain")!
+            }
+            if main == "Drizzle" {
+                return UIImage(named: "rain")!
+            }
+            if main == "Rain" {
+                return UIImage(named: "rain")!
+            }
+            if main == "Snow" {
+                return UIImage(named: "snow")!
+            }
+            if main == "Clear" {
+                return UIImage(named: "clear")!
+            }
+            if main == "Clouds" {
+                return UIImage(named: "cloudy")!
+            }
             return UIImage(named: "clear")!
         }
-        if main == "Clouds" {
-            return UIImage(named: "cloudy")!
-        }
-        return UIImage(named: "clear")!
+        
     }
-    
-}
     

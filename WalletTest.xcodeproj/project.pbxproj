@@ -33,13 +33,19 @@
 		4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836A29839D41003A1222 /* SettingsTableViewCell.swift */; };
 		4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836D2983B4F4003A1222 /* DeleteViewController.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
-		45BB87C42994250B00A37CA5 /* StoriesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C32994250B00A37CA5 /* StoriesCollection.swift */; };
+		45BB87C42994250B00A37CA5 /* StoriesCollectionReusebleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C32994250B00A37CA5 /* StoriesCollectionReusebleView.swift */; };
 		45BB87C62994257200A37CA5 /* StoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */; };
 		45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C7299481BF00A37CA5 /* CircularTransition.swift */; };
 		45BB87CC2995472300A37CA5 /* WeatherStoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */; };
 		45BB87CE299549EE00A37CA5 /* InfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CD299549EE00A37CA5 /* InfoLabel.swift */; };
 		45BB87D029954A8D00A37CA5 /* WeatherNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */; };
 		45BB87D229954F8200A37CA5 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D129954F8200A37CA5 /* String.swift */; };
+		45BB87D429962BCD00A37CA5 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D329962BCD00A37CA5 /* ContactViewController.swift */; };
+		45BB87D82996500200A37CA5 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D72996500200A37CA5 /* PhoneContact.swift */; };
+		45BB87DB29966A6600A37CA5 /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */; };
+		45BB87DD29966F4C00A37CA5 /* PaymentsPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */; };
+		45BB87DF299676CE00A37CA5 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */; };
+		45BB87E129968B2F00A37CA5 /* TestInternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87E029968B2F00A37CA5 /* TestInternetConnection.swift */; };
 		45BE247129926C1800111720 /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE247029926C1800111720 /* StoriesViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,13 +78,19 @@
 		4515836A29839D41003A1222 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4515836D2983B4F4003A1222 /* DeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
-		45BB87C32994250B00A37CA5 /* StoriesCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollection.swift; sourceTree = "<group>"; };
+		45BB87C32994250B00A37CA5 /* StoriesCollectionReusebleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionReusebleView.swift; sourceTree = "<group>"; };
 		45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BB87C7299481BF00A37CA5 /* CircularTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularTransition.swift; sourceTree = "<group>"; };
 		45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherStoriesViewController.swift; sourceTree = "<group>"; };
 		45BB87CD299549EE00A37CA5 /* InfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoLabel.swift; sourceTree = "<group>"; };
 		45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherNetworkManager.swift; sourceTree = "<group>"; };
 		45BB87D129954F8200A37CA5 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		45BB87D329962BCD00A37CA5 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
+		45BB87D72996500200A37CA5 /* PhoneContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
+		45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
+		45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsPhoneViewController.swift; sourceTree = "<group>"; };
+		45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
+		45BB87E029968B2F00A37CA5 /* TestInternetConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestInternetConnection.swift; sourceTree = "<group>"; };
 		45BE247029926C1800111720 /* StoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,12 +127,14 @@
 				450AE97D297C35C200274D48 /* AppDelegate.swift */,
 				450AE97F297C35C200274D48 /* SceneDelegate.swift */,
 				450AE998297CA1A400274D48 /* NetworkManager.swift */,
+				45BB87E029968B2F00A37CA5 /* TestInternetConnection.swift */,
 				45BB87CF29954A8D00A37CA5 /* WeatherNetworkManager.swift */,
 				4515836729836A4D003A1222 /* TabBar */,
 				450AE9A829800F6600274D48 /* LoginScreen */,
 				450AE9A729800F3300274D48 /* MainScreen */,
 				4515835F2981F224003A1222 /* Transfer */,
 				4515836229835126003A1222 /* Transactions */,
+				45BB87D929966A3600A37CA5 /* Payments */,
 				4515836C2983AAC7003A1222 /* Settings */,
 				450AE99C297D94A900274D48 /* CoreData */,
 				450AE989297C35C600274D48 /* Assets.xcassets */,
@@ -146,7 +160,7 @@
 			children = (
 				450AE9A329800C7700274D48 /* MainViewController.swift */,
 				45BB87C7299481BF00A37CA5 /* CircularTransition.swift */,
-				45BB87C32994250B00A37CA5 /* StoriesCollection.swift */,
+				45BB87C32994250B00A37CA5 /* StoriesCollectionReusebleView.swift */,
 				45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */,
 				45BE247029926C1800111720 /* StoriesViewController.swift */,
 				45BB87CB2995472300A37CA5 /* WeatherStoriesViewController.swift */,
@@ -172,7 +186,9 @@
 			children = (
 				45158359298185E6003A1222 /* TransferViewController.swift */,
 				451583602982E232003A1222 /* AnotherTransferViewController.swift */,
+				45BB87D329962BCD00A37CA5 /* ContactViewController.swift */,
 				4515835B2981D6E9003A1222 /* MenuTableViewController.swift */,
+				45BB87D72996500200A37CA5 /* PhoneContact.swift */,
 				4515835D2981E403003A1222 /* TransferTableViewCell.swift */,
 			);
 			path = Transfer;
@@ -213,6 +229,16 @@
 				459282A029803C07007271DD /* DetailCollectionViewCell.swift */,
 			);
 			path = Detail;
+			sourceTree = "<group>";
+		};
+		45BB87D929966A3600A37CA5 /* Payments */ = {
+			isa = PBXGroup;
+			children = (
+				45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */,
+				45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */,
+				45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */,
+			);
+			path = Payments;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,23 +313,29 @@
 			buildActionMask = 2147483647;
 			files = (
 				450AE9A0297F546500274D48 /* LoginViewController.swift in Sources */,
+				45BB87D429962BCD00A37CA5 /* ContactViewController.swift in Sources */,
 				4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */,
 				4515835A298185E6003A1222 /* TransferViewController.swift in Sources */,
 				459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */,
 				45BB87D229954F8200A37CA5 /* String.swift in Sources */,
 				45BB87C8299481BF00A37CA5 /* CircularTransition.swift in Sources */,
 				45BB87CC2995472300A37CA5 /* WeatherStoriesViewController.swift in Sources */,
+				45BB87E129968B2F00A37CA5 /* TestInternetConnection.swift in Sources */,
 				45BB87CE299549EE00A37CA5 /* InfoLabel.swift in Sources */,
 				450AE9A629800E0C00274D48 /* CheckCollectionViewCell.swift in Sources */,
 				4515835C2981D6E9003A1222 /* MenuTableViewController.swift in Sources */,
+				45BB87DB29966A6600A37CA5 /* ServicesViewController.swift in Sources */,
 				45BB87D029954A8D00A37CA5 /* WeatherNetworkManager.swift in Sources */,
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
+				45BB87D82996500200A37CA5 /* PhoneContact.swift in Sources */,
+				45BB87DF299676CE00A37CA5 /* PaymentsViewController.swift in Sources */,
+				45BB87DD29966F4C00A37CA5 /* PaymentsPhoneViewController.swift in Sources */,
 				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				45BE247129926C1800111720 /* StoriesViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
 				4515836629836731003A1222 /* TabBarViewController.swift in Sources */,
 				450AE982297C35C200274D48 /* DetailViewController.swift in Sources */,
-				45BB87C42994250B00A37CA5 /* StoriesCollection.swift in Sources */,
+				45BB87C42994250B00A37CA5 /* StoriesCollectionReusebleView.swift in Sources */,
 				450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */,
 				451583582980C11B003A1222 /* User.swift in Sources */,
 				4515835E2981E403003A1222 /* TransferTableViewCell.swift in Sources */,

@@ -11,8 +11,8 @@ import CoreLocation
 
 class MainViewController: UIViewController {
     var locationManager = CLLocationManager()
-    var storiesCentrY = 0.0
-    var storiesCentrX = 0.0
+    var storiesCentrY = CGFloat(0)
+    var storiesCentrX = CGFloat(0)
     let transition = CircularTransition()
     let coreManager = CoreDataManager.shared
     let user: User
@@ -31,8 +31,8 @@ class MainViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var storiesCollection: StoriesCollection = {
-       let stories = StoriesCollection()
+    private lazy var storiesCollection: StoriesCollectionReusebleView = {
+       let stories = StoriesCollectionReusebleView()
         stories.translatesAutoresizingMaskIntoConstraints = false
         stories.delegate = self
         return stories
@@ -69,6 +69,7 @@ class MainViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(CheckCollectionViewCell.self, forCellWithReuseIdentifier: "ChekCell")
+        collectionView.register(StoriesCollectionReusebleView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView
@@ -94,6 +95,12 @@ class MainViewController: UIViewController {
         return label
     }()
  
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }()
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,6 +109,8 @@ class MainViewController: UIViewController {
         self.setupNavigationBar()
         UserDefaults.standard.set(true, forKey: "isLogin")
         self.locationManager.requestWhenInUseAuthorization()
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global().async {
@@ -110,6 +119,8 @@ class MainViewController: UIViewController {
         }
         group.notify(queue: .main) {
             self.getWeather()
+            self.activityIndicator.isHidden = true
+            self.activityIndicator.stopAnimating()
         }
     }
     
@@ -134,31 +145,24 @@ class MainViewController: UIViewController {
         self.view.addSubview(self.chekCollectionView)
         self.view.addSubview(self.addWalletButton)
         self.view.addSubview(self.nameUserLabel)
-        self.view.addSubview(self.storiesCollection)
+        self.view.addSubview(self.activityIndicator)
         
         NSLayoutConstraint.activate([
            
             self.nameUserLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor,constant: 10),
             self.nameUserLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            
-            
-            
-            self.storiesCollection.leftAnchor.constraint(equalTo: self.view.leftAnchor),
-            self.storiesCollection.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.storiesCollection.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor,constant: 16),
-            self.storiesCollection.heightAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.3),
-            self.storiesCollection.widthAnchor.constraint(equalTo: self.storiesCollection.heightAnchor),
-           
             self.addWalletButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor,constant: -20),
             self.addWalletButton.leftAnchor.constraint(equalTo: self.view.leftAnchor,constant: 16),
             self.addWalletButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.addWalletButton.heightAnchor.constraint(equalToConstant: 50),
             
-            self.chekCollectionView.topAnchor.constraint(equalTo: self.storiesCollection.bottomAnchor, constant: 10),
+            self.chekCollectionView.topAnchor.constraint(equalTo: self.nameUserLabel.bottomAnchor, constant: 10),
             self.chekCollectionView.bottomAnchor.constraint(equalTo: self.addWalletButton.topAnchor),
             self.chekCollectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.chekCollectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
             
         ])
     }
@@ -192,10 +196,13 @@ class MainViewController: UIViewController {
         let saveAction = UIAlertAction(title: "Создать", style: .default, handler: { alert -> Void in
             let firstTextField = alertController.textFields![0] as UITextField
             guard let name = firstTextField.text else {return}
-            
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
             NetworkManager().createWallet(name: name) { wallet in
                 self.coreManager.createWallet(newWallet: wallet, user: self.user) {
                     DispatchQueue.main.async {
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
                         self.wallets = self.coreManager.wallets(user: self.user)
                         self.chekCollectionView.reloadData()
                     }
@@ -215,6 +222,18 @@ class MainViewController: UIViewController {
    
 }
 extension MainViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! StoriesCollectionReusebleView
+        header.delegate = self
+        self.indexPath = header.indexPath
+        return header
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 117)
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return wallets.count
@@ -250,10 +269,13 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
     }
 }
 extension MainViewController: StoriesViewDelegate {
-    func present() {
-        self.indexPath = storiesCollection.indexPath
-        if self.indexPath.row == 0 {
-            let vc = WeatherStoriesViewController(weather: self.weather.first!)
+    func present(indexPath: IndexPath, centrX: CGFloat, centrY: CGFloat) {
+        self.storiesCentrX = centrX
+        self.storiesCentrY = centrY + 120
+        self.indexPath = indexPath
+        if indexPath.row == 0  {
+            let vc = WeatherStoriesViewController()
+            vc.weather = self.weather.first
             vc.transitioningDelegate = self
             vc.modalPresentationStyle = .custom
             self.present(vc, animated: true)
@@ -270,21 +292,16 @@ extension MainViewController: StoriesViewDelegate {
 extension MainViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let centrViewX = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midX
-        let centrViewY = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midY + 120
         transition.transitionMode = .present
-        transition.startingPoint = CGPoint(x: centrViewX, y: centrViewY)
-        print("🍎 \(centrViewX), \(centrViewY)")
+        transition.startingPoint = CGPoint(x: self.storiesCentrX, y: self.storiesCentrY)
         transition.circleColor = .systemRed
         
         return transition
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        let centrViewX = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midX
-        let centrViewY = self.storiesCollection.storiesCollectionView.cellForItem(at: self.indexPath)!.frame.midY + 120
         transition.transitionMode = .dismiss
-        transition.startingPoint = CGPoint(x: centrViewX, y: centrViewY)
+        transition.startingPoint = CGPoint(x: self.storiesCentrX, y: self.storiesCentrY)
         transition.circleColor = .systemRed
         self.storiesCollection.storiesCollectionView.reloadData()
         return transition

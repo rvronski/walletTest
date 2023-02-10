@@ -39,9 +39,18 @@ class TransactionsTableViewCell: UITableViewCell {
     }
     
     
-    func setup(transaction: Transaction) {
+    func setup(transaction: Transaction)  {
+        let sum = transaction.amount ?? "0"
+        guard let sum1 = Int(sum) else {return}
+        if sum1 < 0 {
+            self.sumLabel.textColor = .systemRed
+            self.sumLabel.text = sum
+        } else {
+            self.sumLabel.textColor = .systemGreen
+            self.sumLabel.text = "+" + sum
+        }
         self.operationLabel.text = transaction.reference
-        self.sumLabel.text = transaction.amount
+       
         self.dateLabel.text = transaction.stringDate
     }
     

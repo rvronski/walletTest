@@ -12,7 +12,7 @@ class TransferViewController: UIViewController {
     let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
-    var wallets = [Wallet]()
+    var wallets:[Wallet] = []
     
     init(user: User) {
         self.user = user
@@ -99,6 +99,13 @@ class TransferViewController: UIViewController {
         return button
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
@@ -107,6 +114,12 @@ class TransferViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
+        let nameWalletFrom = wallets.first?.nameWallet ?? "Выберите счет"
+        let balanceFrom = wallets.first?.balance ?? ""
+        let nameWalletTo = wallets.last?.nameWallet ?? "Выберите счет"
+        let balanceFromTo = wallets.last?.balance ?? ""
+        self.fromLabel.text = " " + nameWalletFrom + " " + balanceFrom + "₽"
+        self.toLabel.text = " " + nameWalletTo + " " + balanceFromTo + "₽"
     }
     
     private func setupNavigationBar() {
@@ -126,6 +139,7 @@ class TransferViewController: UIViewController {
         self.view.addSubview(self.sumLabel)
         self.view.addSubview(self.sumTextField)
         self.view.addSubview(self.transferButton)
+        self.view.addSubview(self.activityIndicator)
         
         
         NSLayoutConstraint.activate([
@@ -162,7 +176,8 @@ class TransferViewController: UIViewController {
             self.transferButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -16),
             self.transferButton.heightAnchor.constraint(equalToConstant: 50),
             
-            
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.activityIndicator.centerYAnchor.constraint(equalTo: self.fromInLabel.centerYAnchor),
         ])
     }
     @objc private func tapFromLabel() {
@@ -255,10 +270,14 @@ class TransferViewController: UIViewController {
             let toBalance = sum2 + sum
             let fromNewBalance = String(fromBalance)
             let toNewBalance = String(toBalance)
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
             networkManager.transfer(amount: text, from_id: fromId, to_id: toId) {
                 self.coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
                     self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
                         DispatchQueue.main.async {
+                            self.activityIndicator.isHidden = true
+                            self.activityIndicator.stopAnimating()
                             self.navigationController?.popViewController(animated: true)
                         }
                     }

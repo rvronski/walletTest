@@ -41,6 +41,7 @@ class DetailTransViewController: UIViewController {
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 30)
         label.text = transaction.reference
+        label.textAlignment = .center
         return label
     }()
     
@@ -48,7 +49,6 @@ class DetailTransViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 30)
-        label.text = transaction.amount
         return label
     }()
     
@@ -72,6 +72,15 @@ class DetailTransViewController: UIViewController {
         super.viewDidLoad()
         self.setupView()
         self.setupNavigationBar()
+        let sum = transaction.amount ?? "0"
+        guard let sum1 = Int(sum) else {return}
+        if sum1 < 0 {
+            self.sumLabel.textColor = .systemRed
+            self.sumLabel.text = sum
+        } else {
+            self.sumLabel.textColor = .systemGreen
+            self.sumLabel.text = "+" + sum
+        }
     }
    private func setupNavigationBar() {
        self.navigationItem.title = self.transaction.stringDate
@@ -104,7 +113,7 @@ class DetailTransViewController: UIViewController {
             
             self.operationLabel.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
             self.operationLabel.leftAnchor.constraint(equalTo: self.transferView.leftAnchor, constant: 16),
-            self.operationLabel.widthAnchor.constraint(equalToConstant: 150),
+            self.operationLabel.widthAnchor.constraint(equalToConstant: 300),
             
             self.sumLabel.centerYAnchor.constraint(equalTo: self.operationLabel.centerYAnchor),
             self.sumLabel.rightAnchor.constraint(equalTo: self.transferView.rightAnchor, constant: -16),

@@ -136,10 +136,17 @@ class DetailViewController: UIViewController {
     private lazy var transferButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Перевести", for: .normal)
+        button.setTitle("Оплатить", for: .normal)
         button.setTitleColor(.systemRed, for: .normal)
         button.addTarget(self, action: #selector(tapTransButton), for: .touchUpInside)
         return button
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
     }()
     
     override func viewDidLoad() {
@@ -162,6 +169,7 @@ class DetailViewController: UIViewController {
         self.view.addSubview(self.conteinerView)
         self.view.addSubview(self.transferView)
         self.view.addSubview(self.detailCollectionView)
+        self.view.addSubview(self.activityIndicator)
         self.conteinerView.addSubview(self.cardBackView)
         self.cardBackView.addSubview(self.cardBackImageView)
         self.cardBackView.addSubview(self.cardCVCLabel)
@@ -225,6 +233,9 @@ class DetailViewController: UIViewController {
             self.transferButton.centerYAnchor.constraint(equalTo: self.transferImageView.centerYAnchor),
             self.transferButton.leftAnchor.constraint(equalTo: self.transferImageView.rightAnchor, constant: 25),
             
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            
         ])
     }
     
@@ -275,9 +286,13 @@ class DetailViewController: UIViewController {
                 return
             }
             guard let id = self.wallet.id else {return}
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
             self.networkManager.credit(amount: text, id: id) { balance in
                 self.coreManager.changeBalance(id: id, newBalance: balance) {
                     DispatchQueue.main.async {
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
                         self.detailCollectionView.reloadData()
                     }
                 }
@@ -297,8 +312,14 @@ class DetailViewController: UIViewController {
     @objc private func tapTransButton() {
         let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
         
-        let anotherBank = UIAlertAction(title: "В другой банк", style: .default) {_ in
+        let anotherBank = UIAlertAction(title: "Перевод по телефону", style: .default) {_ in
             let vc = AnotherTransferViewController(user: self.user)
+            self.navigationController?.pushViewController(vc, animated: true)
+            
+        }
+        
+        let services = UIAlertAction(title: "Оплата услуг", style: .default) {_ in
+            let vc = ServicesViewController(user: self.user)
             self.navigationController?.pushViewController(vc, animated: true)
             
         }
@@ -311,6 +332,7 @@ class DetailViewController: UIViewController {
         
         alertController.addAction(betweenAction)
         alertController.addAction(anotherBank)
+        alertController.addAction(services)
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
     }

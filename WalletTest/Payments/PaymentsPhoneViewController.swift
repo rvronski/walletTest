@@ -1,21 +1,23 @@
 //
-//  AnotherTransferViewController.swift
+//  PaymentsViewController.swift
 //  WalletTest
 //
-//  Created by ROMAN VRONSKY on 25.01.2023.
+//  Created by ROMAN VRONSKY on 10.02.2023.
 //
 
 import UIKit
-import Contacts
-class AnotherTransferViewController: UIViewController {
+
+class PaymentsPhoneViewController: UIViewController {
 
     let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets = [Wallet]()
-    var contactName = String()
-    init(user: User) {
+    var titleScreen: String
+    
+    init(user: User, titleScreen: String) {
         self.user = user
+        self.titleScreen = titleScreen
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -86,7 +88,7 @@ class AnotherTransferViewController: UIViewController {
         sumTextField.layer.borderColor = UIColor.lightGray.cgColor
         sumTextField.layer.borderWidth = 0.5
         sumTextField.layer.cornerRadius = 20
-        sumTextField.text = "Кому перевести" 
+        sumTextField.text = "Номер телефона"
         sumTextField.textAlignment = .center
         sumTextField.isUserInteractionEnabled = true
         return sumTextField
@@ -95,10 +97,13 @@ class AnotherTransferViewController: UIViewController {
     private lazy var transferButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Перевести", for: .normal)
+        button.setTitle("Оплатить", for: .normal)
         button.backgroundColor = .systemRed
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(didTapTransferButton), for: .touchUpInside)
+        let paddingView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 20))
+        sumTextField.leftView = paddingView
+        sumTextField.leftViewMode = .always
         return button
     }()
     
@@ -106,6 +111,7 @@ class AnotherTransferViewController: UIViewController {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.color = .darkGray
+//        activityIndicator.isHidden = true
         return activityIndicator
     }()
     
@@ -124,7 +130,7 @@ class AnotherTransferViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
-        self.navigationItem.title = "Перевод"
+        self.navigationItem.title = self.titleScreen
         navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = false
     }
@@ -142,7 +148,6 @@ class AnotherTransferViewController: UIViewController {
         self.view.addSubview(self.transferButton)
         self.view.addSubview(self.toTextLabel)
         self.view.addSubview(self.activityIndicator)
-        
         
         NSLayoutConstraint.activate([
             
@@ -240,7 +245,7 @@ class AnotherTransferViewController: UIViewController {
         guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
                let toText = self.toTextLabel.text, !toText.isEmpty
         else {
-            self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
+            self.alertOk(title: "Ошибка!", message: "Укажите счета для оплаты")
             return
         }
         guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
@@ -258,12 +263,12 @@ class AnotherTransferViewController: UIViewController {
         guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
         guard let sum2 = Int(text) else { return }
         if sum2 > sum1 {
-            self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
+            self.alertOk(title: "Cумма оплаты превышает остаток", message: nil)
         } else {
             guard let fromId = wallets[self.fromLabel.tag].id else { return }
             self.activityIndicator.isHidden = false
             self.activityIndicator.startAnimating()
-            networkManager.debit(amount: text, id: fromId, reference: toText) { balance in
+            networkManager.debit(amount: text, id: fromId, reference: self.titleScreen) { balance in
                 self.coreManager.changeBalance(id: fromId, newBalance: balance) {
                     DispatchQueue.main.async {
                         self.activityIndicator.isHidden = true
@@ -276,13 +281,13 @@ class AnotherTransferViewController: UIViewController {
         }
     }
 }
-extension AnotherTransferViewController: UIPopoverPresentationControllerDelegate {
+extension PaymentsPhoneViewController: UIPopoverPresentationControllerDelegate {
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }
 }
-extension AnotherTransferViewController: TableViewDelegate {
+extension PaymentsPhoneViewController: TableViewDelegate {
     func transferNameWallet(index: Int, view: UIView) {
         let label = view as! UILabel
         guard let nameWallet = wallets[index].nameWallet else { return }
@@ -291,7 +296,7 @@ extension AnotherTransferViewController: TableViewDelegate {
         label.tag = index
     }
 }
-extension AnotherTransferViewController: ContactViewDelegate {
+extension PaymentsPhoneViewController: ContactViewDelegate {
     func present(name: String) {
         self.toTextLabel.text = name
     }

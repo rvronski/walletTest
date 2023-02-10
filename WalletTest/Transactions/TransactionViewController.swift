@@ -58,12 +58,27 @@ class TransactionViewController: UIViewController {
         return label
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.wallets = coreManager.wallets(user: user)
         self.setupView()
         self.gestureFromLabel()
         self.setupNavigationBar()
+        if self.wallets.count > 0 {
+            self.transactions = self.coreManager.transaction(wallet: wallets[0])
+            guard let nameWallet = self.wallets[0].nameWallet else { return }
+            guard let balance = self.wallets[0].balance else { return }
+            walletLabel.text = " " + nameWallet + " " + balance + "₽"
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,6 +99,7 @@ class TransactionViewController: UIViewController {
         self.view.addSubview(self.walletLabel)
         self.view.addSubview(self.fromInLabel)
         self.view.addSubview(self.tableView)
+        self.view.addSubview(self.activityIndicator)
         
         
         NSLayoutConstraint.activate([
@@ -102,7 +118,8 @@ class TransactionViewController: UIViewController {
             self.tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
-            
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            self.activityIndicator.centerYAnchor.constraint(equalTo: self.fromInLabel.centerYAnchor),
         ])
     }
     
@@ -142,7 +159,13 @@ extension TransactionViewController:  TableViewDelegate {
         guard let id = self.wallets[index].id else {return}
         self.transactions = self.coreManager.transaction(wallet: wallet)
         self.tableView.reloadData()
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
         networkManager.transactions(id: id) { trans in
+            DispatchQueue.main.async {
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+            }
             self.coreManager.createTransactions(transactions: trans, wallet: wallet) {
                 self.transactions = self.coreManager.transaction(wallet: wallet)
                 DispatchQueue.main.async {

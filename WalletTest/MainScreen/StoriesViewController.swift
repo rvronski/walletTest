@@ -56,8 +56,7 @@ class StoriesViewController: UIViewController {
     
     private func setupGesture() {
         let tapGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.dismissView))
-      
-//        tapGesture.direction = .up
+        tapGesture.direction = [.up,.down]
         self.view.addGestureRecognizer(tapGesture)
     }
     

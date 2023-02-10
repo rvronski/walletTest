@@ -181,7 +181,7 @@ class NetworkManager {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = self.headers
-        let body = DebitPost(amount: amount, id: id, reference: "Перевод в другой банк \(reference)" )
+        let body = DebitPost(amount: amount, id: id, reference: reference)
         let encoder = JSONEncoder()
         
         do {

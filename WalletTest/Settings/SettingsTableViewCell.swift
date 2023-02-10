@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Contacts
 class SettingsTableViewCell: UITableViewCell {
 
     private lazy var setLabel: UILabel = {
@@ -24,6 +24,9 @@ class SettingsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupContact(contact: PhoneContact) {
+        self.setLabel.text = contact.givenName + "" + contact.familyName
+    }
     
     func setup(text: String) {
         self.setLabel.text = text
