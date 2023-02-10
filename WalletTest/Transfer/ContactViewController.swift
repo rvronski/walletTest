@@ -65,8 +65,9 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //        self.contact = PhoneContacts().getContacts()
-        //        self.string = phoneNumberWithContryCode()
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         self.contactTableView.reloadData()
     }
     
@@ -128,6 +129,16 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
         }
 
         return results
+    }
+    
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
     }
 
 }

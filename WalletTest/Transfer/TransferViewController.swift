@@ -127,7 +127,12 @@ class TransferViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
         self.tabBarController?.tabBar.isHidden = false
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
+    }
     
     private func setupView() {
         self.view.backgroundColor = .white

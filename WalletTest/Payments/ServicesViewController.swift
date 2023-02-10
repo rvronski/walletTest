@@ -46,7 +46,20 @@ class ServicesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         self.contactTableView.reloadData()
+    }
+    
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     private func setupNavigationBar() {

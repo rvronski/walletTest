@@ -158,6 +158,9 @@ class DetailViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         self.detailCollectionView.reloadData()
         self.navigationItem.title = wallet.nameWallet
         navigationController?.setNavigationBarHidden(false, animated: false)

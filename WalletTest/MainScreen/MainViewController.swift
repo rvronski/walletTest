@@ -109,6 +109,9 @@ class MainViewController: UIViewController {
         self.setupNavigationBar()
         UserDefaults.standard.set(true, forKey: "isLogin")
         self.locationManager.requestWhenInUseAuthorization()
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         self.activityIndicator.isHidden = false
         self.activityIndicator.startAnimating()
         let group = DispatchGroup()
@@ -134,6 +137,9 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         self.wallets = coreManager.wallets(user: user)
         self.chekCollectionView.reloadData()
         self.storiesCollection.storiesCollectionView.reloadData()
@@ -174,6 +180,16 @@ class MainViewController: UIViewController {
                 self.weather.insert(weather, at: 0)
             }
         }
+    }
+    
+    private func alertOk(title: String, message: String?) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "ОК", style: .default)
+        
+        alertController.addAction(ok)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     private func location() {

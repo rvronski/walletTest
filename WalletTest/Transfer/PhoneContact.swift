@@ -11,7 +11,7 @@ import Contacts
 struct PhoneContact {
     var givenName: String
     var familyName: String
-//    var phoneNumber: String
+    
   
 }
 

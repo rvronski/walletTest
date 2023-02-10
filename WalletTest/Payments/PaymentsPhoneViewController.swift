@@ -129,6 +129,13 @@ class PaymentsPhoneViewController: UIViewController {
        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
+    }
+    
     private func setupNavigationBar() {
         self.navigationItem.title = self.titleScreen
         navigationController?.setNavigationBarHidden(false, animated: false)

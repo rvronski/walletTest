@@ -103,7 +103,7 @@ class LoginViewController: UIViewController {
         self.setupGesture()
         self.tabBarController?.tabBar.isHidden = true
         self.use = coreManager.user()
-      
+        
     }
     private func setupView() {
         self.view.addSubview(scrollView)
@@ -149,6 +149,9 @@ class LoginViewController: UIViewController {
   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
         if UserDefaults.standard.bool(forKey: "isLogin") {
             guard let email else { return }
             coreManager.getUser(email: email) { user in
