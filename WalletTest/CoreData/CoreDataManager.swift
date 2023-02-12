@@ -177,4 +177,18 @@ class CoreDataManager {
         completion()
     }
     
+    func deleteTransactions(completion: @escaping () -> Void) {
+        let fetchRequest = Transaction.fetchRequest()
+        var fetchedTransactions: [Transaction] = []
+        do {
+            fetchedTransactions = try persistentContainer.viewContext.fetch(fetchRequest)
+        } catch let error {
+          print("Error fetching songs \(error)")
+        }
+        for transaction in fetchedTransactions {
+            persistentContainer.viewContext.delete(transaction)
+        }
+        saveContext()
+        completion()
+    }
 }

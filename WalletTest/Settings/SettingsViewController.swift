@@ -14,7 +14,7 @@ class SettingsViewController: UIViewController {
     let user: User
     var wallets = [Wallet]()
     
-    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить аккаунт"]
+    let settings = ["Выйти из аккаунта", "Удалить счет", "Удалить аккаунт", "Очистить кэш"]
     
     init(user: User) {
         self.user = user
@@ -37,6 +37,12 @@ class SettingsViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.color = .darkGray
+        return activityIndicator
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,14 +67,16 @@ class SettingsViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.tableView)
-        
+        self.view.addSubview(self.activityIndicator)
         NSLayoutConstraint.activate([
             
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16),
             self.tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             self.tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
+            self.activityIndicator.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: -16),
+            self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             
         ])
     }
@@ -136,11 +144,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                             return
                         }
                     }
+                    self.activityIndicator.isHidden = false
+                    self.activityIndicator.startAnimating()
                     for i in self.wallets {
                         guard let id = i.id else {return}
                         self.networkManager.deleteWallet(id: id) {
                             self.coreManager.deleteUser(user: self.user) {
                                 DispatchQueue.main.async {
+                                    self.activityIndicator.isHidden = true
+                                    self.activityIndicator.stopAnimating()
                                     self.navigationController?.pushViewController(LoginViewController(), animated: true)
                                 }
                             }
@@ -150,13 +162,27 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 } else {
                     self.coreManager.deleteUser(user: self.user) {
                         DispatchQueue.main.async {
+                            self.activityIndicator.isHidden = true
+                            self.activityIndicator.stopAnimating()
                             self.navigationController?.pushViewController(LoginViewController(), animated: true)
                         }
                     }
                 }
                 
             }
-            
+        }
+        if indexPath.section == 0 && indexPath.row == 3 {
+            self.alertDismiss(title: "Очистить кэш?", message: nil) {
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+                self.coreManager.deleteTransactions {
+                    DispatchQueue.main.async {
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
+                        self.alertOk(title: "Кэш очищен", message: nil)
+                    }
+                }
+            }
         }
     }
 }
