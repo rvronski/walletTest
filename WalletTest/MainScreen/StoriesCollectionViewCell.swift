@@ -10,7 +10,7 @@ import UIKit
 class StoriesCollectionViewCell: UICollectionViewCell {
     
     
-    
+    var isTouch = false
     lazy var backgroundImageView: UIImageView  = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,10 +40,7 @@ class StoriesCollectionViewCell: UICollectionViewCell {
     func changeColor() {
         backgroundImageView.layer.borderColor = UIColor.white.cgColor
     }
-//    override func layoutSubviews() {
-//        super.layoutSubviews()
-//        self.backgroundImageView.layer.cornerRadius = self.backgroundImageView.frame.height/2
-//    }
+    
     
     private func setupView() {
         self.contentView.addSubview(self.backgroundImageView)

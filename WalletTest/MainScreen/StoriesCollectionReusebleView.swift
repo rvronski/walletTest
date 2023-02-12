@@ -117,6 +117,7 @@ extension StoriesCollectionReusebleView: UICollectionViewDelegateFlowLayout, UIC
         self.indexPath = indexPath
         self.indexArray.append(indexPath)
         self.delegate?.present(indexPath: indexPath, centrX: centrX, centrY: centrY)
+        self.storiesCollectionView.reloadData()
     }
 }
 extension StoriesCollectionReusebleView: UIViewControllerTransitioningDelegate {
