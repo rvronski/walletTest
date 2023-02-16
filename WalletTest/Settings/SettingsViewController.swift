@@ -126,6 +126,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 && indexPath.row == 0 {
+            UserDefaults.standard.set(false, forKey: "isLogin")
             self.navigationController?.pushViewController(LoginViewController(), animated: true)
         }
         if indexPath.section == 0 && indexPath.row == 1 {
@@ -153,6 +154,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                                 DispatchQueue.main.async {
                                     self.activityIndicator.isHidden = true
                                     self.activityIndicator.stopAnimating()
+                                    UserDefaults.standard.set(false, forKey: "isLogin")
                                     self.navigationController?.pushViewController(LoginViewController(), animated: true)
                                 }
                             }

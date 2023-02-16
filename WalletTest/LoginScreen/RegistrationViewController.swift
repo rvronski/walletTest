@@ -244,7 +244,7 @@ class RegistrationViewController: UIViewController {
                     }
                 }
                 return }
-            
+            UserDefaults.standard.set(email, forKey: "email")
             DispatchQueue.main.async {
                 self.navigationController?.pushViewController(TabBarViewController(user: user), animated: true)
             }

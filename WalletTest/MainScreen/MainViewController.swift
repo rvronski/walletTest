@@ -15,7 +15,8 @@ class MainViewController: UIViewController {
     var storiesCentrX = CGFloat(0)
     let transition = CircularTransition()
     let coreManager = CoreDataManager.shared
-    let user: User
+    let email = UserDefaults.standard.string(forKey: "email")
+    var user: User
     var wallets = [Wallet]()
     var isStoriesIncreased = false
     var indexPath = IndexPath()
@@ -106,12 +107,17 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        self.wallets = coreManager.wallets(user: user)
-        self.setupNavigationBar()
+        self.wallets = coreManager.wallets(user: self.user)
+        print("🍎 \(self.user.userName ?? "no user")")
         UserDefaults.standard.set(true, forKey: "isLogin")
         self.locationManager.requestWhenInUseAuthorization()
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        }
+        guard let email else {return}
+        coreManager.getUser(email: email) { user in
+            guard let user else {return}
+            self.user = user
         }
         self.activityIndicator.isHidden = false
         self.activityIndicator.startAnimating()
@@ -119,19 +125,21 @@ class MainViewController: UIViewController {
         group.enter()
         DispatchQueue.global().async {
             self.location()
+           
             group.leave()
         }
         group.notify(queue: .main) {
             self.getWeather()
+            self.setupNavigationBar()
             self.activityIndicator.isHidden = true
             self.activityIndicator.stopAnimating()
         }
     }
     
     private func setupNavigationBar() {
-        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = user.userName?.capitalized
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationItem.title = self.user.userName?.capitalized
         self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.hidesBackButton = true
         self.navigationController?.navigationBar.tintColor = .systemRed
@@ -143,7 +151,7 @@ class MainViewController: UIViewController {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
         self.getWeather()
-        self.wallets = coreManager.wallets(user: user)
+        self.wallets = coreManager.wallets(user: self.user)
         self.chekCollectionView.reloadData()
         self.storiesCollection.storiesCollectionView.reloadData()
     }

@@ -13,7 +13,8 @@ class TransferViewController: UIViewController {
     let coreManager = CoreDataManager.shared
     let user: User
     var wallets:[Wallet] = []
-    
+    var fromIsSelected = false
+    var toIsSelected = false
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -114,12 +115,12 @@ class TransferViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
-        let nameWalletFrom = wallets.first?.nameWallet ?? "Выберите счет"
-        let balanceFrom = wallets.first?.balance ?? ""
-        let nameWalletTo = wallets.last?.nameWallet ?? "Выберите счет"
-        let balanceFromTo = wallets.last?.balance ?? ""
-        self.fromLabel.text = " " + nameWalletFrom + " " + balanceFrom + "₽"
-        self.toLabel.text = " " + nameWalletTo + " " + balanceFromTo + "₽"
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets.first?.nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets.first?.balance
+        let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets.last?.nameWallet
+        let balanceFromTo = wallets.isEmpty ? "" : wallets.last?.balance
+        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+        self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
     }
     
     private func setupNavigationBar() {
@@ -186,6 +187,7 @@ class TransferViewController: UIViewController {
         ])
     }
     @objc private func tapFromLabel() {
+        fromIsSelected = true
         let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
@@ -200,6 +202,7 @@ class TransferViewController: UIViewController {
     }
     
     @objc private func tapToLabel() {
+        toIsSelected = true
         let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
@@ -262,8 +265,8 @@ class TransferViewController: UIViewController {
         guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
-        guard let fromId = wallets[self.fromLabel.tag].id else { return }
-        guard let toId = wallets[self.toLabel.tag].id else { return }
+        let fromId = fromIsSelected ? wallets[self.fromLabel.tag].id : wallets.first?.id
+        let toId = toIsSelected ? wallets[self.toLabel.tag].id : wallets.last?.id
         guard (wallets[self.toLabel.tag].balance != nil) else {return}
         guard (wallets[self.fromLabel.tag].balance != nil) else {return}
         guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
@@ -277,9 +280,9 @@ class TransferViewController: UIViewController {
             let toNewBalance = String(toBalance)
             self.activityIndicator.isHidden = false
             self.activityIndicator.startAnimating()
-            networkManager.transfer(amount: text, from_id: fromId, to_id: toId) {
-                self.coreManager.changeBalance(id: fromId, newBalance: fromNewBalance) {
-                    self.coreManager.changeBalance(id: toId, newBalance: toNewBalance) {
+            networkManager.transfer(amount: text, from_id: fromId!, to_id: toId!) {
+                self.coreManager.changeBalance(id: fromId!, newBalance: fromNewBalance) {
+                    self.coreManager.changeBalance(id: toId!, newBalance: toNewBalance) {
                         DispatchQueue.main.async {
                             self.activityIndicator.isHidden = true
                             self.activityIndicator.stopAnimating()

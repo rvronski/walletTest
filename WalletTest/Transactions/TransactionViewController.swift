@@ -82,10 +82,10 @@ class TransactionViewController: UIViewController {
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
+        self.wallets = coreManager.wallets(user: user)
         if self.wallets.count > 0 {
             self.updateTransactions()
         }
-        self.wallets = coreManager.wallets(user: user)
         self.tableView.reloadData()
     }
     private func alertOk(title: String, message: String?) {
@@ -106,12 +106,11 @@ class TransactionViewController: UIViewController {
     
     private func updateTransactions() {
         let wallet = self.wallets[index]
-        guard let id = self.wallets[index].id else {return}
+        guard let id = wallet.id else {return}
         self.transactions = self.coreManager.transaction(wallet: wallet)
         guard let nameWallet = self.wallets[index].nameWallet else { return }
         guard let balance = self.wallets[index].balance else { return }
         walletLabel.text = " " + nameWallet + " " + balance + "₽"
-        self.tableView.reloadData()
         self.activityIndicator.isHidden = false
         self.activityIndicator.startAnimating()
         networkManager.transactions(id: id) { trans in

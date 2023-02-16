@@ -204,9 +204,7 @@ class AnotherTransferViewController: UIViewController {
     
     @objc private func tapContact() {
         let popVC = ContactViewController()
-        popVC.delegate = self
-        popVC.modalPresentationStyle = .pageSheet
-        self.present(popVC, animated: true)
+        self.navigationController?.pushViewController(popVC, animated: true)
         
     }
     
