@@ -60,7 +60,7 @@ class MainViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Создать кошелек", for: .normal)
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemYellow
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(didTapWalletButton), for: .touchUpInside)
         return button
@@ -142,7 +142,7 @@ class MainViewController: UIViewController {
         self.navigationItem.title = self.user.userName?.capitalized
         self.tabBarController?.tabBar.isHidden = false
         self.navigationItem.hidesBackButton = true
-        self.navigationController?.navigationBar.tintColor = .systemRed
+        self.navigationController?.navigationBar.tintColor = .systemYellow
     }
     
     override func viewWillAppear(_ animated: Bool) {

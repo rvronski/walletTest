@@ -36,8 +36,12 @@ class SettingsTableViewCell: UITableViewCell {
     
     func setupContact(contact: PhoneContact) {
         self.setLabel.text = contact.givenName + "" + contact.familyName
-        var text = contact.phoneNumber
-        self.numberLabel.text = text.trimmingCharacters(in: .whitespaces)
+        let text = contact.phoneNumber
+        if text.count > 1 {
+            self.numberLabel.text = "\(text.first ?? "") и еще \(text.count - 1)"
+        } else {
+            self.numberLabel.text = text.first?.trimmingCharacters(in: .whitespaces)
+        }
         
     }
     

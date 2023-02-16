@@ -64,7 +64,7 @@ class DetailTransViewController: UIViewController {
     private lazy var cardImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "CardImageNewMW")
+        imageView.image = UIImage(named: "card")
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -87,7 +87,7 @@ class DetailTransViewController: UIViewController {
        self.navigationItem.title = self.transaction.stringDate
        self.navigationController?.navigationBar.prefersLargeTitles = false
        self.navigationController?.setNavigationBarHidden(false, animated: false)
-       self.navigationController?.navigationBar.tintColor = .systemRed
+       self.navigationController?.navigationBar.tintColor = .systemYellow
     }
     
     private func setupView(){

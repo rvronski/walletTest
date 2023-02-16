@@ -59,7 +59,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate  {
         layer.shadowOpacity = 1
         
         self.tabBar.layer.insertSublayer(layer, at: 0)
-        self.tabBar.tintColor = .systemRed
+        self.tabBar.tintColor = #colorLiteral(red: 0.05413367599, green: 0.5092155337, blue: 0.7902257442, alpha: 1)
         self.tabBar.itemWidth = width/6
         self.tabBar.itemPositioning = .automatic
         self.tabBar.unselectedItemTintColor = .black

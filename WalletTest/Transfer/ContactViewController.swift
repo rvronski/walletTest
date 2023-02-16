@@ -9,7 +9,7 @@ import UIKit
 import Contacts
 
 protocol ContactViewDelegate: AnyObject {
-    func present(name: String)
+    func present(name: String, number: String)
 }
 
 class ContactViewController: UIViewController, UISearchResultsUpdating {
@@ -42,9 +42,7 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
         gets{
             self.contactTableView.reloadData()
         }
-//        self.contacts = contacts
     }
-        //        self.contact = PhoneContacts().getContacts()
     
     
     func getsSearch(searchText: String) {
@@ -54,12 +52,17 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
             let contacts = self.getContactFromCNContact(searchText: searchText)
             var cont = [PhoneContact]()
             for contact in contacts {
+                var numer = [String]()
                 let givenName = contact.givenName
                 let middleName = contact.middleName
-                let phoneNumber = contact.phoneNumbers.first?.value.stringValue ?? ""
-                let phoneContact = PhoneContact(givenName: givenName, familyName: middleName, phoneNumber: phoneNumber, id: UUID())
+                let number = contact.phoneNumbers
+                for i in number {
+                    let value = i.value.stringValue
+                    numer.append(value)
+                }
+                let phoneNumber = numer
+                let phoneContact = PhoneContact(givenName: givenName, familyName: middleName, phoneNumber: phoneNumber)
                 cont.append(phoneContact)
-//                cont.sort(by: {$0.givenName<$1.givenName})
             }
             self.contacts = cont
             self.contactTableView.reloadData()
@@ -69,27 +72,32 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
     func getNumber(search: Int) {
         var mo = [PhoneContact]()
         for i in self.contacts {
-            let phone = i.phoneNumber
+            let phone = i.phoneNumber.first ?? ""
             if phone.contains(String(search)) {
                 mo.append(i)
             }
         }
-//        mo. self.contacts
-        self.contacts = mo
         
-            self.contactTableView.reloadData()
+        self.contacts = mo
+        self.contactTableView.reloadData()
         
     }
     
     func gets(completion: () -> Void) {
         let contacts = self.getContactFromCNContact()
         for contact in contacts {
+            var numer = [String]()
             let givenName = contact.givenName
             let middleName = contact.middleName
-            let phoneNumber = contact.phoneNumbers.first?.value.stringValue ?? "" //contact.phoneNumbers
-            let phoneContact = PhoneContact(givenName: givenName, familyName: middleName, phoneNumber: phoneNumber, id: UUID())
+            let number = contact.phoneNumbers
+            for i in number {
+                let value = i.value.stringValue
+                numer.append(value)
+            }
+            let phoneNumber = numer
+            let phoneContact = PhoneContact(givenName: givenName, familyName: middleName, phoneNumber: phoneNumber)
             self.contacts.append(phoneContact)
-//            self.contacts.sort(by: {$0.givenName<$1.givenName})
+            
         }
         completion()
         
@@ -175,6 +183,26 @@ class ContactViewController: UIViewController, UISearchResultsUpdating {
         return results
     }
     
+    
+    private func tapCell(numbers: [String], completion: @escaping (_ number: String) -> Void) {
+        let alertController = UIAlertController(title: "Выберите номер", message: nil, preferredStyle: .actionSheet)
+        var actions = [UIAlertAction]()
+        for n in numbers {
+            let action = UIAlertAction(title: n, style: .default) {_ in
+                completion(n)
+            }
+            actions.append(action)
+        }
+       let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
+       
+        for a in actions {
+            alertController.addAction(a)
+        }
+       alertController.addAction(cancelAction)
+       self.present(alertController, animated: true, completion: nil)
+   }
+
+    
     private func alertOk(title: String, message: String?) {
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -200,9 +228,18 @@ extension ContactViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let userName = contacts[indexPath.row].givenName + "" + contacts[indexPath.row].familyName
-        self.delegate?.present(name: userName)
-        self.dismiss(animated: true)
-        
+        let numbers = contacts[indexPath.row].phoneNumber
+        if numbers.count > 1 {
+            tapCell(numbers: numbers) { number in
+                DispatchQueue.main.async {
+                    self.delegate?.present(name: userName, number: number)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        } else {
+            self.delegate?.present(name: userName, number: numbers.first ?? "")
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
 }

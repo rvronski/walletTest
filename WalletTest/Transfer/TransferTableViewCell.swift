@@ -12,7 +12,7 @@ class TransferTableViewCell: UITableViewCell {
     private lazy var cardImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "CardImageNewMW")
+        imageView.image = UIImage(named: "card")
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -31,15 +31,6 @@ class TransferTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var rubleImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "rublesign.circle")
-        imageView.tintColor = .systemRed
-        imageView.clipsToBounds = true
-        return imageView
-    }()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
         self.setupView()
@@ -55,7 +46,6 @@ class TransferTableViewCell: UITableViewCell {
     func setup(wallet: Wallet) {
         self.balanceLabel.text = "\(wallet.balance ?? "")  ₽"
         self.walletNameLabel.text = wallet.nameWallet
-        self.cardImageView.image = UIImage(named: "CardImageNewMW")
         
     }
     
@@ -71,8 +61,8 @@ class TransferTableViewCell: UITableViewCell {
             self.cardImageView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             self.cardImageView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
             self.cardImageView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10 ),
-            self.cardImageView.heightAnchor.constraint(equalToConstant: 20),
-            self.cardImageView.widthAnchor.constraint(equalToConstant: 30),
+            self.cardImageView.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, multiplier: 0.11),
+            self.cardImageView.heightAnchor.constraint(equalTo: self.cardImageView.widthAnchor,multiplier: 0.75),
             
             self.walletNameLabel.centerYAnchor.constraint(equalTo: self.cardImageView.centerYAnchor),
             self.walletNameLabel.leftAnchor.constraint(equalTo: self.cardImageView.rightAnchor, constant: 10),

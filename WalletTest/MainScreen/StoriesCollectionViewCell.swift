@@ -16,7 +16,7 @@ class StoriesCollectionViewCell: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
 //        imageView.image = UIImage(named: "background_image")
         imageView.layer.cornerRadius = self.frame.width/2
-        imageView.layer.borderColor = UIColor.systemRed.cgColor
+        imageView.layer.borderColor = #colorLiteral(red: 0.05413367599, green: 0.5092155337, blue: 0.7902257442, alpha: 1)
         imageView.layer.borderWidth = 5
         imageView.clipsToBounds = true
         

@@ -50,7 +50,7 @@ class DeleteViewController: UIViewController {
         self.navigationItem.title = "Удалить счет"
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        self.navigationController?.navigationBar.tintColor = .systemRed
+        self.navigationController?.navigationBar.tintColor = .systemYellow
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -12,9 +12,9 @@ class TransferViewController: UIViewController {
     let networkManager = NetworkManager.shared
     let coreManager = CoreDataManager.shared
     let user: User
+    var indexFrom = 0
+    var indexTo = 1
     var wallets:[Wallet] = []
-    var fromIsSelected = false
-    var toIsSelected = false
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -24,11 +24,71 @@ class TransferViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private lazy var nextButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "arrow.right.to.line.compact"), for: .normal)
+        button.tintColor = .systemYellow
+        button.tag = 1
+        button.addTarget(self, action: #selector(nextWalletFrom), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var toNextButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "arrow.right.to.line.compact"), for: .normal)
+        button.tintColor = .systemYellow
+        button.tag = 2
+        button.addTarget(self, action: #selector(self.nextWalletTo), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var transferView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = #colorLiteral(red: 0.9294117689, green: 0.9294117093, blue: 0.9294117689, alpha: 1)
+        view.layer.cornerRadius = 30
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 5
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.6
+        return view
+    }()
+    
+    private lazy var transferToView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = #colorLiteral(red: 0.9294117689, green: 0.9294117093, blue: 0.9294117689, alpha: 1)
+        view.layer.cornerRadius = 30
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 5
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.6
+        return view
+    }()
+    
+    private lazy var cardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "card")
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    private lazy var toCardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "card")
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     private let toInLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "На счет"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .thin)
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -37,7 +97,7 @@ class TransferViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Со счета"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .thin)
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -45,10 +105,8 @@ class TransferViewController: UIViewController {
     private let fromLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        label.layer.cornerRadius = 30
-        label.layer.borderWidth = 0.09
+        label.backgroundColor = .clear
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.isUserInteractionEnabled = true
         return label
@@ -57,10 +115,8 @@ class TransferViewController: UIViewController {
     private let toLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        label.layer.borderWidth = 0.09
-        label.layer.cornerRadius = 30
+        label.backgroundColor = .clear
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.isUserInteractionEnabled = true
         return label
@@ -94,7 +150,7 @@ class TransferViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Перевести", for: .normal)
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemYellow
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(didTapTransferButton), for: .touchUpInside)
         return button
@@ -115,12 +171,17 @@ class TransferViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
-        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets.first?.nameWallet
-        let balanceFrom = wallets.isEmpty ? "" : wallets.first?.balance
-        let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets.last?.nameWallet
-        let balanceFromTo = wallets.isEmpty ? "" : wallets.last?.balance
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
+        if wallets.count > 0 {
+            let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
+            let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
+            self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
+        } else {
+            self.toLabel.text = "Нет счета для перевода"
+        }
         self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
-        self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
+       
     }
     
     private func setupNavigationBar() {
@@ -133,15 +194,23 @@ class TransferViewController: UIViewController {
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
+        self.indexFrom = 0
+        self.indexTo = 1
     }
     
     private func setupView() {
         self.view.backgroundColor = .white
+        self.view.addSubview(self.transferView)
+        self.transferView.addSubview(self.fromLabel)
+        self.transferView.addSubview(self.fromInLabel)
+        self.transferView.addSubview(self.cardImageView)
+        self.transferView.addSubview(self.nextButton)
+        self.view.addSubview(self.transferToView)
+        self.transferToView.addSubview(self.toLabel)
+        self.transferToView.addSubview(self.toInLabel)
+        self.transferToView.addSubview(self.toCardImageView)
+        self.transferToView.addSubview(self.toNextButton)
         
-        self.view.addSubview(self.fromLabel)
-        self.view.addSubview(self.toLabel)
-        self.view.addSubview(self.toInLabel)
-        self.view.addSubview(self.fromInLabel)
         self.view.addSubview(self.sumLabel)
         self.view.addSubview(self.sumTextField)
         self.view.addSubview(self.transferButton)
@@ -150,26 +219,53 @@ class TransferViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            self.fromInLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
-            self.fromInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            self.transferView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
+            self.transferView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.transferView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            self.transferView.heightAnchor.constraint(equalToConstant: 120),
+            
+            self.fromInLabel.topAnchor.constraint(equalTo: self.transferView.topAnchor, constant: 10),
+            self.fromInLabel.leftAnchor.constraint(equalTo: self.transferView.leftAnchor, constant: 16),
             self.fromInLabel.heightAnchor.constraint(equalToConstant: 20),
+             
+            self.cardImageView.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
+            self.cardImageView.leftAnchor.constraint(equalTo: self.transferView.leftAnchor,constant: 20),
+            self.cardImageView.widthAnchor.constraint(equalTo: self.transferView.widthAnchor, multiplier: 0.11),
+            self.cardImageView.heightAnchor.constraint(equalTo: self.cardImageView.widthAnchor, multiplier: 0.75),
             
-            self.fromLabel.topAnchor.constraint(equalTo: self.fromInLabel.bottomAnchor, constant: 16),
+            self.fromLabel.centerYAnchor.constraint(equalTo: self.cardImageView.centerYAnchor),
             self.fromLabel.heightAnchor.constraint(equalToConstant: 80),
-            self.fromLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.fromLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.fromLabel.leftAnchor.constraint(equalTo: self.cardImageView.rightAnchor, constant: 16),
+            self.fromLabel.rightAnchor.constraint(equalTo: self.nextButton.leftAnchor, constant: -5),
             
-            self.toInLabel.topAnchor.constraint(equalTo: self.fromLabel.bottomAnchor, constant: 16),
-            self.toInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            self.nextButton.centerYAnchor.constraint(equalTo: self.fromLabel.centerYAnchor),
+            self.nextButton.rightAnchor.constraint(equalTo: self.transferView.rightAnchor,constant: -10),
+            
+            self.transferToView.topAnchor.constraint(equalTo: self.transferView.bottomAnchor, constant: 16),
+            self.transferToView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.transferToView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            self.transferToView.heightAnchor.constraint(equalToConstant: 120),
+            
+            self.toInLabel.topAnchor.constraint(equalTo: self.transferToView.topAnchor, constant: 10),
+            self.toInLabel.leftAnchor.constraint(equalTo: self.transferToView.leftAnchor, constant: 16),
             self.toInLabel.heightAnchor.constraint(equalToConstant: 20),
+             
+            self.toCardImageView.centerYAnchor.constraint(equalTo: self.transferToView.centerYAnchor),
+            self.toCardImageView.leftAnchor.constraint(equalTo: self.transferToView.leftAnchor,constant: 20),
+            self.toCardImageView.widthAnchor.constraint(equalTo: self.transferToView.widthAnchor, multiplier: 0.11),
+            self.toCardImageView.heightAnchor.constraint(equalTo: self.toCardImageView.widthAnchor, multiplier: 0.75),
+            
+            self.toNextButton.centerYAnchor.constraint(equalTo: self.toCardImageView.centerYAnchor),
+            self.toNextButton.rightAnchor.constraint(equalTo: self.transferToView.rightAnchor,constant: -10),
             
             
-            self.toLabel.topAnchor.constraint(equalTo: self.toInLabel.bottomAnchor, constant: 16),
+            self.toLabel.centerYAnchor.constraint(equalTo: self.toCardImageView.centerYAnchor),
             self.toLabel.heightAnchor.constraint(equalToConstant: 80),
-            self.toLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.toLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.toLabel.leftAnchor.constraint(equalTo: self.toCardImageView.rightAnchor, constant: 16),
+            self.toLabel.rightAnchor.constraint(equalTo: self.toNextButton.leftAnchor, constant: -5),
             
-            self.sumLabel.topAnchor.constraint(equalTo: self.toLabel.bottomAnchor, constant: 30),
+           
+            self.sumLabel.topAnchor.constraint(equalTo: self.transferToView.bottomAnchor, constant: 30),
             self.sumLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             
             self.sumTextField.centerYAnchor.constraint(equalTo: self.sumLabel.centerYAnchor),
@@ -186,8 +282,33 @@ class TransferViewController: UIViewController {
             self.activityIndicator.centerYAnchor.constraint(equalTo: self.fromInLabel.centerYAnchor),
         ])
     }
+    
+    @objc private func nextWalletFrom() {
+        if (self.indexFrom + 1) == wallets.count {
+            self.indexFrom = -1
+        }
+        self.indexFrom += 1
+       
+            let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+            let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
+           
+            self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+           
+       
+        
+    }
+
+    @objc private func nextWalletTo() {
+        if (self.indexTo + 1) == wallets.count {
+            self.indexTo = -1
+        }
+        self.indexTo += 1
+            let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
+            let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
+            self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
+    }
+    
     @objc private func tapFromLabel() {
-        fromIsSelected = true
         let popVC = MenuTableViewController(wallet: self.wallets)
         
         popVC.modalPresentationStyle = .popover
@@ -202,9 +323,7 @@ class TransferViewController: UIViewController {
     }
     
     @objc private func tapToLabel() {
-        toIsSelected = true
         let popVC = MenuTableViewController(wallet: self.wallets)
-        
         popVC.modalPresentationStyle = .popover
         popVC.delegate = self
         let popOverVC = popVC.popoverPresentationController
@@ -265,8 +384,8 @@ class TransferViewController: UIViewController {
         guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
-        let fromId = fromIsSelected ? wallets[self.fromLabel.tag].id : wallets.first?.id
-        let toId = toIsSelected ? wallets[self.toLabel.tag].id : wallets.last?.id
+        let fromId = wallets[self.fromLabel.tag].id
+        let toId = wallets[self.toLabel.tag].id
         guard (wallets[self.toLabel.tag].balance != nil) else {return}
         guard (wallets[self.fromLabel.tag].balance != nil) else {return}
         guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
@@ -306,6 +425,10 @@ extension TransferViewController: TableViewDelegate {
         guard let nameWallet = wallets[index].nameWallet else { return }
         guard let balance = wallets[index].balance else { return }
         label.text = " " + nameWallet + " " + balance + "₽"
-        label.tag = index
+        if label == fromLabel {
+            self.indexFrom = index
+        } else if label == toLabel {
+            self.indexTo = index
+        }
     }
 }

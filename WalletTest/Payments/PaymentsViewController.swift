@@ -26,11 +26,40 @@ class PaymentsViewController: UIViewController {
     }
     
     
+    private lazy var transferView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = #colorLiteral(red: 0.9294117689, green: 0.9294117093, blue: 0.9294117689, alpha: 1)
+        view.layer.cornerRadius = 30
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
+        view.layer.shadowRadius = 5
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.6
+        return view
+    }()
+    
+    private lazy var nextButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "arrow.right.to.line.compact"), for: .normal)
+        button.tintColor = .systemYellow
+//        button.addTarget(self, action: #selector(nextWalletFrom), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var cardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "card")
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     private let fromInLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Со счета"
-        label.font = UIFont.systemFont(ofSize: 20, weight: .light)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .thin)
         label.isUserInteractionEnabled = true
         return label
     }()
@@ -38,10 +67,8 @@ class PaymentsViewController: UIViewController {
     private let fromLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .white
-        label.textAlignment = .center
-        label.layer.cornerRadius = 30
-        label.layer.borderWidth = 0.09
+        label.backgroundColor = .clear
+        label.textAlignment = .left
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.isUserInteractionEnabled = true
         return label
@@ -52,7 +79,7 @@ class PaymentsViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.image = UIImage(systemName: "list.bullet.rectangle")
         view.clipsToBounds = true
-        view.tintColor = .systemRed
+        view.tintColor = #colorLiteral(red: 0.05413367599, green: 0.5092155337, blue: 0.7902257442, alpha: 1)
         return view
     }()
     
@@ -101,7 +128,7 @@ class PaymentsViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Оплатить", for: .normal)
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemYellow
         button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(didTapTransferButton), for: .touchUpInside)
         return button
@@ -138,9 +165,12 @@ class PaymentsViewController: UIViewController {
     private func setupView() {
         self.view.backgroundColor = .white
         
-        self.view.addSubview(self.fromLabel)
+        self.view.addSubview(self.transferView)
+        self.transferView.addSubview(self.fromInLabel)
+        self.transferView.addSubview(self.fromLabel)
+        self.transferView.addSubview(self.cardImageView)
+        self.transferView.addSubview(self.nextButton)
         self.view.addSubview(self.contactImage)
-        self.view.addSubview(self.fromInLabel)
         self.view.addSubview(self.sumLabel)
         self.view.addSubview(self.sumTextField)
         self.view.addSubview(self.transferButton)
@@ -149,16 +179,31 @@ class PaymentsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            self.fromInLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
-            self.fromInLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.fromInLabel.heightAnchor.constraint(equalToConstant: 20),
+            self.transferView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
+            self.transferView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.transferView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            self.transferView.heightAnchor.constraint(equalToConstant: 120),
             
-            self.fromLabel.topAnchor.constraint(equalTo: self.fromInLabel.bottomAnchor, constant: 16),
+            self.fromInLabel.topAnchor.constraint(equalTo: self.transferView.topAnchor, constant: 10),
+            self.fromInLabel.leftAnchor.constraint(equalTo: self.transferView.leftAnchor, constant: 16),
+            
+             
+            self.cardImageView.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
+            self.cardImageView.leftAnchor.constraint(equalTo: self.transferView.leftAnchor,constant: 20),
+            self.cardImageView.widthAnchor.constraint(equalTo: self.transferView.widthAnchor, multiplier: 0.11),
+            self.cardImageView.heightAnchor.constraint(equalTo: self.cardImageView.widthAnchor, multiplier: 0.75),
+            
+            self.nextButton.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
+            self.nextButton.rightAnchor.constraint(equalTo: self.transferView.rightAnchor,constant: -10),
+            self.nextButton.widthAnchor.constraint(equalToConstant: 16),
+            
+            self.fromLabel.centerYAnchor.constraint(equalTo: self.transferView.centerYAnchor),
             self.fromLabel.heightAnchor.constraint(equalToConstant: 80),
-            self.fromLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
-            self.fromLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.fromLabel.leftAnchor.constraint(equalTo: self.cardImageView.rightAnchor, constant: 16),
+            self.fromLabel.rightAnchor.constraint(equalTo: self.nextButton.leftAnchor),
             
-            self.contactImage.topAnchor.constraint(equalTo: self.fromLabel.bottomAnchor, constant: 36),
+            
+            self.contactImage.topAnchor.constraint(equalTo: self.transferView.bottomAnchor, constant: 36),
             self.contactImage.heightAnchor.constraint(equalToConstant: 30),
             self.contactImage.widthAnchor.constraint(equalToConstant: 30),
             self.contactImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),

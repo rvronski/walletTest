@@ -28,7 +28,7 @@ class StoriesViewController: UIViewController {
     private lazy var progressView: UIProgressView = {
         let progress = UIProgressView(progressViewStyle: .default)
         progress.translatesAutoresizingMaskIntoConstraints = false
-        progress.progressTintColor = .systemRed
+        progress.progressTintColor = .systemYellow
         return progress
     }()
     

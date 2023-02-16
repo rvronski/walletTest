@@ -11,9 +11,9 @@ class DetailCollectionViewCell: UICollectionViewCell {
     private lazy var walletView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
+        view.backgroundColor = #colorLiteral(red: 0.9294117689, green: 0.9294117093, blue: 0.9294117689, alpha: 1)
         view.layer.cornerRadius = 30
-        view.layer.shadowOffset = CGSize(width: 3, height: 3)
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 5
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.6
@@ -24,7 +24,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "rublesign.circle")
-        imageView.tintColor = .systemRed
+        imageView.tintColor = .systemYellow
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -41,7 +41,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Пополнить"
-        label.textColor = .systemRed
+        label.textColor = .black
         return label
     }()
     

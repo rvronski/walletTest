@@ -304,7 +304,7 @@ extension PaymentsPhoneViewController: TableViewDelegate {
     }
 }
 extension PaymentsPhoneViewController: ContactViewDelegate {
-    func present(name: String) {
+    func present(name: String, number: String) {
         self.toTextLabel.text = name
     }
     

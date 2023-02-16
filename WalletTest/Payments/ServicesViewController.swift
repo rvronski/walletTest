@@ -95,7 +95,7 @@ extension ServicesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row == 1 {
-            self.navigationController?.pushViewController(PaymentsPhoneViewController(user: self.user, titleScreen: "Оплата мобильной связи"), animated: true)
+            self.navigationController?.pushViewController(AnotherTransferViewController(user: self.user, isPhonePayments: true), animated: true)
         } else {
             self.self.navigationController?.pushViewController(PaymentsViewController(user: self.user, titleScreen: self.services[indexPath.row]), animated: true)
         }

@@ -30,6 +30,7 @@ class DetailViewController: UIViewController {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
     
@@ -39,7 +40,8 @@ class DetailViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
         view.isUserInteractionEnabled = true
-        view.image = UIImage(named: "CardImageNewMW")
+        view.clipsToBounds = true
+        view.image = UIImage(named: "card")
         return view
     }()
     
@@ -47,8 +49,9 @@ class DetailViewController: UIViewController {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.black.cgColor
+        view.clipsToBounds = true
+//        view.layer.borderWidth = 0.5
+//        view.layer.borderColor = UIColor.black.cgColor
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -59,7 +62,8 @@ class DetailViewController: UIViewController {
         view.layer.cornerRadius = 10
         view.layer.borderColor = UIColor.black.cgColor
         view.isUserInteractionEnabled = true
-        view.image = UIImage(named: "BackCardImageNew")
+        view.clipsToBounds = true
+        view.image = UIImage(named: "card")
         return view
     }()
     
@@ -67,8 +71,7 @@ class DetailViewController: UIViewController {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.black.cgColor
+        view.clipsToBounds = true
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -115,9 +118,9 @@ class DetailViewController: UIViewController {
     private lazy var transferView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
+        view.backgroundColor = #colorLiteral(red: 0.9294117689, green: 0.9294117093, blue: 0.9294117689, alpha: 1)
         view.layer.cornerRadius = 30
-        view.layer.shadowOffset = CGSize(width: 3, height: 3)
+        view.layer.shadowOffset = CGSize(width: 2, height: 2)
         view.layer.shadowRadius = 5
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOpacity = 0.6
@@ -128,7 +131,7 @@ class DetailViewController: UIViewController {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(systemName: "shuffle")
-        imageView.tintColor = .systemRed
+        imageView.tintColor = .systemYellow
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -137,7 +140,7 @@ class DetailViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Оплатить", for: .normal)
-        button.setTitleColor(.systemRed, for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(tapTransButton), for: .touchUpInside)
         return button
     }()
@@ -316,7 +319,7 @@ class DetailViewController: UIViewController {
         let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
         
         let anotherBank = UIAlertAction(title: "Перевод по телефону", style: .default) {_ in
-            let vc = AnotherTransferViewController(user: self.user)
+            let vc = AnotherTransferViewController(user: self.user, isPhonePayments: false)
             self.navigationController?.pushViewController(vc, animated: true)
             
         }

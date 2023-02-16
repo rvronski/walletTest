@@ -84,7 +84,7 @@ class LoginViewController: UIViewController {
         button.layer.cornerRadius = 10
         button.backgroundColor = .systemRed
         button.setTitle("Log in", for: .normal)
-        button.addTarget(self, action: #selector(self.didTapButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         button.clipsToBounds = true
         return button
     }()
