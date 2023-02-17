@@ -78,6 +78,7 @@ class CoreDataManager {
                 guard let date = dateFormater.date(from: stringDate) else { return }
                 let formatter = DateFormatter()
                 formatter.dateFormat = "d MMM YYYY"
+                formatter.locale = Locale.init(identifier: "ru")
                 let dateString = formatter.string(from: date)
                 newTransaction.id = transaction.id
                 newTransaction.amount = transaction.amount
