@@ -110,21 +110,24 @@ class TransactionViewController: UIViewController {
         super.viewWillAppear(animated)
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
-        }
-        self.indexFrom = 0
-        guard let email else {return}
-        coreManager.getUser(email: email) { user in
-            guard let user else {return}
-            self.user = user
-        }
-        self.wallets = coreManager.wallets(user: user)
-        if self.wallets.count > 0 {
-            self.updateTransactions()
         } else {
-            self.fromLabel.text = "Создайте счет"
+            self.indexFrom = 0
+            guard let email else {return}
+            coreManager.getUser(email: email) { user in
+                guard let user else {return}
+                self.user = user
+            }
+            self.wallets = coreManager.wallets(user: user)
+            if self.wallets.count > 0 {
+                self.updateTransactions()
+            } else {
+                self.fromLabel.text = "Создайте счет"
+            }
+            self.tableView.reloadData()
         }
-        self.tableView.reloadData()
     }
+    
+    
     private func alertOk(title: String, message: String?) {
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -134,6 +137,7 @@ class TransactionViewController: UIViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+
     private func setupNavigationBar() {
         self.navigationItem.title = "Транзакции"
         self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -142,23 +146,27 @@ class TransactionViewController: UIViewController {
     }
     
     private func updateTransactions() {
-        let wallet = self.wallets[indexFrom]
-        guard let id = wallet.id else {return}
-        self.transactions = self.coreManager.transaction(wallet: wallet)
-        guard let nameWallet = self.wallets[indexFrom].nameWallet else { return }
-        guard let balance = self.wallets[indexFrom].balance else { return }
-        fromLabel.text = " " + nameWallet + " " + balance + "₽"
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating()
-        networkManager.transactions(id: id) { trans in
-            DispatchQueue.main.async {
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
-            }
-            self.coreManager.createTransactions(transactions: trans, wallet: wallet) {
-                self.transactions = self.coreManager.transaction(wallet: wallet)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
+        } else {
+            let wallet = self.wallets[indexFrom]
+            guard let id = wallet.id else {return}
+            self.transactions = self.coreManager.transaction(wallet: wallet)
+            guard let nameWallet = self.wallets[indexFrom].nameWallet else { return }
+            guard let balance = self.wallets[indexFrom].balance else { return }
+            fromLabel.text = " " + nameWallet + " " + balance + "₽"
+            self.activityIndicator.isHidden = false
+            self.activityIndicator.startAnimating()
+            networkManager.transactions(id: id) { trans in
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.activityIndicator.isHidden = true
+                    self.activityIndicator.stopAnimating()
+                }
+                self.coreManager.createTransactions(transactions: trans, wallet: wallet) {
+                    self.transactions = self.coreManager.transaction(wallet: wallet)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }
@@ -211,31 +219,39 @@ class TransactionViewController: UIViewController {
     }
     
     @objc private func nextWalletFrom() {
-        if (self.indexFrom + 1) == wallets.count {
-            self.indexFrom = -1
+        if wallets.isEmpty  {
+            return
+        } else {
+            if (self.indexFrom + 1) == wallets.count {
+                self.indexFrom = -1
+            }
+            self.indexFrom += 1
+            
+            let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+            let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
+            self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+            let view = self.fromLabel as UIView
+            transferNameWallet(index: indexFrom, view: view)
+            self.tableView.reloadData()
         }
-        self.indexFrom += 1
-        
-        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
-        let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
-        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
-        let view = self.fromLabel as UIView
-        transferNameWallet(index: indexFrom, view: view)
-        self.tableView.reloadData()
     }
     
     
     @objc private func tapFromLabel() {
-        self.wallets = coreManager.wallets(user: user)
-        let popVC = MenuTableViewController(wallet: self.wallets)
-        popVC.modalPresentationStyle = .popover
-        popVC.delegate = self
-        let popOverVC = popVC.popoverPresentationController
-        popOverVC?.delegate = self
-        popOverVC?.sourceView = self.fromLabel
-        popOverVC?.sourceRect = CGRect(x: self.fromLabel.bounds.midX, y: self.fromLabel.bounds.maxY, width: 0, height: 0)
-        popVC.preferredContentSize = CGSize(width: 250, height: 250)
-        self.present(popVC, animated: true)
+        if self.wallets.isEmpty {
+            self.alertOk(title: "Создайте счёт", message: nil)
+        } else {
+            self.wallets = coreManager.wallets(user: user)
+            let popVC = MenuTableViewController(wallet: self.wallets)
+            popVC.modalPresentationStyle = .popover
+            popVC.delegate = self
+            let popOverVC = popVC.popoverPresentationController
+            popOverVC?.delegate = self
+            popOverVC?.sourceView = self.fromLabel
+            popOverVC?.sourceRect = CGRect(x: self.fromLabel.bounds.midX, y: self.fromLabel.bounds.maxY, width: 0, height: 0)
+            popVC.preferredContentSize = CGSize(width: 250, height: 250)
+            self.present(popVC, animated: true)
+        }
     }
     
     private func gestureFromLabel(){

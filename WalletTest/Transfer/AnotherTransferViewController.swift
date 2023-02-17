@@ -14,6 +14,7 @@ class AnotherTransferViewController: UIViewController {
     let user: User
     var indexFrom = 0
     var isPhonePayments:Bool
+    var isContactName = true
     var wallets = [Wallet]()
     var contactName = String()
     init(user: User, isPhonePayments: Bool) {
@@ -147,6 +148,7 @@ class AnotherTransferViewController: UIViewController {
         self.setupGesture()
         self.gesture()
         self.gestureImage()
+        self.gestureToLabel()
         let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[indexFrom].nameWallet
         let balanceFrom = wallets.isEmpty ? "" : wallets[indexFrom].balance 
         self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
@@ -188,8 +190,7 @@ class AnotherTransferViewController: UIViewController {
         self.numberLabel.text =  isPhonePayments ? "Номер телефона" : "Кому перевести"
         self.numberLabel.textAlignment = .left
         NSLayoutConstraint.activate([
-//
-//            <NSLayoutYAxisAnchor:0x6000034ec780 \"UIImageView:0x7fbb1e143800.top\"> and <NSLayoutYAxisAnchor:0x6000034ec600 \"UIView:0x7fbb1e339430.bottom\"> because they have no common ancestor.  Does the constraint or its anchors reference items in different view hierarchies?  That's illegal."
+           
             self.transferView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 25),
             self.transferView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
             self.transferView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
@@ -247,15 +248,19 @@ class AnotherTransferViewController: UIViewController {
     
     
     @objc private func nextWalletFrom() {
-        if (self.indexFrom + 1) == wallets.count {
-            self.indexFrom = -1
-        }
-        self.indexFrom += 1
-       
+        if wallets.isEmpty {
+            return
+        } else {
+            if (self.indexFrom + 1) == wallets.count {
+                self.indexFrom = -1
+            }
+            self.indexFrom += 1
+            
             let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
             let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
-           
+            
             self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+        }
     }
     
     
@@ -273,17 +278,16 @@ class AnotherTransferViewController: UIViewController {
         
     }
     
-    @objc private func tapContact() {
-        let popVC = ContactViewController()
-        popVC.delegate = self
-        self.navigationController?.pushViewController(popVC, animated: true)
-        
-    }
-    
     private func gesture(){
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapContact))
         gesture.numberOfTapsRequired = 1
         self.numberLabel.addGestureRecognizer(gesture)
+    }
+    
+    private func gestureToLabel(){
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tapContact))
+        gesture.numberOfTapsRequired = 1
+        self.toNameLabel.addGestureRecognizer(gesture)
     }
     
     private func gestureImage(){
@@ -308,53 +312,100 @@ class AnotherTransferViewController: UIViewController {
     }
     
     private func alertOk(title: String, message: String?) {
-        
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: "ОК", style: .default)
-        
         alertController.addAction(ok)
-        
         present(alertController, animated: true, completion: nil)
     }
     
+    @objc private func tapContact() {
+        let alertController = UIAlertController(title: "Перевод", message: nil, preferredStyle: .actionSheet)
+        
+        let another = UIAlertAction(title: "Ввести номер", style: .default) {_ in
+            self.alertAction()
+        }
+        let contact = UIAlertAction(title: "Выбрать из контактов", style: .default) {_ in
+            let popVC = ContactViewController()
+            popVC.delegate = self
+            self.navigationController?.pushViewController(popVC, animated: true)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
+        
+        alertController.addAction(another)
+        alertController.addAction(contact)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func alertAction() {
+        let alertController = UIAlertController(title: "Введите номер", message: "", preferredStyle: .alert)
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Номер телефона"
+        }
+        
+        let saveAction = UIAlertAction(title: "Ввести", style: .default, handler: { alert -> Void in
+            let firstTextField = alertController.textFields![0] as UITextField
+            guard let name = firstTextField.text else {return}
+            self.numberLabel.text = name
+            self.toNameLabel.text = "По номеру"
+        })
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel, handler: nil )
+        
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+        
+    }
+    
+    
     @objc private func didTapTransferButton() {
-        guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-               let toText = self.toNameLabel.text, !toText.isEmpty
-        else {
-            let title = isPhonePayments ? "Укажите счет и номер телефона" : "Укажите счета для перевода"
-            self.alertOk(title: "Ошибка!", message: title)
-            return
-        }
-        guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
-            return
-        }
-        
-        guard  let text = self.sumTextField.text, !text.isEmpty
-        else { self.alertOk(title: "Введите сумму", message: nil)
-            return
-        }
-        
-        guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
-            return
-        }
-        guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
-        guard let sum2 = Int(text) else { return }
-        if sum2 > sum1 {
-            let title = isPhonePayments ? "Cумма оплаты превышает остаток" : "Cумма перевода превышает остаток"
-            self.alertOk(title: title, message: nil)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
         } else {
-            guard let fromId = wallets[self.indexFrom].id else { return }
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-            let title = isPhonePayments ? "Оплата мобильной связи \(toText)" : "Перевод \(toText)"
-            networkManager.debit(amount: text, id: fromId, reference: title) { balance in
-                self.coreManager.changeBalance(id: fromId, newBalance: balance) {
-                    DispatchQueue.main.async {
-                        self.activityIndicator.isHidden = true
-                        self.activityIndicator.stopAnimating()
-                        self.navigationController?.popViewController(animated: true)
+            guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
+                   let toText = self.toNameLabel.text, !toText.isEmpty,
+                   let number = self.numberLabel.text, !number.isEmpty
+            else {
+                let title = isPhonePayments ? "Укажите счет и номер телефона" : "Укажите счета для перевода"
+                self.alertOk(title: "Ошибка!", message: title)
+                return
+            }
+            guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            
+            guard  let text = self.sumTextField.text, !text.isEmpty
+            else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            
+            guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
+                return
+            }
+            guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
+            guard let sum2 = Int(text) else { return }
+            if sum2 > sum1 {
+                let title = isPhonePayments ? "Cумма оплаты превышает остаток" : "Cумма перевода превышает остаток"
+                self.alertOk(title: title, message: nil)
+            } else {
+                guard let fromId = wallets[self.indexFrom].id else { return }
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+                
+                let title = isPhonePayments ? "Оплата мобильной связи \(toText)" : "Перевод \(toText) \(number)"
+                networkManager.debit(amount: text, id: fromId, reference: title) { balance in
+                    self.coreManager.changeBalance(id: fromId, newBalance: balance) {
+                        DispatchQueue.main.async {
+                            self.activityIndicator.isHidden = true
+                            self.activityIndicator.stopAnimating()
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                        
                     }
-                    
                 }
             }
         }

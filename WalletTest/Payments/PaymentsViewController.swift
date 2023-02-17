@@ -291,40 +291,44 @@ class PaymentsViewController: UIViewController {
     }
     
     @objc private func didTapTransferButton() {
-        guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-               let toText = self.toTextField.text, !toText.isEmpty
-        else {
-            self.alertOk(title: "Ошибка!", message: "Укажите счет для оплаты")
-            return
-        }
-        guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
-            return
-        }
-        
-        guard  let text = self.sumTextField.text, !text.isEmpty
-        else { self.alertOk(title: "Введите сумму", message: nil)
-            return
-        }
-        
-        guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
-            return
-        }
-        guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
-        guard let sum2 = Int(text) else { return }
-        if sum2 > sum1 {
-            self.alertOk(title: "Cумма оплаты превышает остаток", message: nil)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
         } else {
-            guard let fromId = wallets[self.indexFrom].id else { return }
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-            networkManager.debit(amount: text, id: fromId, reference: self.titleScreen) { balance in
-                self.coreManager.changeBalance(id: fromId, newBalance: balance) {
-                    DispatchQueue.main.async {
-                        self.activityIndicator.isHidden = true
-                        self.activityIndicator.stopAnimating()
-                        self.navigationController?.popViewController(animated: true)
+            guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
+                   let toText = self.toTextField.text, !toText.isEmpty
+            else {
+                self.alertOk(title: "Ошибка!", message: "Укажите счет для оплаты")
+                return
+            }
+            guard sumTextField.text != nil else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            
+            guard  let text = self.sumTextField.text, !text.isEmpty
+            else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            
+            guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
+                return
+            }
+            guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
+            guard let sum2 = Int(text) else { return }
+            if sum2 > sum1 {
+                self.alertOk(title: "Cумма оплаты превышает остаток", message: nil)
+            } else {
+                guard let fromId = wallets[self.indexFrom].id else { return }
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+                networkManager.debit(amount: text, id: fromId, reference: self.titleScreen) { balance in
+                    self.coreManager.changeBalance(id: fromId, newBalance: balance) {
+                        DispatchQueue.main.async {
+                            self.activityIndicator.isHidden = true
+                            self.activityIndicator.stopAnimating()
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                        
                     }
-                    
                 }
             }
         }

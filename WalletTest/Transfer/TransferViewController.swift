@@ -171,11 +171,11 @@ class TransferViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
-        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+        let nameWalletFrom = wallets.isEmpty ? "Создайте счет" : wallets[self.indexFrom].nameWallet
         let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
-        if wallets.count > 0 {
-            let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
-            let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
+        if wallets.count > 1 {
+            let nameWalletTo = wallets[self.indexTo].nameWallet
+            let balanceFromTo = wallets[self.indexTo].balance
             self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
         } else {
             self.toLabel.text = "Нет счета для перевода"
@@ -196,11 +196,11 @@ class TransferViewController: UIViewController {
         }
         self.indexFrom = 0
         self.indexTo = 1
-        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+        let nameWalletFrom = wallets.isEmpty ? "Создайте счет" : wallets[self.indexFrom].nameWallet
         let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
-        if wallets.count > 0 {
-            let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
-            let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
+        if wallets.count > 1 {
+            let nameWalletTo = wallets[self.indexTo].nameWallet
+            let balanceFromTo = wallets[self.indexTo].balance
             self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
         } else {
             self.toLabel.text = "Нет счета для перевода"
@@ -295,28 +295,35 @@ class TransferViewController: UIViewController {
     }
     
     @objc private func nextWalletFrom() {
-        if (self.indexFrom + 1) == wallets.count {
-            self.indexFrom = -1
-        }
-        self.indexFrom += 1
-       
+        if wallets.isEmpty {
+            return
+        } else {
+            if (self.indexFrom + 1) == wallets.count {
+                self.indexFrom = -1
+            }
+            self.indexFrom += 1
+            
             let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
             let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
-           
+            
             self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
-           
-       
+            
+        }
         
     }
 
     @objc private func nextWalletTo() {
-        if (self.indexTo + 1) == wallets.count {
-            self.indexTo = -1
-        }
-        self.indexTo += 1
+        if wallets.isEmpty {
+            return
+        } else {
+            if (self.indexTo + 1) == wallets.count {
+                self.indexTo = -1
+            }
+            self.indexTo += 1
             let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
             let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
             self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
+        }
     }
     
     @objc private func tapFromLabel() {
@@ -378,51 +385,56 @@ class TransferViewController: UIViewController {
     }
     
     @objc private func didTapTransferButton() {
-        guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-               let toText = self.toLabel.text, !toText.isEmpty
-        else {
-            self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
-            return
-        }
-        guard  let text = self.sumTextField.text, !text.isEmpty
-        else { self.alertOk(title: "Введите сумму", message: nil)
-            return
-        }
-        guard fromText != toText else { self.alertOk(title: "Ошибка!", message: "Выберете разные счета")
-            return
-        }
-        
-        guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
-            return
-        }
-        let fromId = wallets[self.indexFrom].id
-        let toId = wallets[self.indexTo].id
-        guard (wallets[self.indexTo].balance != nil) else {return}
-        guard (wallets[self.indexFrom].balance != nil) else {return}
-        guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
-        guard let sum2 = Int(wallets[self.indexTo].balance!) else { return }
-        if sum > sum1 {
-            self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
+        if currentReachabilityStatus == .notReachable {
+            self.alertOk(title: "Проверьте интернет соединение", message: nil)
         } else {
-            let fromBalance = sum1 - sum
-            let toBalance = sum2 + sum
-            let fromNewBalance = String(fromBalance)
-            let toNewBalance = String(toBalance)
-            self.activityIndicator.isHidden = false
-            self.activityIndicator.startAnimating()
-            networkManager.transfer(amount: text, from_id: fromId!, to_id: toId!) {
-                self.coreManager.changeBalance(id: fromId!, newBalance: fromNewBalance) {
-                    self.coreManager.changeBalance(id: toId!, newBalance: toNewBalance) {
-                        DispatchQueue.main.async {
-                            self.activityIndicator.isHidden = true
-                            self.activityIndicator.stopAnimating()
-                            self.navigationController?.popViewController(animated: true)
+            guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
+                   let toText = self.toLabel.text, !toText.isEmpty
+            else {
+                self.alertOk(title: "Ошибка!", message: "Укажите счета для перевода")
+                return
+            }
+            guard  let text = self.sumTextField.text, !text.isEmpty
+            else { self.alertOk(title: "Введите сумму", message: nil)
+                return
+            }
+            guard fromText != toText else { self.alertOk(title: "Ошибка!", message: "Выберете разные счета")
+                return
+            }
+            
+            guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
+                return
+            }
+            let fromId = wallets[self.indexFrom].id
+            let toId = wallets[self.indexTo].id
+            guard (wallets[self.indexTo].balance != nil) else {return}
+            guard (wallets[self.indexFrom].balance != nil) else {return}
+            guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
+            guard let sum2 = Int(wallets[self.indexTo].balance!) else { return }
+            if sum > sum1 {
+                self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
+            } else {
+                let fromBalance = sum1 - sum
+                let toBalance = sum2 + sum
+                let fromNewBalance = String(fromBalance)
+                let toNewBalance = String(toBalance)
+                self.activityIndicator.isHidden = false
+                self.activityIndicator.startAnimating()
+                networkManager.transfer(amount: text, from_id: fromId!, to_id: toId!) {
+                    self.coreManager.changeBalance(id: fromId!, newBalance: fromNewBalance) {
+                        self.coreManager.changeBalance(id: toId!, newBalance: toNewBalance) {
+                            DispatchQueue.main.async {
+                                self.activityIndicator.isHidden = true
+                                self.activityIndicator.stopAnimating()
+                                self.navigationController?.popViewController(animated: true)
+                            }
                         }
                     }
                 }
             }
         }
     }
+        
 }
 extension TransferViewController: UIPopoverPresentationControllerDelegate {
     
