@@ -95,7 +95,15 @@ class NetworkManager {
         } catch {
             print(error)
         }
-        let session = URLSession(configuration: .default)
+//        let configuration = URLSessionConfiguration.background(withIdentifier: "com.my.app")
+//        configuration.sessionSendsLaunchEvents = true
+//        configuration.isDiscretionary = true
+//        configuration.allowsCellularAccess = true
+//        configuration.shouldUseExtendedBackgroundIdleMode = true
+//        configuration.waitsForConnectivity = true
+
+        
+        let session = URLSession(configuration: .ephemeral)
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if let error {
                 print(error.localizedDescription)
@@ -350,3 +358,58 @@ class NetworkManager {
         task.resume()
     }
 }
+//extension NetworkManager: URLSessionDelegate {
+//    func isEqual(_ object: Any?) -> Bool {
+//        true
+//    }
+//    
+//    var hash: Int {
+//        0
+//    }
+//    
+//    var superclass: AnyClass? {
+//        .none
+//    }
+//
+//    func `self`() -> Self {
+//        self
+//    }
+//    
+//    func perform(_ aSelector: Selector!) -> Unmanaged<AnyObject>! {
+//        .none
+//    }
+//    
+//    func perform(_ aSelector: Selector!, with object: Any!) -> Unmanaged<AnyObject>! {
+//        .none
+//    }
+//    
+//    func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! {
+//        .none
+//    }
+//    
+//    func isProxy() -> Bool {
+//      true
+//    }
+//    
+//    func isKind(of aClass: AnyClass) -> Bool {
+//        true
+//    }
+//    
+//    func isMember(of aClass: AnyClass) -> Bool {
+//        true
+//    }
+//    
+//    func conforms(to aProtocol: Protocol) -> Bool {
+//        true
+//    }
+//    
+//    func responds(to aSelector: Selector!) -> Bool {
+//        true
+//    }
+//    
+//    var description: String {
+//        return ""
+//    }
+//    
+//    
+//}

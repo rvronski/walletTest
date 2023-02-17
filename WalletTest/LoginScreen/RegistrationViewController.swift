@@ -72,7 +72,7 @@ class RegistrationViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Зарегистрироваться", for: .normal)
         button.layer.cornerRadius = 10
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemYellow
         button.addTarget(self, action: #selector(didTapRegButton), for: .touchUpInside)
         button.clipsToBounds = true
         return button
@@ -113,7 +113,7 @@ class RegistrationViewController: UIViewController {
     }
     
     private func setupView() {
-        self.view.backgroundColor = .systemRed.withAlphaComponent(0.9)
+        self.view.backgroundColor = .systemYellow.withAlphaComponent(0.9)
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.registerView)
         self.scrollView.addSubview(self.registerLabel)

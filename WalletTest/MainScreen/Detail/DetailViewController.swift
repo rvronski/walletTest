@@ -136,13 +136,13 @@ class DetailViewController: UIViewController {
         return imageView
     }()
     
-    private lazy var transferButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Оплатить", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.addTarget(self, action: #selector(tapTransButton), for: .touchUpInside)
-        return button
+    private lazy var payLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Оплатить"
+        label.font = .systemFont(ofSize: 20)
+        label.textColor = .black
+        return label
     }()
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
@@ -184,7 +184,7 @@ class DetailViewController: UIViewController {
         self.cardView.addSubview(self.cardNameLabel)
         self.cardView.bringSubviewToFront(cardNameLabel)
         self.transferView.addSubview(self.transferImageView)
-        self.transferView.addSubview(self.transferButton)
+        self.transferView.addSubview(self.payLabel)
         
         
         NSLayoutConstraint.activate([
@@ -215,7 +215,7 @@ class DetailViewController: UIViewController {
             self.cardImageView.leadingAnchor.constraint(equalTo: self.cardView.leadingAnchor),
             self.cardImageView.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor),
             
-            self.cardNameLabel.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor, constant: -10),
+            self.cardNameLabel.bottomAnchor.constraint(equalTo: self.cardView.bottomAnchor, constant: -5),
             self.cardNameLabel.trailingAnchor.constraint(equalTo: self.cardView.trailingAnchor, constant: -20),
             
             self.cardCVCLabel.trailingAnchor.constraint(equalTo: self.cardBackView.trailingAnchor, constant: -16),
@@ -236,8 +236,8 @@ class DetailViewController: UIViewController {
             self.transferImageView.heightAnchor.constraint(equalTo: self.transferView.heightAnchor, multiplier: 0.3),
             self.transferImageView.widthAnchor.constraint(equalTo: self.transferImageView.heightAnchor),
             
-            self.transferButton.centerYAnchor.constraint(equalTo: self.transferImageView.centerYAnchor),
-            self.transferButton.leftAnchor.constraint(equalTo: self.transferImageView.rightAnchor, constant: 25),
+            self.payLabel.centerYAnchor.constraint(equalTo: self.transferImageView.centerYAnchor),
+            self.payLabel.centerXAnchor.constraint(equalTo: self.transferView.centerXAnchor),
             
             self.activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             self.activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),

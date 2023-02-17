@@ -111,6 +111,7 @@ class TransactionViewController: UIViewController {
         if currentReachabilityStatus == .notReachable {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
+        self.indexFrom = 0
         guard let email else {return}
         coreManager.getUser(email: email) { user in
             guard let user else {return}

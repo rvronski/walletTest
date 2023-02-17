@@ -17,7 +17,6 @@
 		450AE997297C385200274D48 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE996297C385200274D48 /* SettingsViewController.swift */; };
 		450AE999297CA1A500274D48 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE998297CA1A400274D48 /* NetworkManager.swift */; };
 		450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE99A297D8D3200274D48 /* CoreDataManager.swift */; };
-		450AE99E297DF3B000274D48 /* MyWalletLogo1.png in Resources */ = {isa = PBXBuildFile; fileRef = 450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */; };
 		450AE9A0297F546500274D48 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE99F297F546400274D48 /* LoginViewController.swift */; };
 		450AE9A2297F607100274D48 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A1297F607100274D48 /* RegistrationViewController.swift */; };
 		450AE9A429800C7700274D48 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450AE9A329800C7700274D48 /* MainViewController.swift */; };
@@ -32,6 +31,7 @@
 		4515836929838D50003A1222 /* DetailTransViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836829838D50003A1222 /* DetailTransViewController.swift */; };
 		4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836A29839D41003A1222 /* SettingsTableViewCell.swift */; };
 		4515836E2983B4F4003A1222 /* DeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4515836D2983B4F4003A1222 /* DeleteViewController.swift */; };
+		451EB964299F88F30060CE2A /* ServicesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451EB963299F88F30060CE2A /* ServicesTableViewCell.swift */; };
 		459282A129803C07007271DD /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459282A029803C07007271DD /* DetailCollectionViewCell.swift */; };
 		45BB87C42994250B00A37CA5 /* StoriesCollectionReusebleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C32994250B00A37CA5 /* StoriesCollectionReusebleView.swift */; };
 		45BB87C62994257200A37CA5 /* StoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */; };
@@ -43,7 +43,6 @@
 		45BB87D429962BCD00A37CA5 /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D329962BCD00A37CA5 /* ContactViewController.swift */; };
 		45BB87D82996500200A37CA5 /* PhoneContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87D72996500200A37CA5 /* PhoneContact.swift */; };
 		45BB87DB29966A6600A37CA5 /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */; };
-		45BB87DD29966F4C00A37CA5 /* PaymentsPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */; };
 		45BB87DF299676CE00A37CA5 /* PaymentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */; };
 		45BB87E129968B2F00A37CA5 /* TestInternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BB87E029968B2F00A37CA5 /* TestInternetConnection.swift */; };
 		45BE247129926C1800111720 /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BE247029926C1800111720 /* StoriesViewController.swift */; };
@@ -62,7 +61,6 @@
 		450AE996297C385200274D48 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		450AE998297CA1A400274D48 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		450AE99A297D8D3200274D48 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MyWalletLogo1.png; sourceTree = "<group>"; };
 		450AE99F297F546400274D48 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		450AE9A1297F607100274D48 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		450AE9A329800C7700274D48 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +75,7 @@
 		4515836829838D50003A1222 /* DetailTransViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTransViewController.swift; sourceTree = "<group>"; };
 		4515836A29839D41003A1222 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4515836D2983B4F4003A1222 /* DeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteViewController.swift; sourceTree = "<group>"; };
+		451EB963299F88F30060CE2A /* ServicesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesTableViewCell.swift; sourceTree = "<group>"; };
 		459282A029803C07007271DD /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BB87C32994250B00A37CA5 /* StoriesCollectionReusebleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionReusebleView.swift; sourceTree = "<group>"; };
 		45BB87C52994257200A37CA5 /* StoriesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -88,7 +87,6 @@
 		45BB87D329962BCD00A37CA5 /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
 		45BB87D72996500200A37CA5 /* PhoneContact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneContact.swift; sourceTree = "<group>"; };
 		45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
-		45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsPhoneViewController.swift; sourceTree = "<group>"; };
 		45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentsViewController.swift; sourceTree = "<group>"; };
 		45BB87E029968B2F00A37CA5 /* TestInternetConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestInternetConnection.swift; sourceTree = "<group>"; };
 		45BE247029926C1800111720 /* StoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 				450AE989297C35C600274D48 /* Assets.xcassets */,
 				450AE98B297C35C600274D48 /* LaunchScreen.storyboard */,
 				450AE98E297C35C600274D48 /* Info.plist */,
-				450AE99D297DF3AF00274D48 /* MyWalletLogo1.png */,
 			);
 			path = WalletTest;
 			sourceTree = "<group>";
@@ -235,7 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				45BB87DA29966A6600A37CA5 /* ServicesViewController.swift */,
-				45BB87DC29966F4C00A37CA5 /* PaymentsPhoneViewController.swift */,
+				451EB963299F88F30060CE2A /* ServicesTableViewCell.swift */,
 				45BB87DE299676CE00A37CA5 /* PaymentsViewController.swift */,
 			);
 			path = Payments;
@@ -301,7 +298,6 @@
 			files = (
 				450AE98D297C35C600274D48 /* LaunchScreen.storyboard in Resources */,
 				450AE98A297C35C600274D48 /* Assets.xcassets in Resources */,
-				450AE99E297DF3B000274D48 /* MyWalletLogo1.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +325,6 @@
 				450AE9A429800C7700274D48 /* MainViewController.swift in Sources */,
 				45BB87D82996500200A37CA5 /* PhoneContact.swift in Sources */,
 				45BB87DF299676CE00A37CA5 /* PaymentsViewController.swift in Sources */,
-				45BB87DD29966F4C00A37CA5 /* PaymentsPhoneViewController.swift in Sources */,
 				450AE995297C381200274D48 /* TransactionViewController.swift in Sources */,
 				45BE247129926C1800111720 /* StoriesViewController.swift in Sources */,
 				450AE988297C35C200274D48 /* WalletTest.xcdatamodeld in Sources */,
@@ -347,6 +342,7 @@
 				4515836B29839D41003A1222 /* SettingsTableViewCell.swift in Sources */,
 				450AE980297C35C200274D48 /* SceneDelegate.swift in Sources */,
 				451583612982E232003A1222 /* AnotherTransferViewController.swift in Sources */,
+				451EB964299F88F30060CE2A /* ServicesTableViewCell.swift in Sources */,
 				450AE99B297D8D3300274D48 /* CoreDataManager.swift in Sources */,
 				450AE997297C385200274D48 /* SettingsViewController.swift in Sources */,
 			);

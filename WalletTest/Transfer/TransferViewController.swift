@@ -196,6 +196,17 @@ class TransferViewController: UIViewController {
         }
         self.indexFrom = 0
         self.indexTo = 1
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
+        if wallets.count > 0 {
+            let nameWalletTo =  wallets.isEmpty ? "Выберите счет" : wallets[self.indexTo].nameWallet
+            let balanceFromTo = wallets.isEmpty ? "" : wallets[self.indexTo].balance
+            self.toLabel.text = " " + nameWalletTo! + " " + balanceFromTo! + "₽"
+        } else {
+            self.toLabel.text = "Нет счета для перевода"
+        }
+        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+       
     }
     
     private func setupView() {
@@ -384,12 +395,12 @@ class TransferViewController: UIViewController {
         guard let sum = Int(text) else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
-        let fromId = wallets[self.fromLabel.tag].id
-        let toId = wallets[self.toLabel.tag].id
-        guard (wallets[self.toLabel.tag].balance != nil) else {return}
-        guard (wallets[self.fromLabel.tag].balance != nil) else {return}
-        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
-        guard let sum2 = Int(wallets[self.toLabel.tag].balance!) else { return }
+        let fromId = wallets[self.indexFrom].id
+        let toId = wallets[self.indexTo].id
+        guard (wallets[self.indexTo].balance != nil) else {return}
+        guard (wallets[self.indexFrom].balance != nil) else {return}
+        guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
+        guard let sum2 = Int(wallets[self.indexTo].balance!) else { return }
         if sum > sum1 {
             self.alertOk(title: "Cумма перевода превышает остаток", message: nil)
         } else {

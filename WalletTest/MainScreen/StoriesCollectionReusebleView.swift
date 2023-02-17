@@ -19,7 +19,7 @@ class StoriesCollectionReusebleView: UICollectionReusableView {
     let transition = CircularTransition()
     var indexPath = IndexPath()
     var indexArray = [IndexPath]()
-    var images = [UIImage(named: "weatherLogo"),UIImage(named: "background_image"),UIImage(named: "MyWalletLogo1"), ]
+    var images = [UIImage(named: "weatherLogo"),UIImage(named: "background_image"),UIImage(named: "newLogo"), ]
     let email = UserDefaults.standard.string(forKey: "email")
     var user: User?
     

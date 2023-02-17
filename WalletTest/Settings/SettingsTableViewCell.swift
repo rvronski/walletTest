@@ -51,19 +51,25 @@ class SettingsTableViewCell: UITableViewCell {
         
     }
     
+   
     private func setupView(){
         
         self.contentView.addSubview(self.stackView)
         self.stackView.addArrangedSubview(self.setLabel)
         self.stackView.addArrangedSubview(self.numberLabel)
+       
         
         
         NSLayoutConstraint.activate([
+            
+            
+            
             self.stackView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10),
             self.stackView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 16),
             self.stackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -10),
-            self.numberLabel.leftAnchor.constraint(equalTo: self.stackView.leftAnchor)
-           
+            self.numberLabel.leftAnchor.constraint(equalTo: self.stackView.leftAnchor),
+          
+            
 //            self.numberLabel.topAnchor.constraint(equalTo: self.setLabel.bottomAnchor,constant: 10),
 //            self.numberLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 16),
 //            self.numberLabel.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: -10),

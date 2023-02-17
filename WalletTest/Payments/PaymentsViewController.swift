@@ -14,7 +14,7 @@ class PaymentsViewController: UIViewController {
     let user: User
     var wallets = [Wallet]()
     var titleScreen: String
-    
+    var indexFrom = 0
     init(user: User, titleScreen: String) {
         self.user = user
         self.titleScreen = titleScreen
@@ -43,7 +43,7 @@ class PaymentsViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "arrow.right.to.line.compact"), for: .normal)
         button.tintColor = .systemYellow
-//        button.addTarget(self, action: #selector(nextWalletFrom), for: .touchUpInside)
+        button.addTarget(self, action: #selector(nextWalletFrom), for: .touchUpInside)
         return button
     }()
 
@@ -148,9 +148,9 @@ class PaymentsViewController: UIViewController {
         self.gestureFromLabel()
         self.setupNavigationBar()
         self.setupGesture()
-        let nameWalletFrom = wallets.first?.nameWallet ?? "Выберите счет"
-        let balanceFrom = wallets.first?.balance ?? ""
-        self.fromLabel.text = " " + nameWalletFrom + " " + balanceFrom + "₽"
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[indexFrom].nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets[indexFrom].balance
+        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
        
     }
     
@@ -160,6 +160,13 @@ class PaymentsViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.indexFrom = 0
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[indexFrom].nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets[indexFrom].balance
+        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+    }
    
     
     private func setupView() {
@@ -231,6 +238,19 @@ class PaymentsViewController: UIViewController {
             
         ])
     }
+    
+    @objc private func nextWalletFrom() {
+        if (self.indexFrom + 1) == wallets.count {
+            self.indexFrom = -1
+        }
+        self.indexFrom += 1
+       
+            let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[self.indexFrom].nameWallet
+            let balanceFrom = wallets.isEmpty ? "" : wallets[self.indexFrom].balance
+           
+            self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
+    }
+    
     @objc private func tapFromLabel() {
         let popVC = MenuTableViewController(wallet: self.wallets)
         
@@ -289,12 +309,12 @@ class PaymentsViewController: UIViewController {
         guard Int(text) != nil else { self.alertOk(title: "Нельзя перевести буквы 😀", message: "Укажите сумму цифрами")
             return
         }
-        guard let sum1 = Int(wallets[self.fromLabel.tag].balance!) else { return }
+        guard let sum1 = Int(wallets[self.indexFrom].balance!) else { return }
         guard let sum2 = Int(text) else { return }
         if sum2 > sum1 {
             self.alertOk(title: "Cумма оплаты превышает остаток", message: nil)
         } else {
-            guard let fromId = wallets[self.fromLabel.tag].id else { return }
+            guard let fromId = wallets[self.indexFrom].id else { return }
             self.activityIndicator.isHidden = false
             self.activityIndicator.startAnimating()
             networkManager.debit(amount: text, id: fromId, reference: self.titleScreen) { balance in
@@ -322,6 +342,7 @@ extension PaymentsViewController: TableViewDelegate {
         guard let nameWallet = wallets[index].nameWallet else { return }
         guard let balance = wallets[index].balance else { return }
         label.text = " " + nameWallet + " " + balance + "₽"
+        self.indexFrom = index
         label.tag = index
     }
 }

@@ -77,9 +77,10 @@ class AnotherTransferViewController: UIViewController {
     private let contactImage: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = UIImage(systemName: "phone.fill.arrow.up.right")
+        view.image = UIImage(named: "contactBook")
         view.clipsToBounds = true
-        view.tintColor = #colorLiteral(red: 0.05413367599, green: 0.5092155337, blue: 0.7902257442, alpha: 1)
+        view.isUserInteractionEnabled = true
+//        view.tintColor = #colorLiteral(red: 0.05413367599, green: 0.5092155337, blue: 0.7902257442, alpha: 1)
         return view
     }()
     
@@ -107,20 +108,18 @@ class AnotherTransferViewController: UIViewController {
         return sumTextField
     }()
     
-    private lazy var toTextLabel: UILabel = {
+    private lazy var toNameLabel: UILabel = {
         let sumTextField = UILabel()
         sumTextField.translatesAutoresizingMaskIntoConstraints = false
         sumTextField.textColor = .black
-        sumTextField.font = UIFont.systemFont(ofSize: 20)
+        sumTextField.font = UIFont.systemFont(ofSize: 15)
         sumTextField.layer.borderColor = UIColor.lightGray.cgColor
-        sumTextField.layer.borderWidth = 0.5
-        sumTextField.layer.cornerRadius = 20
-        sumTextField.text = isPhonePayments ? "Номер телефона" : "Кому перевести"
         sumTextField.textAlignment = .center
         sumTextField.isUserInteractionEnabled = true
         return sumTextField
     }()
     
+    private lazy var numberLabel = WeatherLabels(size: 20, weight: .regular, color: .black)
     private lazy var transferButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -147,10 +146,11 @@ class AnotherTransferViewController: UIViewController {
         self.setupNavigationBar()
         self.setupGesture()
         self.gesture()
+        self.gestureImage()
         let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[indexFrom].nameWallet
         let balanceFrom = wallets.isEmpty ? "" : wallets[indexFrom].balance 
         self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
-       
+        self.numberLabel.isUserInteractionEnabled = true
     }
     
     private func setupNavigationBar() {
@@ -166,6 +166,9 @@ class AnotherTransferViewController: UIViewController {
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         }
         self.indexFrom = 0
+        let nameWalletFrom = wallets.isEmpty ? "Выберите счет" : wallets[indexFrom].nameWallet
+        let balanceFrom = wallets.isEmpty ? "" : wallets[indexFrom].balance
+        self.fromLabel.text = " " + nameWalletFrom! + " " + balanceFrom! + "₽"
     }
     
     private func setupView() {
@@ -179,10 +182,11 @@ class AnotherTransferViewController: UIViewController {
         self.view.addSubview(self.sumLabel)
         self.view.addSubview(self.sumTextField)
         self.view.addSubview(self.transferButton)
-        self.view.addSubview(self.toTextLabel)
+        self.view.addSubview(self.toNameLabel)
+        self.view.addSubview(self.numberLabel)
         self.view.addSubview(self.activityIndicator)
-        
-        
+        self.numberLabel.text =  isPhonePayments ? "Номер телефона" : "Кому перевести"
+        self.numberLabel.textAlignment = .left
         NSLayoutConstraint.activate([
 //
 //            <NSLayoutYAxisAnchor:0x6000034ec780 \"UIImageView:0x7fbb1e143800.top\"> and <NSLayoutYAxisAnchor:0x6000034ec600 \"UIView:0x7fbb1e339430.bottom\"> because they have no common ancestor.  Does the constraint or its anchors reference items in different view hierarchies?  That's illegal."
@@ -209,17 +213,20 @@ class AnotherTransferViewController: UIViewController {
             self.fromLabel.leftAnchor.constraint(equalTo: self.cardImageView.rightAnchor, constant: 16),
             self.fromLabel.rightAnchor.constraint(equalTo: self.nextButton.leftAnchor),
             
-            self.contactImage.topAnchor.constraint(equalTo: self.transferView.bottomAnchor, constant: 36),
-            self.contactImage.heightAnchor.constraint(equalToConstant: 30),
-            self.contactImage.widthAnchor.constraint(equalToConstant: 30),
+            self.contactImage.topAnchor.constraint(equalTo: self.transferView.bottomAnchor, constant: 50),
+            self.contactImage.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.16),
+            self.contactImage.heightAnchor.constraint(equalTo: self.contactImage.widthAnchor),
+           
             self.contactImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
 
-            self.toTextLabel.centerYAnchor.constraint(equalTo: self.contactImage.centerYAnchor),
-            self.toTextLabel.leftAnchor.constraint(equalTo: self.contactImage.rightAnchor, constant: 16),
-            self.toTextLabel.heightAnchor.constraint(equalToConstant: 50),
-            self.toTextLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
+            self.numberLabel.centerYAnchor.constraint(equalTo: self.contactImage.centerYAnchor),
+            self.numberLabel.leftAnchor.constraint(equalTo: self.contactImage.rightAnchor, constant: 16),
+            self.numberLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
 
-            self.sumLabel.topAnchor.constraint(equalTo: self.toTextLabel.bottomAnchor, constant: 46),
+            self.toNameLabel.bottomAnchor.constraint(equalTo: self.numberLabel.topAnchor, constant: -10),
+            self.toNameLabel.leftAnchor.constraint(equalTo: self.numberLabel.leftAnchor),
+            
+            self.sumLabel.topAnchor.constraint(equalTo: self.numberLabel.bottomAnchor, constant: 46),
             self.sumLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
 
             self.sumTextField.centerYAnchor.constraint(equalTo: self.sumLabel.centerYAnchor),
@@ -276,7 +283,13 @@ class AnotherTransferViewController: UIViewController {
     private func gesture(){
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapContact))
         gesture.numberOfTapsRequired = 1
-        self.toTextLabel.addGestureRecognizer(gesture)
+        self.numberLabel.addGestureRecognizer(gesture)
+    }
+    
+    private func gestureImage(){
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tapContact))
+        gesture.numberOfTapsRequired = 1
+        self.contactImage.addGestureRecognizer(gesture)
     }
     
     
@@ -306,7 +319,7 @@ class AnotherTransferViewController: UIViewController {
     
     @objc private func didTapTransferButton() {
         guard  let fromText = self.fromLabel.text, !fromText.isEmpty,
-               let toText = self.toTextLabel.text, !toText.isEmpty
+               let toText = self.toNameLabel.text, !toText.isEmpty
         else {
             let title = isPhonePayments ? "Укажите счет и номер телефона" : "Укажите счета для перевода"
             self.alertOk(title: "Ошибка!", message: title)
@@ -364,7 +377,8 @@ extension AnotherTransferViewController: TableViewDelegate {
 }
 extension AnotherTransferViewController: ContactViewDelegate {
     func present(name: String, number: String) {
-        self.toTextLabel.text = name
+        self.toNameLabel.text = name
+        self.numberLabel.text = number
     }
     
     

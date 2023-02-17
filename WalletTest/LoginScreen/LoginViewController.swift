@@ -82,7 +82,7 @@ class LoginViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 10
-        button.backgroundColor = .systemRed
+        button.backgroundColor = .systemYellow
         button.setTitle("Log in", for: .normal)
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         button.clipsToBounds = true
@@ -93,7 +93,7 @@ class LoginViewController: UIViewController {
         let logoImage = UIImageView()
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         logoImage.backgroundColor = .clear
-        logoImage.image = UIImage(named: "MyWalletLogo1.png")
+        logoImage.image = UIImage(named: "newLogo")
         logoImage.clipsToBounds = true
         return logoImage
     }()

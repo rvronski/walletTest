@@ -10,7 +10,7 @@ import UIKit
 class ServicesViewController: UIViewController {
     
     let user: User
-    
+    let images = ["flat","phone","enternet","transport","tv"]
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +26,7 @@ class ServicesViewController: UIViewController {
     private lazy var contactTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: "PayCell")
+        tableView.register(ServicesTableViewCell.self, forCellReuseIdentifier: "PayCell")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -87,8 +87,8 @@ extension ServicesViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PayCell", for: indexPath) as! SettingsTableViewCell
-        cell.setup(text: services[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PayCell", for: indexPath) as! ServicesTableViewCell
+        cell.setupServices(text: services[indexPath.row], image: images[indexPath.row])
         return cell
     }
     
