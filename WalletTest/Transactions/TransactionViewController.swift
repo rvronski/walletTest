@@ -147,6 +147,7 @@ class TransactionViewController: UIViewController {
     
     private func updateTransactions() {
         if currentReachabilityStatus == .notReachable {
+            self.tableView.reloadData()
             self.alertOk(title: "Проверьте интернет соединение", message: nil)
         } else {
             let wallet = self.wallets[indexFrom]
